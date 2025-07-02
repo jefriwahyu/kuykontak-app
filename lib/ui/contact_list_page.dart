@@ -2,10 +2,13 @@ import 'package:azlistview/azlistview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kontak_app_m/bloc/contact_bloc.dart';
+import 'package:kontak_app_m/helpers/contact_service.dart';
 import 'package:kontak_app_m/model/contact.dart';
 import 'package:kontak_app_m/ui/add_edit_contact_page.dart';
 import 'package:kontak_app_m/ui/contact_detail_page.dart';
 import 'package:kontak_app_m/ui/theme.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_contacts/flutter_contacts.dart' as FC;
 
 class ContactListPage extends StatefulWidget {
   const ContactListPage({super.key});
@@ -15,20 +18,88 @@ class ContactListPage extends StatefulWidget {
 }
 
 class _ContactListPageState extends State<ContactListPage> {
+  // Fungsi untuk memulai proses sinkronisasi kontak
+  Future<void> _syncContacts() async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          content: Text('Memulai sinkronisasi...'),
+          backgroundColor: Colors.blue),
+    );
+
+    // 1. Minta Izin akses kontak
+    if (await Permission.contacts.request().isGranted) {
+      // 2. Baca kontak dari perangkat
+      List<FC.Contact> deviceContacts = await FC.FlutterContacts.getContacts(
+          withProperties: true // Ambil juga nomor telepon dan email
+          );
+
+      // 3. Ubah data ke format Map untuk dikirim ke API
+      List<Map<String, dynamic>> contactsToSync = [];
+      for (var contact in deviceContacts) {
+        if (contact.phones.isNotEmpty && contact.displayName.isNotEmpty) {
+          contactsToSync.add({
+            'nama': contact.displayName,
+            'no_hp': contact.phones.first.number
+                .replaceAll(RegExp(r'[-\s]'), ''), // Bersihkan format nomor HP
+            'email':
+                contact.emails.isNotEmpty ? contact.emails.first.address : ''
+          });
+        }
+      }
+
+      // 4. Kirim data ke service untuk diproses oleh backend
+      try {
+        await ContactService.syncContacts(contactsToSync);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('Sinkronisasi berhasil!'),
+                backgroundColor: Colors.green),
+          );
+          // 5. Muat ulang daftar kontak di aplikasi untuk menampilkan data baru
+          context.read<ContactBloc>().add(LoadContacts());
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text('Gagal melakukan sinkronisasi: ${e.toString()}'),
+                backgroundColor: Colors.red),
+          );
+        }
+      }
+    } else {
+      // Jika pengguna menolak izin
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Izin akses kontak ditolak.'),
+              backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('KuyKontak'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.sync),
+            tooltip: 'Sinkronisasi Kontak',
+            onPressed: _syncContacts, // Panggil fungsi sinkronisasi
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
         child: Column(
           children: [
-            // Kolom Pencarian
             TextField(
               onChanged: (value) {
-                // TODO: Implement search logic using BLoC event
+                // TODO: Implement search logic
               },
               decoration: const InputDecoration(
                 labelText: 'Pencarian',
@@ -36,21 +107,17 @@ class _ContactListPageState extends State<ContactListPage> {
               ),
             ),
             const SizedBox(height: 16),
-            // Gunakan BlocBuilder untuk membangun UI berdasarkan state BLoC
             Expanded(
               child: BlocBuilder<ContactBloc, ContactState>(
                 builder: (context, state) {
-                  // Saat data sedang dimuat, tampilkan loading spinner
                   if (state is ContactLoading || state is ContactInitial) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  // Jika data berhasil dimuat
                   if (state is ContactLoaded) {
                     final contacts = state.contacts;
                     if (contacts.isEmpty) {
                       return const Center(child: Text('Tidak ada kontak.'));
                     }
-                    // Proses data untuk AzListView
                     SuspensionUtil.sortListBySuspensionTag(contacts);
                     SuspensionUtil.setShowSuspensionStatus(contacts);
 
@@ -85,11 +152,9 @@ class _ContactListPageState extends State<ContactListPage> {
                       },
                     );
                   }
-                  // Jika terjadi error
                   if (state is ContactError) {
                     return Center(child: Text('Error: ${state.message}'));
                   }
-                  // State default
                   return const Center(
                       child: Text('Mulai dengan menambahkan kontak baru.'));
                 },
@@ -126,9 +191,6 @@ class _ContactListPageState extends State<ContactListPage> {
           leading: CircleAvatar(
             backgroundColor: primaryColor.withOpacity(0.2),
             foregroundColor: primaryColor,
-            // --- PERUBAHAN DI SINI ---
-            // Jika URL avatar ada, tampilkan gambar dari internet.
-            // Jika tidak, tampilkan inisial nama.
             backgroundImage:
                 contact.avatar.isNotEmpty ? NetworkImage(contact.avatar) : null,
             child: contact.avatar.isEmpty

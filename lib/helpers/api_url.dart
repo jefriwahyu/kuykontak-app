@@ -8,7 +8,7 @@ const ApiType currentApi = ApiType.express;
 
 class ApiUrl {
   // 1. Definisikan base URL murni (tanpa path)
-  static const String _expressBase = 'http://localhost:3000'; // Sesuaikan port
+  static const String _expressBase = 'https://manu.my.id'; // Sesuaikan port
   static const String _ci4Base = 'http://localhost:8080'; // Sesuaikan port
 
   // 2. Definisikan path lengkap untuk setiap endpoint
