@@ -1,194 +1,157 @@
 import 'package:flutter/material.dart';
-import '../model/contact.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kontak_app_m/bloc/contact_bloc.dart';
+import 'package:kontak_app_m/model/contact.dart';
+import 'package:kontak_app_m/ui/add_edit_contact_page.dart';
+import 'package:kontak_app_m/ui/theme.dart';
+import 'package:kontak_app_m/helpers/slide_right_route.dart';
 
 class ContactDetailPage extends StatelessWidget {
   final Contact contact;
-  final VoidCallback onDeleted;
-  final VoidCallback onEdit;
+  const ContactDetailPage({super.key, required this.contact});
 
-  const ContactDetailPage({
-    super.key,
-    required this.contact,
-    required this.onDeleted,
-    required this.onEdit,
-  });
+  Widget _buildDetailItem(String label, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(color: Colors.grey, fontSize: 14),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F6FA),
-      appBar: AppBar(
-        title: const Text('Detail Kontak'),
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'hapus') {
-                showDialog(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: const Text('Konfirmasi Hapus'),
-                    content: const Text(
-                        'Apakah Anda yakin ingin menghapus kontak ini?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(ctx).pop(),
-                        child: const Text('Batal'),
-                      ),
-                      FilledButton(
-                        onPressed: () {
-                          Navigator.of(ctx).pop();
-                          onDeleted();
-                          Navigator.of(context).pop('deleted');
-                        },
-                        child: const Text('Hapus'),
-                      ),
-                    ],
-                  ),
-                );
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'hapus',
-                child: ListTile(
-                  leading: Icon(Icons.delete, color: Colors.red),
-                  title: Text('Hapus'),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-      body: Center(
-        child: SingleChildScrollView(
+    return BlocListener<ContactBloc, ContactState>(
+      listener: (context, state) {
+        if (state is ContactActionSuccess) {
+          if (Navigator.canPop(context)) {
+            Navigator.of(context).pop();
+          }
+        }
+        if (state is ContactError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text('Gagal: ${state.message}'),
+                backgroundColor: Colors.red),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Detail Kontak')),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Avatar besar di atas card
-              Padding(
-                padding: const EdgeInsets.only(top: 32, bottom: 8),
-                child: CircleAvatar(
-                  radius: 54,
-                  backgroundColor: Colors.deepPurple.shade100,
-                  backgroundImage: contact.avatar.isNotEmpty
-                      ? NetworkImage(contact.avatar)
-                      : null,
+              const SizedBox(height: 20),
+              Center(
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: primaryColor.withOpacity(0.2),
+                    image: contact.avatar.isNotEmpty
+                        ? DecorationImage(
+                            image: NetworkImage(contact.avatar),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                  ),
                   child: contact.avatar.isEmpty
-                      ? Text(
-                          contact.nama.isNotEmpty
-                              ? contact.nama[0].toUpperCase()
-                              : '?',
-                          style: const TextStyle(
-                              fontSize: 48,
-                              color: Colors.deepPurple,
-                              fontWeight: FontWeight.bold),
+                      ? Center(
+                          child: Text(
+                            contact.nama.isNotEmpty
+                                ? contact.nama[0].toUpperCase()
+                                : '?',
+                            style: const TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor),
+                          ),
                         )
                       : null,
                 ),
               ),
+              const SizedBox(height: 30),
               Card(
-                elevation: 10,
-                margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24)),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Text(
-                          contact.nama,
-                          style: const TextStyle(
-                              fontSize: 26, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Divider(color: Colors.grey.shade300, thickness: 1),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          const Icon(Icons.phone,
-                              size: 22, color: Colors.deepPurple),
-                          const SizedBox(width: 10),
-                          Text(
-                            contact.noHp,
-                            style: const TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      ),
-                      if (contact.email.isNotEmpty) ...[
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            const Icon(Icons.email,
-                                size: 22, color: Colors.deepPurple),
-                            const SizedBox(width: 10),
-                            Flexible(
-                              child: Text(
-                                contact.email,
-                                style: const TextStyle(fontSize: 18),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                      // Jika ada field tambahan seperti tanggal dibuat, bisa tampilkan di sini
-                      // const SizedBox(height: 16),
-                      // Row(
-                      //   children: [
-                      //     Icon(Icons.calendar_today, size: 20, color: Colors.deepPurple),
-                      //     SizedBox(width: 10),
-                      //     Text('Dibuat: 2023-07-07', style: TextStyle(fontSize: 16)),
-                      //   ],
-                      // ),
-                      const SizedBox(height: 32),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit,
-                                color: Colors.blue, size: 32),
-                            tooltip: 'Edit Kontak',
-                            onPressed: onEdit,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete,
-                                color: Colors.red, size: 32),
-                            tooltip: 'Hapus Kontak',
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => AlertDialog(
-                                  title: const Text('Konfirmasi Hapus'),
-                                  content: const Text(
-                                      'Apakah Anda yakin ingin menghapus kontak ini?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.of(ctx).pop(),
-                                      child: const Text('Batal'),
-                                    ),
-                                    FilledButton(
-                                      onPressed: () {
-                                        Navigator.of(ctx).pop();
-                                        onDeleted();
-                                        Navigator.of(context).pop('deleted');
-                                      },
-                                      child: const Text('Hapus'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                      _buildDetailItem('Nama', contact.nama),
+                      const SizedBox(height: 20),
+                      _buildDetailItem('No. Hp', contact.noHp),
+                      const SizedBox(height: 20),
+                      _buildDetailItem('Email', contact.email),
                     ],
                   ),
                 ),
+              ),
+              const SizedBox(height: 30),
+
+              // --- PERUBAHAN KEDUA TOMBOL DI SINI ---
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Tombol Ubah (Icon)
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    color: primaryColor, // Menggunakan warna tema utama
+                    iconSize: 32,
+                    tooltip: 'Ubah Kontak',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          SlideRightRoute(
+                            page: AddEditContactPage(contact: contact),
+                          ));
+                    },
+                  ),
+                  const SizedBox(width: 24), // Beri jarak sedikit lebih lebar
+                  // Tombol Hapus (Icon)
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    color: deleteColor,
+                    iconSize: 32,
+                    tooltip: 'Hapus Kontak',
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('Konfirmasi Hapus'),
+                          content: Text(
+                              'Apakah Anda yakin ingin menghapus kontak "${contact.nama}"?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(ctx).pop(),
+                              child: const Text('Batal'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                                context
+                                    .read<ContactBloc>()
+                                    .add(DeleteContact(contact.id));
+                              },
+                              child: const Text('Hapus',
+                                  style: TextStyle(color: deleteColor)),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -197,14 +160,3 @@ class ContactDetailPage extends StatelessWidget {
     );
   }
 }
-
-// Penggunaan ContactDetailPage yang baru
-// builder: (context) => ContactDetailPage(
-//   contact: contact,
-//   onDeleted: () {
-//     // aksi setelah kontak dihapus, misal refresh list
-//   },
-//   onEdit: () {
-//     // aksi untuk edit kontak, misal buka halaman edit
-//   },
-// ),

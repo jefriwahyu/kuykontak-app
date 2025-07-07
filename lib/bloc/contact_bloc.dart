@@ -45,6 +45,8 @@ class ContactInitial extends ContactState {}
 
 class ContactLoading extends ContactState {}
 
+class ContactActionSuccess extends ContactState {}
+
 class ContactLoaded extends ContactState {
   final List<Contact> contacts;
   const ContactLoaded(this.contacts);
@@ -93,7 +95,8 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     on<DeleteContact>((event, emit) async {
       try {
         await ContactService.deleteContact(event.id);
-        add(LoadContacts()); // Panggil event LoadContacts untuk refresh
+        emit(ContactActionSuccess()); // <-- KIRIM SINYAL SUKSES
+        add(LoadContacts()); // Tetap muat ulang daftar setelahnya
       } catch (e) {
         emit(ContactError(e.toString()));
       }

@@ -9,6 +9,7 @@ import 'package:kontak_app_m/ui/contact_detail_page.dart';
 import 'package:kontak_app_m/ui/theme.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_contacts/flutter_contacts.dart' as FC;
+import 'package:kontak_app_m/helpers/slide_right_route.dart';
 
 class ContactListPage extends StatefulWidget {
   const ContactListPage({super.key});
@@ -97,6 +98,7 @@ class _ContactListPageState extends State<ContactListPage> {
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
         child: Column(
           children: [
+            const SizedBox(height: 100),
             TextField(
               onChanged: (value) {
                 // TODO: Implement search logic
@@ -165,12 +167,16 @@ class _ContactListPageState extends State<ContactListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          // Kode Baru
           Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => const AddEditContactPage(),
+              SlideRightRoute(
+                page: const AddEditContactPage(),
               ));
         },
+        shape: const CircleBorder(),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
         child: const Icon(Icons.add),
       ),
     );
@@ -179,30 +185,11 @@ class _ContactListPageState extends State<ContactListPage> {
   Widget _buildContactItem(Contact contact) {
     return GestureDetector(
       onTap: () {
+        // Panggil ContactDetailPage dengan cara yang lebih sederhana
         Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => ContactDetailPage(
-                contact: contact,
-                onDeleted: () {
-                  // aksi setelah kontak dihapus, misal refresh list
-                  context.read<ContactBloc>().add(LoadContacts());
-                  Navigator.of(context).pop();
-                },
-                onEdit: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          AddEditContactPage(contact: contact),
-                    ),
-                  );
-                  if (result == 'saved' || result == 'updated') {
-                    context.read<ContactBloc>().add(LoadContacts());
-                    Navigator.of(context).pop();
-                  }
-                },
-              ),
+            SlideRightRoute(
+              page: ContactDetailPage(contact: contact),
             ));
       },
       child: Card(

@@ -1,6 +1,5 @@
 import 'package:azlistview/azlistview.dart';
 
-// Implementasikan kembali ISuspensionBean
 class Contact extends ISuspensionBean {
   final String id;
   final String nama;
@@ -11,7 +10,6 @@ class Contact extends ISuspensionBean {
   final String createdAt;
   final String updatedAt;
 
-  // Properti tag untuk pengelompokan
   String? tag;
 
   Contact({
@@ -24,10 +22,22 @@ class Contact extends ISuspensionBean {
     required this.createdAt,
     required this.updatedAt,
   }) {
-    tag = nama.isNotEmpty ? nama[0].toUpperCase() : '#';
+    if (nama.isEmpty) {
+      // Jika nama kosong, masuk ke grup #
+      tag = '#';
+    } else {
+      String firstChar = nama[0].toUpperCase();
+      // Cek apakah karakter pertama adalah huruf A-Z
+      if (RegExp(r'[A-Z]').hasMatch(firstChar)) {
+        // Jika ya, gunakan huruf tersebut sebagai tag
+        tag = firstChar;
+      } else {
+        // Jika tidak (angka, simbol, dll), masuk ke grup #
+        tag = '#';
+      }
+    }
   }
 
-  // Override method yang dibutuhkan azlistview
   @override
   String getSuspensionTag() => tag!;
 

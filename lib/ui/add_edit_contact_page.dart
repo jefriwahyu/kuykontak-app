@@ -25,6 +25,8 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
   Uint8List? _imageBytes;
   String? _imageName;
   bool _isSaving = false;
+  // State baru untuk menandai jika avatar yang ada ingin dihapus
+  bool _isAvatarRemoved = false;
 
   bool get isEditMode => widget.contact != null;
 
@@ -58,6 +60,8 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
       setState(() {
         _imageBytes = bytes;
         _imageName = pickedFile.name;
+        _isAvatarRemoved =
+            false; // Jika memilih gambar baru, batalkan status hapus
       });
     }
   }
@@ -70,7 +74,12 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
 
       String? avatarUrl;
 
-      if (_imageBytes != null && _imageName != null) {
+      // Logika penentuan URL Avatar
+      if (_isAvatarRemoved) {
+        // Jika user menekan 'x' pada gambar lama, URL dikosongkan
+        avatarUrl = '';
+      } else if (_imageBytes != null && _imageName != null) {
+        // Jika ada gambar baru yang dipilih, upload
         avatarUrl =
             await ContactService.uploadAvatar(_imageBytes!, _imageName!);
         if (avatarUrl == null) {
@@ -87,6 +96,7 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
           return;
         }
       } else if (isEditMode) {
+        // Jika tidak ada perubahan, gunakan URL avatar yang lama
         avatarUrl = widget.contact!.avatar;
       }
 
@@ -123,6 +133,12 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Cek apakah ada gambar yang bisa ditampilkan
+    final bool hasImage = (isEditMode &&
+            widget.contact!.avatar.isNotEmpty &&
+            !_isAvatarRemoved) ||
+        _imageBytes != null;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(isEditMode ? 'Edit Kontak' : 'Tambah Kontak'),
@@ -134,23 +150,54 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              GestureDetector(
-                onTap: _pickImage,
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage: _imageBytes != null
-                      ? MemoryImage(_imageBytes!)
-                      : (isEditMode && widget.contact!.avatar.isNotEmpty
-                          ? NetworkImage(widget.contact!.avatar)
-                          : null) as ImageProvider?,
-                  child: _isSaving
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : (_imageBytes == null &&
-                              !(isEditMode && widget.contact!.avatar.isNotEmpty)
-                          ? const Icon(Icons.add_a_photo,
-                              size: 40, color: Colors.white60)
-                          : null),
-                ),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: _imageBytes != null
+                          ? MemoryImage(_imageBytes!)
+                          : (isEditMode &&
+                                  widget.contact!.avatar.isNotEmpty &&
+                                  !_isAvatarRemoved
+                              ? NetworkImage(widget.contact!.avatar)
+                              : null) as ImageProvider?,
+                      child: _isSaving
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : (!hasImage
+                              ? const Icon(Icons.add_a_photo,
+                                  size: 40, color: Colors.white60)
+                              : null),
+                    ),
+                  ),
+                  if (hasImage && !_isSaving)
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          // Hapus gambar yang sedang ditampilkan dari preview
+                          setState(() {
+                            _imageBytes = null;
+                            _imageName = null;
+                            _isAvatarRemoved = true;
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              shape: BoxShape.circle,
+                              border:
+                                  Border.all(color: Colors.white, width: 2)),
+                          child: const Icon(Icons.close,
+                              size: 18, color: Colors.black54),
+                        ),
+                      ),
+                    ),
+                ],
               ),
               const SizedBox(height: 30),
               Card(
