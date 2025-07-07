@@ -182,7 +182,27 @@ class _ContactListPageState extends State<ContactListPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ContactDetailPage(contact: contact),
+              builder: (context) => ContactDetailPage(
+                contact: contact,
+                onDeleted: () {
+                  // aksi setelah kontak dihapus, misal refresh list
+                  context.read<ContactBloc>().add(LoadContacts());
+                  Navigator.of(context).pop();
+                },
+                onEdit: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          AddEditContactPage(contact: contact),
+                    ),
+                  );
+                  if (result == 'saved' || result == 'updated') {
+                    context.read<ContactBloc>().add(LoadContacts());
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
             ));
       },
       child: Card(
