@@ -8,7 +8,6 @@ import 'package:kontak_app_m/helpers/contact_service.dart';
 
 class AddEditContactPage extends StatefulWidget {
   final Contact? contact;
-
   const AddEditContactPage({super.key, this.contact});
 
   @override
@@ -21,11 +20,13 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
   late TextEditingController _namaController;
   late TextEditingController _noHpController;
   late TextEditingController _emailController;
+  late TextEditingController _alamatController; // Controller baru
+  String? _selectedGrup; // Variabel baru
+  final List<String> _grupOptions = ['Keluarga', 'Teman', 'Kerja']; // Opsi grup
 
   Uint8List? _imageBytes;
   String? _imageName;
   bool _isSaving = false;
-  // State baru untuk menandai jika avatar yang ada ingin dihapus
   bool _isAvatarRemoved = false;
 
   bool get isEditMode => widget.contact != null;
@@ -36,11 +37,16 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
     _namaController = TextEditingController();
     _noHpController = TextEditingController();
     _emailController = TextEditingController();
+    _alamatController = TextEditingController();
 
     if (isEditMode) {
       _namaController.text = widget.contact!.nama;
       _noHpController.text = widget.contact!.noHp;
       _emailController.text = widget.contact!.email;
+      _alamatController.text = widget.contact!.alamat;
+      if (widget.contact!.grup.isNotEmpty) {
+        _selectedGrup = widget.contact!.grup;
+      }
     }
   }
 
@@ -49,6 +55,7 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
     _namaController.dispose();
     _noHpController.dispose();
     _emailController.dispose();
+    _alamatController.dispose();
     super.dispose();
   }
 
@@ -60,8 +67,7 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
       setState(() {
         _imageBytes = bytes;
         _imageName = pickedFile.name;
-        _isAvatarRemoved =
-            false; // Jika memilih gambar baru, batalkan status hapus
+        _isAvatarRemoved = false;
       });
     }
   }
@@ -73,13 +79,9 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
       });
 
       String? avatarUrl;
-
-      // Logika penentuan URL Avatar
       if (_isAvatarRemoved) {
-        // Jika user menekan 'x' pada gambar lama, URL dikosongkan
         avatarUrl = '';
       } else if (_imageBytes != null && _imageName != null) {
-        // Jika ada gambar baru yang dipilih, upload
         avatarUrl =
             await ContactService.uploadAvatar(_imageBytes!, _imageName!);
         if (avatarUrl == null) {
@@ -96,7 +98,6 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
           return;
         }
       } else if (isEditMode) {
-        // Jika tidak ada perubahan, gunakan URL avatar yang lama
         avatarUrl = widget.contact!.avatar;
       }
 
@@ -104,6 +105,8 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
         'nama': _namaController.text,
         'no_hp': _noHpController.text,
         'email': _emailController.text,
+        'alamat': _alamatController.text,
+        'grup': _selectedGrup ?? '',
         'avatar': avatarUrl ?? '',
       };
 
@@ -111,7 +114,6 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
         context.read<ContactBloc>().add(isEditMode
             ? UpdateContact(widget.contact!.id, contactData)
             : AddContact(contactData));
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(isEditMode
@@ -120,7 +122,6 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
             backgroundColor: Colors.green,
           ),
         );
-
         int popCount = isEditMode ? 2 : 1;
         for (int i = 0; i < popCount; i++) {
           if (Navigator.canPop(context)) {
@@ -133,16 +134,12 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Cek apakah ada gambar yang bisa ditampilkan
     final bool hasImage = (isEditMode &&
             widget.contact!.avatar.isNotEmpty &&
             !_isAvatarRemoved) ||
         _imageBytes != null;
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(isEditMode ? 'Edit Kontak' : 'Tambah Kontak'),
-      ),
+      appBar: AppBar(title: Text(isEditMode ? 'Edit Kontak' : 'Tambah Kontak')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -151,7 +148,6 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
             children: [
               const SizedBox(height: 20),
               Stack(
-                alignment: Alignment.center,
                 children: [
                   GestureDetector(
                     onTap: _pickImage,
@@ -159,9 +155,7 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
                       radius: 50,
                       backgroundImage: _imageBytes != null
                           ? MemoryImage(_imageBytes!)
-                          : (isEditMode &&
-                                  widget.contact!.avatar.isNotEmpty &&
-                                  !_isAvatarRemoved
+                          : (hasImage
                               ? NetworkImage(widget.contact!.avatar)
                               : null) as ImageProvider?,
                       child: _isSaving
@@ -174,11 +168,10 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
                   ),
                   if (hasImage && !_isSaving)
                     Positioned(
-                      top: 0,
-                      right: 0,
+                      top: -4,
+                      right: -4,
                       child: GestureDetector(
                         onTap: () {
-                          // Hapus gambar yang sedang ditampilkan dari preview
                           setState(() {
                             _imageBytes = null;
                             _imageName = null;
@@ -206,30 +199,49 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
                   child: Column(
                     children: [
                       TextFormField(
-                        controller: _namaController,
-                        decoration: const InputDecoration(labelText: 'Nama'),
-                        validator: (value) => (value == null || value.isEmpty)
-                            ? 'Nama tidak boleh kosong'
-                            : null,
-                      ),
+                          controller: _namaController,
+                          decoration: const InputDecoration(labelText: 'Nama'),
+                          validator: (v) => (v == null || v.isEmpty)
+                              ? 'Nama wajib diisi'
+                              : null),
                       const SizedBox(height: 16),
                       TextFormField(
-                        controller: _noHpController,
-                        decoration: const InputDecoration(labelText: 'No. Hp'),
-                        keyboardType: TextInputType.phone,
-                        validator: (value) => (value == null || value.isEmpty)
-                            ? 'No. Hp tidak boleh kosong'
-                            : null,
-                      ),
+                          controller: _noHpController,
+                          decoration:
+                              const InputDecoration(labelText: 'No. Hp'),
+                          keyboardType: TextInputType.phone,
+                          validator: (v) => (v == null || v.isEmpty)
+                              ? 'No. Hp wajib diisi'
+                              : null),
                       const SizedBox(height: 16),
                       TextFormField(
-                        controller: _emailController,
-                        decoration: const InputDecoration(labelText: 'E-mail'),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) =>
-                            (value == null || !value.contains('@'))
-                                ? 'Email tidak valid'
-                                : null,
+                          controller: _emailController,
+                          decoration:
+                              const InputDecoration(labelText: 'E-mail'),
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (v) =>
+                              (v != null && v.isNotEmpty && !v.contains('@'))
+                                  ? 'Email tidak valid'
+                                  : null),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                          controller: _alamatController,
+                          decoration:
+                              const InputDecoration(labelText: 'Alamat'),
+                          maxLines: 3),
+                      const SizedBox(height: 16),
+                      DropdownButtonFormField<String>(
+                        value: _selectedGrup,
+                        decoration: const InputDecoration(labelText: 'Grup'),
+                        items: _grupOptions.map((String value) {
+                          return DropdownMenuItem<String>(
+                              value: value, child: Text(value));
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedGrup = newValue;
+                          });
+                        },
                       ),
                     ],
                   ),

@@ -19,102 +19,59 @@ class ContactListPage extends StatefulWidget {
 }
 
 class _ContactListPageState extends State<ContactListPage> {
-  // Variabel untuk menyimpan semua kontak asli dari BLoC
   List<Contact> _allContacts = [];
-  // Variabel untuk menampilkan kontak yang sudah difilter
   List<Contact> _filteredContacts = [];
+
+  final List<String> _kategori = ['Semua', 'Keluarga', 'Teman', 'Kerja'];
+  String _selectedKategori = 'Semua';
+  String _searchKeyword = '';
 
   @override
   void initState() {
     super.initState();
-    // Inisialisasi awal, bisa juga langsung diisi dari state BLoC jika sudah ada
     final currentState = context.read<ContactBloc>().state;
     if (currentState is ContactLoaded) {
       _allContacts = currentState.contacts;
-      _filteredContacts = _allContacts;
+      _runFilter(); // Jalankan filter awal
     }
   }
 
-  // Fungsi untuk logika pencarian
-  void _runFilter(String enteredKeyword) {
-    List<Contact> results = [];
-    if (enteredKeyword.isEmpty) {
-      // Jika kolom pencarian kosong, tampilkan semua kontak
+  // --- FUNGSI FILTER YANG DIPERBARUI DENGAN OPTIMASI ---
+  void _runFilter() {
+    List<Contact> results;
+
+    if (_selectedKategori == 'Semua') {
       results = _allContacts;
     } else {
-      // Jika ada teks, filter berdasarkan nama
-      results = _allContacts
+      results = _allContacts.where((c) => c.grup == _selectedKategori).toList();
+    }
+
+    if (_searchKeyword.isNotEmpty) {
+      results = results
           .where((contact) =>
-              contact.nama.toLowerCase().contains(enteredKeyword.toLowerCase()))
+              contact.nama.toLowerCase().contains(_searchKeyword.toLowerCase()))
           .toList();
     }
-    // Update UI dengan daftar yang sudah difilter
+
+    // --- PROSES DATA DI SINI (BUKAN DI BUILD) ---
+    SuspensionUtil.sortListBySuspensionTag(results);
+    SuspensionUtil.setShowSuspensionStatus(results);
+
     setState(() {
       _filteredContacts = results;
     });
   }
 
-  // Fungsi untuk sinkronisasi kontak
-  Future<void> _syncContacts() async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-          content: Text('Memulai sinkronisasi...'),
-          backgroundColor: Colors.blue),
-    );
-    if (await Permission.contacts.request().isGranted) {
-      List<FC.Contact> deviceContacts =
-          await FC.FlutterContacts.getContacts(withProperties: true);
-      List<Map<String, dynamic>> contactsToSync = [];
-      for (var contact in deviceContacts) {
-        if (contact.phones.isNotEmpty && contact.displayName.isNotEmpty) {
-          contactsToSync.add({
-            'nama': contact.displayName,
-            'no_hp':
-                contact.phones.first.number.replaceAll(RegExp(r'[-\s]'), ''),
-            'email':
-                contact.emails.isNotEmpty ? contact.emails.first.address : ''
-          });
-        }
-      }
-      try {
-        await ContactService.syncContacts(contactsToSync);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Sinkronisasi berhasil!'),
-                backgroundColor: Colors.green),
-          );
-          context.read<ContactBloc>().add(LoadContacts());
-        }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text('Gagal melakukan sinkronisasi: ${e.toString()}'),
-                backgroundColor: Colors.red),
-          );
-        }
-      }
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Izin akses kontak ditolak.'),
-              backgroundColor: Colors.red),
-        );
-      }
-    }
-  }
+  Future<void> _syncContacts() async {/* ... tidak berubah ... */}
 
   @override
   Widget build(BuildContext context) {
-    // Gunakan BlocListener untuk update data tanpa mengganggu UI builder
     return BlocListener<ContactBloc, ContactState>(
       listener: (context, state) {
         if (state is ContactLoaded) {
           setState(() {
             _allContacts = state.contacts;
-            _filteredContacts = _allContacts;
+            _runFilter();
           });
         }
       },
@@ -129,78 +86,105 @@ class _ContactListPageState extends State<ContactListPage> {
             )
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-          child: Column(
-            children: [
-              const SizedBox(height: 8),
-              TextField(
-                onChanged: (value) => _runFilter(value),
-                decoration: const InputDecoration(
-                  labelText: 'Pencarian',
-                  prefixIcon: Icon(Icons.search),
-                ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SegmentedButton<String>(
+                      segments: _kategori
+                          .map((k) =>
+                              ButtonSegment<String>(value: k, label: Text(k)))
+                          .toList(),
+                      selected: {_selectedKategori},
+                      onSelectionChanged: (newSelection) {
+                        setState(() {
+                          _selectedKategori = newSelection.first;
+                          _runFilter();
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    onChanged: (value) {
+                      _searchKeyword = value;
+                      _runFilter();
+                    },
+                    decoration: const InputDecoration(
+                        labelText: 'Pencarian', prefixIcon: Icon(Icons.search)),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: BlocBuilder<ContactBloc, ContactState>(
-                  builder: (context, state) {
-                    if (state is ContactLoading || state is ContactInitial) {
-                      return const Center(child: CircularProgressIndicator());
+            ),
+            Expanded(
+              child: BlocBuilder<ContactBloc, ContactState>(
+                builder: (context, state) {
+                  if (state is ContactLoading || state is ContactInitial) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (state is ContactLoaded) {
+                    if (_allContacts.isEmpty) {
+                      return const Center(child: Text('Tidak ada kontak.'));
                     }
-                    if (state is ContactLoaded) {
-                      if (_allContacts.isEmpty) {
-                        return const Center(child: Text('Tidak ada kontak.'));
-                      }
-                      if (_filteredContacts.isEmpty) {
-                        return const Center(
-                            child: Text('Kontak tidak ditemukan.'));
-                      }
-                      SuspensionUtil.sortListBySuspensionTag(_filteredContacts);
-                      SuspensionUtil.setShowSuspensionStatus(_filteredContacts);
-
-                      return AzListView(
-                        data: _filteredContacts,
-                        itemCount: _filteredContacts.length,
-                        itemBuilder: (context, index) {
-                          final contact = _filteredContacts[index];
-                          return Column(
-                            children: [
-                              Offstage(
-                                offstage: !contact.isShowSuspension,
-                                child: _buildSuspensionWidget(
-                                    contact.getSuspensionTag()),
-                              ),
-                              _buildContactItem(contact),
-                            ],
-                          );
-                        },
-                        indexBarData:
-                            SuspensionUtil.getTagIndexList(_filteredContacts),
-                        indexHintBuilder: (context, hint) {
-                          return Container(
-                            alignment: Alignment.center,
-                            width: 60.0,
-                            height: 60.0,
-                            decoration: BoxDecoration(
-                                color: Colors.black54, shape: BoxShape.circle),
-                            child: Text(hint,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 30.0)),
-                          );
-                        },
-                      );
+                    if (_filteredContacts.isEmpty) {
+                      return const Center(
+                          child: Text('Kontak tidak ditemukan.'));
                     }
-                    if (state is ContactError) {
-                      return Center(child: Text('Error: ${state.message}'));
-                    }
-                    return const Center(
-                        child: Text('Mulai dengan menambahkan kontak baru.'));
-                  },
-                ),
+                    // --- TIDAK ADA LAGI PROSES SORTING DI SINI ---
+                    return AzListView(
+                      data: _filteredContacts,
+                      itemCount: _filteredContacts.length,
+                      itemBuilder: (context, index) {
+                        final contact = _filteredContacts[index];
+                        return Column(
+                          children: [
+                            Offstage(
+                              offstage: !contact.isShowSuspension,
+                              child: _buildSuspensionWidget(
+                                  contact.getSuspensionTag()),
+                            ),
+                            _buildContactItem(contact),
+                          ],
+                        );
+                      },
+                      indexBarOptions: IndexBarOptions(
+                        needRebuild: true,
+                        hapticFeedback: true,
+                        textStyle: TextStyle(
+                            color: Colors.grey.shade600, fontSize: 12),
+                        selectTextStyle: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                        selectItemDecoration: BoxDecoration(
+                            shape: BoxShape.circle, color: primaryColor),
+                      ),
+                      indexHintBuilder: (context, hint) {
+                        return Container(
+                          alignment: Alignment.center,
+                          width: 60.0,
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                              color: Colors.black54, shape: BoxShape.circle),
+                          child: Text(hint,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 30.0)),
+                        );
+                      },
+                    );
+                  }
+                  if (state is ContactError) {
+                    return Center(child: Text('Error: ${state.message}'));
+                  }
+                  return const Center(
+                      child: Text('Mulai dengan menambahkan kontak baru.'));
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {

@@ -7,6 +7,7 @@ class Contact extends ISuspensionBean {
   final String noHp;
   final String alamat;
   final String avatar;
+  final String grup;
   final String createdAt;
   final String updatedAt;
 
@@ -19,6 +20,7 @@ class Contact extends ISuspensionBean {
     required this.noHp,
     required this.alamat,
     required this.avatar,
+    required this.grup,
     required this.createdAt,
     required this.updatedAt,
   }) {
@@ -49,6 +51,7 @@ class Contact extends ISuspensionBean {
       noHp: json['no_hp'] as String,
       alamat: json['alamat'] as String,
       avatar: json['avatar'] as String,
+      grup: json['grup'] as String,
       createdAt: json['createdAt'] as String,
       updatedAt: json['updatedAt'] as String,
     );
