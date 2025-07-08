@@ -7,7 +7,8 @@ const ApiType currentApi = ApiType.express;
 
 class ApiUrl {
   //Definisikan base URL murni (tanpa path)
-  static const String _expressBase = 'http://localhost:5000'; // Sesuaikan port
+  static const String _expressBase =
+      'http://192.168.0.130:5000'; // Sesuaikan port
   static const String _ci4Base =
       'https://kontak-api.tinagers.com'; // Sesuaikan port
 

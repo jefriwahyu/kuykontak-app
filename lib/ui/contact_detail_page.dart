@@ -160,12 +160,9 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                                 _isFavorite = !_isFavorite;
                               });
                               context.read<ContactBloc>().add(
-                                    ToggleFavorite(
-                                        widget.contact.id, _isFavorite),
-                                  );
-                              // Update count setelah toggle
-                              Future.delayed(const Duration(milliseconds: 500),
-                                  _updateFavoriteCount);
+                                ToggleFavorite(widget.contact.id, _isFavorite),
+                              );
+                              // Tidak perlu pop/LoadContacts di sini, biarkan BlocListener yang pop
                             },
                     ),
                     const SizedBox(width: 24),

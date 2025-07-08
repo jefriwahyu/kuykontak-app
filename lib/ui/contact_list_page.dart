@@ -86,7 +86,10 @@ class _ContactListPageState extends State<ContactListPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('KuyKontak'),
+          title: Image.asset(
+            'assets/KuyKontak.png',
+            height: 75, // Atur tinggi sesuai kebutuhan
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.sync),
