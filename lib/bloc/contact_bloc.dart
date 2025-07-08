@@ -34,6 +34,14 @@ class DeleteContact extends ContactEvent {
   List<Object?> get props => [id];
 }
 
+class ToggleFavorite extends ContactEvent {
+  final String id;
+  final bool isFavorite;
+  const ToggleFavorite(this.id, this.isFavorite);
+  @override
+  List<Object?> get props => [id, isFavorite];
+}
+
 // --- STATES (Kondisi yang dikirim BLoC ke UI) ---
 abstract class ContactState extends Equatable {
   const ContactState();
@@ -97,6 +105,21 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         await ContactService.deleteContact(event.id);
         emit(ContactActionSuccess()); // <-- KIRIM SINYAL SUKSES
         add(LoadContacts()); // Tetap muat ulang daftar setelahnya
+      } catch (e) {
+        emit(ContactError(e.toString()));
+      }
+    });
+
+    on<ToggleFavorite>((event, emit) async {
+      try {
+        final favorites = await ContactService.getContacts();
+        final favCount = favorites.where((c) => c.isFavorite).length;
+        if (!event.isFavorite && favCount >= 5) {
+          emit(const ContactError('Batas favorite hanya 5 kontak!'));
+          return;
+        }
+        await ContactService.toggleFavorite(event.id, event.isFavorite);
+        add(LoadContacts());
       } catch (e) {
         emit(ContactError(e.toString()));
       }

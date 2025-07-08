@@ -6,9 +6,36 @@ import 'package:kontak_app_m/ui/add_edit_contact_page.dart';
 import 'package:kontak_app_m/ui/theme.dart';
 import 'package:kontak_app_m/helpers/slide_right_route.dart';
 
-class ContactDetailPage extends StatelessWidget {
+class ContactDetailPage extends StatefulWidget {
   final Contact contact;
   const ContactDetailPage({super.key, required this.contact});
+
+  @override
+  State<ContactDetailPage> createState() => _ContactDetailPageState();
+}
+
+class _ContactDetailPageState extends State<ContactDetailPage> {
+  late bool _isFavorite;
+  int _favoriteCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFavorite = widget.contact.isFavorite;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateFavoriteCount();
+    });
+  }
+
+  void _updateFavoriteCount() {
+    final bloc = context.read<ContactBloc>();
+    final state = bloc.state;
+    if (state is ContactLoaded) {
+      setState(() {
+        _favoriteCount = state.contacts.where((c) => c.isFavorite).length;
+      });
+    }
+  }
 
   Widget _buildDetailItem(String label, String value) {
     return Column(
@@ -56,17 +83,17 @@ class ContactDetailPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: primaryColor.withOpacity(0.2),
-                      image: contact.avatar.isNotEmpty
+                      image: widget.contact.avatar.isNotEmpty
                           ? DecorationImage(
-                              image: NetworkImage(contact.avatar),
+                              image: NetworkImage(widget.contact.avatar),
                               fit: BoxFit.cover)
                           : null,
                     ),
-                    child: contact.avatar.isEmpty
+                    child: widget.contact.avatar.isEmpty
                         ? Center(
                             child: Text(
-                              contact.nama.isNotEmpty
-                                  ? contact.nama[0].toUpperCase()
+                              widget.contact.nama.isNotEmpty
+                                  ? widget.contact.nama[0].toUpperCase()
                                   : '?',
                               style: const TextStyle(
                                   fontSize: 40,
@@ -84,19 +111,22 @@ class ContactDetailPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildDetailItem('Nama', contact.nama),
+                        _buildDetailItem('Nama', widget.contact.nama),
                         const SizedBox(height: 20),
-                        _buildDetailItem('No. Hp', contact.noHp),
+                        _buildDetailItem('No. Hp', widget.contact.noHp),
                         const SizedBox(height: 20),
-                        _buildDetailItem('Email',
-                            contact.email.isNotEmpty ? contact.email : '-'),
-                        if (contact.alamat.isNotEmpty) ...[
+                        _buildDetailItem(
+                            'Email',
+                            widget.contact.email.isNotEmpty
+                                ? widget.contact.email
+                                : '-'),
+                        if (widget.contact.alamat.isNotEmpty) ...[
                           const SizedBox(height: 20),
-                          _buildDetailItem('Alamat', contact.alamat),
+                          _buildDetailItem('Alamat', widget.contact.alamat),
                         ],
-                        if (contact.grup.isNotEmpty) ...[
+                        if (widget.contact.grup.isNotEmpty) ...[
                           const SizedBox(height: 20),
-                          _buildDetailItem('Grup', contact.grup),
+                          _buildDetailItem('Grup', widget.contact.grup),
                         ]
                       ],
                     ),
@@ -107,6 +137,39 @@ class ContactDetailPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
+                      icon: Icon(
+                        _isFavorite ? Icons.star : Icons.star_border,
+                        color: _isFavorite ? Colors.amber : Colors.grey,
+                        size: 32,
+                      ),
+                      tooltip: _isFavorite
+                          ? 'Hapus dari Favorit'
+                          : 'Jadikan Favorit',
+                      onPressed: (_favoriteCount >= 5 && !_isFavorite)
+                          ? () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Maaf, jumlah kontak favorite sudah mencapai batas maksimal (5 kontak).'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          : () {
+                              setState(() {
+                                _isFavorite = !_isFavorite;
+                              });
+                              context.read<ContactBloc>().add(
+                                    ToggleFavorite(
+                                        widget.contact.id, _isFavorite),
+                                  );
+                              // Update count setelah toggle
+                              Future.delayed(const Duration(milliseconds: 500),
+                                  _updateFavoriteCount);
+                            },
+                    ),
+                    const SizedBox(width: 24),
+                    IconButton(
                       icon: const Icon(Icons.edit),
                       color: primaryColor,
                       iconSize: 32,
@@ -115,7 +178,8 @@ class ContactDetailPage extends StatelessWidget {
                         Navigator.push(
                             context,
                             SlideRightRoute(
-                                page: AddEditContactPage(contact: contact)));
+                                page: AddEditContactPage(
+                                    contact: widget.contact)));
                       },
                     ),
                     const SizedBox(width: 24),
@@ -135,7 +199,7 @@ class ContactDetailPage extends StatelessWidget {
                             ),
                             title: const Text('Konfirmasi Hapus'),
                             content: Text(
-                              'Apakah Anda yakin ingin menghapus kontak "${contact.nama}"?',
+                              'Apakah Anda yakin ingin menghapus kontak "${widget.contact.nama}"?',
                               textAlign: TextAlign.center,
                             ),
                             shape: RoundedRectangleBorder(
@@ -180,7 +244,7 @@ class ContactDetailPage extends StatelessWidget {
                                   Navigator.of(ctx).pop();
                                   context
                                       .read<ContactBloc>()
-                                      .add(DeleteContact(contact.id));
+                                      .add(DeleteContact(widget.contact.id));
                                 },
                                 style: ButtonStyle(
                                   side: MaterialStateProperty.all(

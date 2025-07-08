@@ -53,12 +53,21 @@ class _ContactListPageState extends State<ContactListPage> {
           .toList();
     }
 
-    // --- PROSES DATA DI SINI (BUKAN DI BUILD) ---
-    SuspensionUtil.sortListBySuspensionTag(results);
-    SuspensionUtil.setShowSuspensionStatus(results);
+    // Buat list dengan favorite di atas tanpa sorting alfabet untuk favorite
+    List<Contact> favoriteContacts =
+        results.where((c) => c.isFavorite).toList();
+    List<Contact> nonFavoriteContacts =
+        results.where((c) => !c.isFavorite).toList();
+
+    // Sort hanya non-favorite secara alfabet
+    SuspensionUtil.sortListBySuspensionTag(nonFavoriteContacts);
+    SuspensionUtil.setShowSuspensionStatus(nonFavoriteContacts);
+
+    // Gabungkan: favorite di atas, lalu non-favorite
+    List<Contact> finalResults = [...favoriteContacts, ...nonFavoriteContacts];
 
     setState(() {
-      _filteredContacts = results;
+      _filteredContacts = finalResults;
     });
   }
 
@@ -222,8 +231,16 @@ class _ContactListPageState extends State<ContactListPage> {
                   )
                 : null,
           ),
-          title: Text(contact.nama,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
+          title: Row(
+            children: [
+              Expanded(
+                child: Text(contact.nama,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              if (contact.isFavorite)
+                const Icon(Icons.star, color: Colors.amber, size: 16),
+            ],
+          ),
           subtitle: Text(contact.noHp),
         ),
       ),

@@ -58,4 +58,12 @@ class ContactService {
       throw Exception('Gagal melakukan sinkronisasi.');
     }
   }
+
+  static Future<void> toggleFavorite(String id, bool isFavorite) async {
+    final url = '${ApiUrl.contactsUrl}/$id/favorite';
+    final response = await _dio.patch(url, data: {'isFavorite': isFavorite});
+    if (response.statusCode != 200) {
+      throw Exception('Gagal update favorite');
+    }
+  }
 }

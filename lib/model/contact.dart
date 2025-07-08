@@ -10,6 +10,7 @@ class Contact extends ISuspensionBean {
   final String grup;
   final String createdAt;
   final String updatedAt;
+  final bool isFavorite;
 
   String? tag;
 
@@ -23,6 +24,7 @@ class Contact extends ISuspensionBean {
     required this.grup,
     required this.createdAt,
     required this.updatedAt,
+    this.isFavorite = false,
   }) {
     if (nama.isEmpty) {
       // Jika nama kosong, masuk ke grup #
@@ -45,15 +47,29 @@ class Contact extends ISuspensionBean {
 
   factory Contact.fromJson(Map<String, dynamic> json) {
     return Contact(
-      id: json['_id'] as String,
-      nama: json['nama'] as String,
-      email: json['email'] as String,
-      noHp: json['no_hp'] as String,
-      alamat: json['alamat'] as String,
-      avatar: json['avatar'] as String,
-      grup: json['grup'] as String,
-      createdAt: json['createdAt'] as String,
-      updatedAt: json['updatedAt'] as String,
+      id: json['_id'] ?? json['id'],
+      nama: json['nama'] ?? '',
+      email: json['email'] ?? '',
+      noHp: json['no_hp'] ?? '',
+      alamat: json['alamat'] ?? '',
+      avatar: json['avatar'] ?? '',
+      grup: json['grup'] ?? '',
+      createdAt: json['createdAt']?.toString() ?? '',
+      updatedAt: json['updatedAt']?.toString() ?? '',
+      isFavorite: json['isFavorite'] == true || json['isFavorite'] == 1,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nama': nama,
+      'no_hp': noHp,
+      'email': email,
+      'avatar': avatar,
+      'alamat': alamat,
+      'grup': grup,
+      'isFavorite': isFavorite,
+    };
   }
 }
