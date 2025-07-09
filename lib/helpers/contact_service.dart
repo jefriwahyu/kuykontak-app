@@ -48,15 +48,8 @@ class ContactService {
     }
   }
 
-  static Future<void> syncContacts(List<Map<String, dynamic>> contacts) async {
-    try {
-      // Bungkus list kontak di dalam satu objek JSON
-      await _dio
-          .post('${ApiUrl.contactsUrl}/sync', data: {'contacts': contacts});
-    } catch (e) {
-      print('Error syncing contacts: $e');
-      throw Exception('Gagal melakukan sinkronisasi.');
-    }
+  static Future<void> syncContacts() async {
+    await ContactService.syncContacts();
   }
 
   static Future<void> toggleFavorite(String id, bool isFavorite) async {

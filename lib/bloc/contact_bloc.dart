@@ -42,6 +42,8 @@ class ToggleFavorite extends ContactEvent {
   List<Object?> get props => [id, isFavorite];
 }
 
+class SyncContacts extends ContactEvent {}
+
 // --- STATES (Kondisi yang dikirim BLoC ke UI) ---
 abstract class ContactState extends Equatable {
   const ContactState();
@@ -114,12 +116,26 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       try {
         final favorites = await ContactService.getContacts();
         final favCount = favorites.where((c) => c.isFavorite).length;
-        if (!event.isFavorite && favCount >= 5) {
+        if (event.isFavorite && favCount >= 5) {
           emit(const ContactError('Batas favorite hanya 5 kontak!'));
           return;
         }
         await ContactService.toggleFavorite(event.id, event.isFavorite);
         add(LoadContacts());
+      } catch (e) {
+        emit(ContactError(e.toString()));
+      }
+    });
+
+    on<SyncContacts>((event, emit) async {
+      emit(ContactLoading());
+      try {
+        // Panggil fungsi sinkronisasi di ContactService (misal: syncContacts)
+        await ContactService.syncContacts(
+            /* tambahkan argumen yang diperlukan di sini, misal: userId atau contacts */);
+        // Setelah sinkronisasi, muat ulang daftar kontak
+        final contacts = await ContactService.getContacts();
+        emit(ContactLoaded(contacts));
       } catch (e) {
         emit(ContactError(e.toString()));
       }
