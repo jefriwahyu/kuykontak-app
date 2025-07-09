@@ -36,7 +36,7 @@ class Contact extends ISuspensionBean {
         // Jika ya, gunakan huruf tersebut sebagai tag
         tag = firstChar;
       } else {
-        // Jika tidak (angka, simbol, dll), masuk ke grup #
+        // Jika tidak (angka, simbol, dll), masuk ke grup
         tag = '#';
       }
     }

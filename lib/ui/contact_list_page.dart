@@ -146,17 +146,22 @@ class _ContactListPageState extends State<ContactListPage> {
           inputDecorationTheme: InputDecorationTheme(
             filled: true,
             fillColor: theme.isDarkTheme ? darkCard : Colors.white,
-            labelStyle: TextStyle(color: theme.isDarkTheme ? Colors.white : Colors.black),
-            hintStyle: TextStyle(color: theme.isDarkTheme ? Colors.white70 : Colors.black54),
+            labelStyle: TextStyle(
+                color: theme.isDarkTheme ? Colors.white : Colors.black),
+            hintStyle: TextStyle(
+                color: theme.isDarkTheme ? Colors.white70 : Colors.black54),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: theme.isDarkTheme ? Colors.white24 : Colors.black26),
+              borderSide: BorderSide(
+                  color: theme.isDarkTheme ? Colors.white24 : Colors.black26),
             ),
           ),
-          iconTheme: IconThemeData(color: theme.isDarkTheme ? Colors.white : Colors.black),
+          iconTheme: IconThemeData(
+              color: theme.isDarkTheme ? Colors.white : Colors.black),
           appBarTheme: AppBarTheme(
             backgroundColor: theme.isDarkTheme ? darkSidebar : Colors.white,
-            iconTheme: IconThemeData(color: theme.isDarkTheme ? Colors.white : Colors.black),
+            iconTheme: IconThemeData(
+                color: theme.isDarkTheme ? Colors.white : Colors.black),
             titleTextStyle: TextStyle(
               color: theme.isDarkTheme ? Colors.white : Colors.black,
               fontSize: 20,
@@ -164,10 +169,10 @@ class _ContactListPageState extends State<ContactListPage> {
             ),
           ),
           textTheme: Theme.of(context).textTheme.apply(
-            fontSizeFactor: theme.fontSize / 16.0,
-            bodyColor: theme.isDarkTheme ? Colors.white : Colors.black,
-            displayColor: theme.isDarkTheme ? Colors.white : Colors.black,
-          ),
+                fontSizeFactor: theme.fontSize / 16.0,
+                bodyColor: theme.isDarkTheme ? Colors.white : Colors.black,
+                displayColor: theme.isDarkTheme ? Colors.white : Colors.black,
+              ),
           drawerTheme: DrawerThemeData(
             backgroundColor: theme.isDarkTheme ? darkSidebar : Colors.white,
           ),
@@ -218,14 +223,17 @@ class _ContactListPageState extends State<ContactListPage> {
                 children: [
                   if (_showingFavoritesOnly)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       child: Row(
                         children: [
                           ElevatedButton.icon(
                             icon: const Icon(Icons.arrow_back),
                             label: const Text('Kembali ke Semua Kontak'),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: theme.isDarkTheme ? Colors.blueGrey.shade700 : Colors.blue,
+                              backgroundColor: theme.isDarkTheme
+                                  ? Colors.blueGrey.shade700
+                                  : Colors.blue,
                               foregroundColor: Colors.white,
                             ),
                             onPressed: () {
@@ -252,7 +260,9 @@ class _ContactListPageState extends State<ContactListPage> {
                                       label: Text(
                                         k,
                                         style: TextStyle(
-                                          color: theme.isDarkTheme ? Colors.white : Colors.black,
+                                          color: theme.isDarkTheme
+                                              ? Colors.white
+                                              : Colors.black,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -276,7 +286,8 @@ class _ContactListPageState extends State<ContactListPage> {
                             _runFilter();
                           },
                           decoration: const InputDecoration(
-                              labelText: 'Pencarian', prefixIcon: Icon(Icons.search)),
+                              labelText: 'Pencarian',
+                              prefixIcon: Icon(Icons.search)),
                         ),
                       ],
                     ),

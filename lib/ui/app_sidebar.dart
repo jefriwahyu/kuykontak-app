@@ -47,9 +47,11 @@ class AppSidebar extends StatelessWidget {
             Card(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               color: Theme.of(context).cardColor,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
               child: ListTile(
-                leading: Icon(Icons.people, color: Theme.of(context).colorScheme.primary),
+                leading: Icon(Icons.people,
+                    color: Theme.of(context).colorScheme.primary),
                 title: Text(
                   'Jumlah Kontak: $totalContacts',
                   style: TextStyle(
@@ -69,7 +71,8 @@ class AppSidebar extends StatelessWidget {
             ),
             // Menu: Pengaturan
             ListTile(
-              leading: Icon(Icons.settings, color: Theme.of(context).colorScheme.primary),
+              leading: Icon(Icons.settings,
+                  color: Theme.of(context).colorScheme.primary),
               title: const Text('Pengaturan'),
               onTap: onShowSettings,
               textColor: Theme.of(context).textTheme.bodyLarge?.color,
@@ -81,7 +84,11 @@ class AppSidebar extends StatelessWidget {
                 'KuyKontak v1.0',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.color
+                      ?.withOpacity(0.7),
                   fontStyle: FontStyle.italic,
                 ),
               ),
