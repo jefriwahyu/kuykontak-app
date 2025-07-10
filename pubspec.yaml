@@ -57,6 +57,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/KuyKontak.png
+    - assets/KuyKontaka.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

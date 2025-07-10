@@ -7,7 +7,6 @@ import 'package:kontak_app_m/helpers/slide_right_route.dart';
 import 'package:kontak_app_m/model/contact.dart';
 import 'package:kontak_app_m/ui/add_edit_contact_page.dart';
 import 'package:kontak_app_m/ui/contact_detail_page.dart';
-import 'package:kontak_app_m/ui/theme.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_contacts/flutter_contacts.dart' as FC;
 import 'package:kontak_app_m/ui/app_sidebar.dart';
@@ -21,26 +20,70 @@ class ContactListPage extends StatefulWidget {
   State<ContactListPage> createState() => _ContactListPageState();
 }
 
-class _ContactListPageState extends State<ContactListPage> {
+class _ContactListPageState extends State<ContactListPage>
+    with TickerProviderStateMixin {
   List<Contact> _allContacts = [];
   List<Contact> _filteredContacts = [];
+  AnimationController? _animationController;
+  Animation<double>? _fadeAnimation;
+  Animation<Offset>? _slideAnimation;
 
   final List<String> _kategori = ['Semua', 'Keluarga', 'Teman', 'Kerja'];
   String _selectedKategori = 'Semua';
   String _searchKeyword = '';
   bool _showingFavoritesOnly = false;
+  bool _isSearching = false;
+  final FocusNode _searchFocusNode = FocusNode();
+  final TextEditingController _searchController = TextEditingController();
+
+  // Warna tema
+  static const Color primaryBlue = Color(0xFF1E88E5);
+  static const Color secondaryBlue = Color(0xFF42A5F5);
+  static const Color accentBlue = Color(0xFF64B5F6);
+  static const Color darkBlue = Color(0xFF0D47A1);
+  static const Color lightBlue = Color(0xFFE3F2FD);
 
   @override
   void initState() {
     super.initState();
-    final currentState = context.read<ContactBloc>().state;
-    if (currentState is ContactLoaded) {
-      _allContacts = currentState.contacts;
-      _runFilter(); // Jalankan filter awal
-    }
+
+    // Inisialisasi animasi
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController!, curve: Curves.easeInOut),
+    );
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+        parent: _animationController!, curve: Curves.easeOutCubic));
+
+    // Mulai animasi
+    _animationController!.forward();
+
+    // Gunakan post frame callback untuk mengakses context dengan aman
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final currentState = context.read<ContactBloc>().state;
+      if (currentState is ContactLoaded) {
+        setState(() {
+          _allContacts = currentState.contacts;
+          _runFilter();
+        });
+      }
+    });
   }
 
-  // --- FUNGSI FILTER YANG DIPERBARUI DENGAN OPTIMASI ---
+  @override
+  void dispose() {
+    _animationController?.dispose();
+    _searchFocusNode.dispose();
+    _searchController.dispose();
+    super.dispose();
+  }
+
   void _runFilter() {
     List<Contact> results;
 
@@ -53,21 +96,21 @@ class _ContactListPageState extends State<ContactListPage> {
     if (_searchKeyword.isNotEmpty) {
       results = results
           .where((contact) =>
-              contact.nama.toLowerCase().contains(_searchKeyword.toLowerCase()))
+              contact.nama
+                  .toLowerCase()
+                  .contains(_searchKeyword.toLowerCase()) ||
+              contact.noHp.contains(_searchKeyword))
           .toList();
     }
 
-    // Buat list dengan favorite di atas tanpa sorting alfabet untuk favorite
     List<Contact> favoriteContacts =
         results.where((c) => c.isFavorite).toList();
     List<Contact> nonFavoriteContacts =
         results.where((c) => !c.isFavorite).toList();
 
-    // Sort hanya non-favorite secara alfabet
     SuspensionUtil.sortListBySuspensionTag(nonFavoriteContacts);
     SuspensionUtil.setShowSuspensionStatus(nonFavoriteContacts);
 
-    // Gabungkan: favorite di atas, lalu non-favorite
     List<Contact> finalResults = [...favoriteContacts, ...nonFavoriteContacts];
 
     setState(() {
@@ -76,62 +119,100 @@ class _ContactListPageState extends State<ContactListPage> {
   }
 
   Future<void> _syncContacts() async {
-    // Tampilkan loading snackbar
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-          content: Text('Memulai sinkronisasi...'),
-          backgroundColor: Colors.blue),
+    final overlay = Overlay.of(context);
+    OverlayEntry? overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Material(
+        color: Colors.black54,
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(primaryBlue),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Sinkronisasi Kontak...',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade800,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
 
-    // 1. Minta izin akses kontak
-    if (await Permission.contacts.request().isGranted) {
-      // 2. Baca kontak dari perangkat
-      List<FC.Contact> deviceContacts = await FC.FlutterContacts.getContacts(
-        withProperties: true, // Ambil semua properti (nomor, email, dll)
-      );
+    overlay.insert(overlayEntry);
 
-      // 3. Ubah data ke format JSON yang benar
-      List<Map<String, dynamic>> contactsToSync = [];
-      for (var contact in deviceContacts) {
-        if (contact.phones.isNotEmpty && contact.displayName.isNotEmpty) {
-          contactsToSync.add({
-            'nama': contact.displayName,
-            'no_hp': contact.phones.first.number
-                .replaceAll(RegExp(r'[\\s-]'), ''), // Bersihkan nomor HP
-            'email':
-                contact.emails.isNotEmpty ? contact.emails.first.address : ''
-          });
+    try {
+      if (await Permission.contacts.request().isGranted) {
+        List<FC.Contact> deviceContacts = await FC.FlutterContacts.getContacts(
+          withProperties: true,
+        );
+
+        List<Map<String, dynamic>> contactsToSync = [];
+        for (var contact in deviceContacts) {
+          if (contact.phones.isNotEmpty && contact.displayName.isNotEmpty) {
+            contactsToSync.add({
+              'nama': contact.displayName,
+              'no_hp':
+                  contact.phones.first.number.replaceAll(RegExp(r'[\\s-]'), ''),
+              'email':
+                  contact.emails.isNotEmpty ? contact.emails.first.address : ''
+            });
+          }
         }
-      }
 
-      // 4. Kirim data ke service
-      try {
         final message = await ContactService.syncContacts(contactsToSync);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message), backgroundColor: Colors.green),
+            SnackBar(
+              content: Text(message),
+              backgroundColor: Colors.green,
+            ),
           );
-          // 5. Muat ulang daftar kontak di UI untuk menampilkan data baru
           context.read<ContactBloc>().add(LoadContacts());
         }
-      } catch (e) {
+      } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text('Gagal: ${e.toString()}'),
-                backgroundColor: Colors.red),
+            const SnackBar(
+              content: Text('Izin akses kontak ditolak'),
+              backgroundColor: Colors.orange,
+            ),
           );
         }
       }
-    } else {
-      // Tangani jika izin ditolak
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Izin akses kontak ditolak.'),
-              backgroundColor: Colors.orange),
+          SnackBar(
+            content: Text('Gagal: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
+    } finally {
+      overlayEntry?.remove();
     }
   }
 
@@ -143,41 +224,98 @@ class _ContactListPageState extends State<ContactListPage> {
       builder: (context) {
         return Consumer<ThemeController>(
           builder: (context, theme, _) => AlertDialog(
-            title: const Text('Pengaturan'),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: Row(
+              children: [
+                Icon(Icons.settings, color: primaryBlue),
+                const SizedBox(width: 12),
+                const Text('Pengaturan'),
+              ],
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Tema Gelap'),
-                    Switch(
-                      value: theme.isDarkTheme,
-                      onChanged: (val) => themeController.toggleTheme(val),
-                    ),
-                  ],
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: lightBlue.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.dark_mode, color: Colors.grey.shade600),
+                          const SizedBox(width: 12),
+                          const Text('Tema Gelap'),
+                        ],
+                      ),
+                      Switch(
+                        value: theme.isDarkTheme,
+                        onChanged: (val) => themeController.toggleTheme(val),
+                        activeColor: primaryBlue,
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Ukuran Font'),
-                    Text(theme.fontSize.toStringAsFixed(0)),
-                  ],
-                ),
-                Slider(
-                  min: 12,
-                  max: 28,
-                  divisions: 16,
-                  value: theme.fontSize,
-                  label: theme.fontSize.toStringAsFixed(0),
-                  onChanged: (val) => themeController.setFontSize(val),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: lightBlue.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.text_fields,
+                                  color: Colors.grey.shade600),
+                              const SizedBox(width: 12),
+                              const Text('Ukuran Font'),
+                            ],
+                          ),
+                          Text(
+                            theme.fontSize.toStringAsFixed(0),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          activeTrackColor: primaryBlue,
+                          thumbColor: primaryBlue,
+                          overlayColor: primaryBlue.withAlpha(32),
+                        ),
+                        child: Slider(
+                          min: 12,
+                          max: 28,
+                          divisions: 16,
+                          value: theme.fontSize,
+                          label: theme.fontSize.toStringAsFixed(0),
+                          onChanged: (val) => themeController.setFontSize(val),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
+                style: TextButton.styleFrom(
+                  foregroundColor: primaryBlue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                ),
                 child: const Text('Tutup'),
               ),
             ],
@@ -187,247 +325,436 @@ class _ContactListPageState extends State<ContactListPage> {
     );
   }
 
+  Widget _buildModernAppBar() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [primaryBlue, secondaryBlue],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: primaryBlue.withOpacity(0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            children: [
+              Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(Icons.menu, color: Colors.white),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: Image.asset(
+                    'assets/KuyKontak.png',
+                    height: 60,
+                  ),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.sync, color: Colors.white),
+                  tooltip: 'Sinkronisasi Kontak',
+                  onPressed: _syncContacts,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Container(
+      margin: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: _searchController,
+        focusNode: _searchFocusNode,
+        onChanged: (value) {
+          setState(() {
+            _searchKeyword = value;
+            _showingFavoritesOnly = false;
+          });
+          _runFilter();
+        },
+        decoration: InputDecoration(
+          hintText: 'Cari kontak...',
+          prefixIcon: Icon(Icons.search, color: Colors.grey.shade600),
+          suffixIcon: _searchKeyword.isNotEmpty
+              ? IconButton(
+                  icon: Icon(Icons.clear, color: Colors.grey.shade600),
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() {
+                      _searchKeyword = '';
+                      _showingFavoritesOnly = false;
+                    });
+                    _runFilter();
+                  },
+                )
+              : null,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryChips() {
+    return Container(
+      height: 50,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _kategori.length,
+        itemBuilder: (context, index) {
+          final kategori = _kategori[index];
+          final isSelected = _selectedKategori == kategori;
+          return Container(
+            margin: const EdgeInsets.only(right: 12),
+            child: FilterChip(
+              selected: isSelected,
+              label: Text(
+                kategori,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : primaryBlue,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              backgroundColor: Colors.white,
+              selectedColor: primaryBlue,
+              checkmarkColor: Colors.white,
+              side: BorderSide(color: primaryBlue),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              onSelected: (selected) {
+                setState(() {
+                  _selectedKategori = kategori;
+                  _showingFavoritesOnly = false;
+                });
+                _runFilter();
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeController>(
       builder: (context, theme, _) {
-        final darkBg = const Color(0xFF23272F);
-        final darkCard = const Color(0xFF2D313A);
-        final darkSidebar = const Color(0xFF23272F);
-        final themeData = Theme.of(context).copyWith(
-          brightness: theme.isDarkTheme ? Brightness.dark : Brightness.light,
-          scaffoldBackgroundColor: theme.isDarkTheme ? darkBg : null,
-          cardColor: theme.isDarkTheme ? darkCard : null,
-          dialogBackgroundColor: theme.isDarkTheme ? darkCard : null,
-          inputDecorationTheme: InputDecorationTheme(
-            filled: true,
-            fillColor: theme.isDarkTheme ? darkCard : Colors.white,
-            labelStyle: TextStyle(
-                color: theme.isDarkTheme ? Colors.white : Colors.black),
-            hintStyle: TextStyle(
-                color: theme.isDarkTheme ? Colors.white70 : Colors.black54),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
-                  color: theme.isDarkTheme ? Colors.white24 : Colors.black26),
-            ),
-          ),
-          iconTheme: IconThemeData(
-              color: theme.isDarkTheme ? Colors.white : Colors.black),
-          appBarTheme: AppBarTheme(
-            backgroundColor: theme.isDarkTheme ? darkSidebar : Colors.white,
-            iconTheme: IconThemeData(
-                color: theme.isDarkTheme ? Colors.white : Colors.black),
-            titleTextStyle: TextStyle(
-              color: theme.isDarkTheme ? Colors.white : Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          textTheme: Theme.of(context).textTheme.apply(
-                fontSizeFactor: theme.fontSize / 16.0,
-                bodyColor: theme.isDarkTheme ? Colors.white : Colors.black,
-                displayColor: theme.isDarkTheme ? Colors.white : Colors.black,
-              ),
-          drawerTheme: DrawerThemeData(
-            backgroundColor: theme.isDarkTheme ? darkSidebar : Colors.white,
-          ),
-        );
-        return Theme(
-          data: themeData,
-          child: BlocListener<ContactBloc, ContactState>(
-            listener: (context, state) {
-              if (state is ContactLoaded) {
-                setState(() {
-                  _allContacts = state.contacts;
-                  _runFilter();
-                });
-              }
-            },
-            child: Scaffold(
-              appBar: AppBar(
-                centerTitle: true,
-                title: Center(
-                  child: Image.asset(
-                    'assets/KuyKontak.png',
-                    height: 75,
+        return Scaffold(
+          backgroundColor: theme.isDarkTheme
+              ? const Color(0xFF121212)
+              : const Color(0xFFF8F9FA),
+          body: Column(
+            children: [
+              _buildModernAppBar(),
+              if (_showingFavoritesOnly)
+                Container(
+                  margin: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.amber.shade50,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.amber.shade200),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.star,
+                                  color: Colors.amber.shade600, size: 20),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Daftar Kontak Favorit',
+                                style: TextStyle(
+                                  color: Colors.amber.shade800,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      TextButton.icon(
+                        icon: const Icon(Icons.arrow_back),
+                        label: const Text('Kembali'),
+                        style: TextButton.styleFrom(
+                          foregroundColor: primaryBlue,
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _showingFavoritesOnly = false;
+                          });
+                          _runFilter();
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.sync),
-                    tooltip: 'Sinkronisasi Kontak',
-                    onPressed: _syncContacts,
-                  )
-                ],
-              ),
-              drawer: AppSidebar(
-                totalContacts: _allContacts.length,
-                onShowFavorites: () {
-                  setState(() {
-                    _selectedKategori = 'Semua';
-                    _searchKeyword = '';
-                    _filteredContacts =
-                        _allContacts.where((c) => c.isFavorite).toList();
-                    _showingFavoritesOnly = true;
-                  });
-                  Navigator.of(context).pop();
-                },
-                onShowSettings: _showSettingsDialog,
-              ),
-              body: Column(
-                children: [
-                  if (_showingFavoritesOnly)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      child: Row(
-                        children: [
-                          ElevatedButton.icon(
-                            icon: const Icon(Icons.arrow_back),
-                            label: const Text('Kembali ke Semua Kontak'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: theme.isDarkTheme
-                                  ? Colors.blueGrey.shade700
-                                  : Colors.blue,
-                              foregroundColor: Colors.white,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _showingFavoritesOnly = false;
-                                _runFilter();
-                              });
-                            },
+              _buildSearchBar(),
+              _buildCategoryChips(),
+              const SizedBox(height: 16),
+              Expanded(
+                child: BlocListener<ContactBloc, ContactState>(
+                  listener: (context, state) {
+                    if (state is ContactLoaded) {
+                      setState(() {
+                        _allContacts = state.contacts;
+                        _runFilter();
+                      });
+                    }
+                  },
+                  child: BlocBuilder<ContactBloc, ContactState>(
+                    builder: (context, state) {
+                      if (state is ContactLoading || state is ContactInitial) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(primaryBlue),
                           ),
-                        ],
-                      ),
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: SegmentedButton<String>(
-                            segments: _kategori
-                                .map((k) => ButtonSegment<String>(
-                                      value: k,
-                                      label: Text(
-                                        k,
-                                        style: TextStyle(
-                                          color: theme.isDarkTheme
-                                              ? Colors.white
-                                              : Colors.black,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ))
-                                .toList(),
-                            selected: {_selectedKategori},
-                            onSelectionChanged: (newSelection) {
-                              setState(() {
-                                _selectedKategori = newSelection.first;
-                                _showingFavoritesOnly = false;
-                                _runFilter();
-                              });
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        TextField(
-                          onChanged: (value) {
-                            _searchKeyword = value;
-                            _showingFavoritesOnly = false;
-                            _runFilter();
-                          },
-                          decoration: const InputDecoration(
-                              labelText: 'Pencarian',
-                              prefixIcon: Icon(Icons.search)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: BlocBuilder<ContactBloc, ContactState>(
-                      builder: (context, state) {
-                        if (state is ContactLoading ||
-                            state is ContactInitial) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        if (state is ContactLoaded) {
-                          if (_allContacts.isEmpty) {
-                            return const Center(
-                                child: Text('Tidak ada kontak.'));
-                          }
-                          if (_filteredContacts.isEmpty) {
-                            return const Center(
-                                child: Text('Kontak tidak ditemukan.'));
-                          }
-                          // --- TIDAK ADA LAGI PROSES SORTING DI SINI ---
-                          return AzListView(
-                            data: _filteredContacts,
-                            itemCount: _filteredContacts.length,
-                            itemBuilder: (context, index) {
-                              final contact = _filteredContacts[index];
-                              return Column(
-                                children: [
-                                  Offstage(
-                                    offstage: !contact.isShowSuspension,
-                                    child: _buildSuspensionWidget(
-                                        contact.getSuspensionTag()),
+                        );
+                      }
+                      if (state is ContactLoaded) {
+                        if (_allContacts.isEmpty) {
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.contacts,
+                                    size: 80, color: Colors.grey.shade400),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'Tidak ada kontak',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey.shade600,
                                   ),
-                                  _buildContactItem(contact),
-                                ],
-                              );
-                            },
-                            indexBarOptions: IndexBarOptions(
-                              needRebuild: true,
-                              hapticFeedback: true,
-                              textStyle: TextStyle(
-                                  color: Colors.grey.shade600, fontSize: 12),
-                              selectTextStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                              selectItemDecoration: BoxDecoration(
-                                  shape: BoxShape.circle, color: primaryColor),
+                                ),
+                              ],
                             ),
-                            indexHintBuilder: (context, hint) {
-                              return Container(
-                                alignment: Alignment.center,
-                                width: 60.0,
-                                height: 60.0,
-                                decoration: BoxDecoration(
-                                    color: Colors.black54,
-                                    shape: BoxShape.circle),
-                                child: Text(hint,
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 30.0)),
-                              );
-                            },
                           );
                         }
-                        if (state is ContactError) {
-                          return Center(child: Text('Error: ${state.message}'));
+                        if (_filteredContacts.isEmpty) {
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.search_off,
+                                    size: 80, color: Colors.grey.shade400),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'Kontak tidak ditemukan',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
                         }
-                        return const Center(
-                            child:
-                                Text('Mulai dengan menambahkan kontak baru.'));
-                      },
-                    ),
+                        return FadeTransition(
+                          opacity: _fadeAnimation!,
+                          child: SlideTransition(
+                            position: _slideAnimation!,
+                            child: AzListView(
+                              data: _filteredContacts,
+                              itemCount: _filteredContacts.length,
+                              itemBuilder: (context, index) {
+                                final contact = _filteredContacts[index];
+                                return Column(
+                                  children: [
+                                    Offstage(
+                                      offstage: !contact.isShowSuspension,
+                                      child: _buildSuspensionWidget(
+                                          contact.getSuspensionTag()),
+                                    ),
+                                    _buildContactItem(contact, index),
+                                  ],
+                                );
+                              },
+                              indexBarOptions: IndexBarOptions(
+                                needRebuild: true,
+                                hapticFeedback: true,
+                                textStyle: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                selectTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                selectItemDecoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: primaryBlue,
+                                ),
+                              ),
+                              indexHintBuilder: (context, hint) {
+                                return Container(
+                                  alignment: Alignment.center,
+                                  width: 70.0,
+                                  height: 70.0,
+                                  decoration: BoxDecoration(
+                                    color: primaryBlue,
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: primaryBlue.withOpacity(0.3),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Text(
+                                    hint,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 28.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                      if (state is ContactError) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.error_outline,
+                                  size: 80, color: Colors.red.shade400),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Terjadi Kesalahan',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.red.shade600,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(state.message),
+                            ],
+                          ),
+                        );
+                      }
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.person_add,
+                                size: 80, color: Colors.grey.shade400),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Mulai dengan menambahkan kontak baru',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                ],
+                ),
               ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      SlideRightRoute(page: const AddEditContactPage()));
-                },
-                shape: const CircleBorder(),
-                backgroundColor: Theme.of(context).primaryColor,
-                child: const Icon(Icons.add, color: Colors.white),
+            ],
+          ),
+          drawer: AppSidebar(
+            totalContacts: _allContacts.length,
+            onShowFavorites: () {
+              setState(() {
+                _selectedKategori = 'Semua';
+                _searchKeyword = '';
+                _searchController.clear();
+                _filteredContacts =
+                    _allContacts.where((c) => c.isFavorite).toList();
+                _showingFavoritesOnly = true;
+              });
+              Navigator.of(context).pop();
+            },
+            onShowSettings: _showSettingsDialog,
+          ),
+          floatingActionButton: Container(
+            decoration: BoxDecoration(
+              shape:
+                  BoxShape.circle, // Pastikan bentuk container juga lingkaran
+              gradient: LinearGradient(
+                colors: [primaryBlue, secondaryBlue],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: primaryBlue.withOpacity(0.4),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  SlideRightRoute(page: const AddEditContactPage()),
+                );
+              },
+              backgroundColor: Colors
+                  .transparent, // Warna transparan untuk menunjukkan gradient container
+              elevation: 0, // Nonaktifkan elevation default FAB
+              shape: const CircleBorder(),
+              child: const Icon(Icons.add, color: Colors.white, size: 28),
             ),
           ),
         );
@@ -435,40 +762,153 @@ class _ContactListPageState extends State<ContactListPage> {
     );
   }
 
-  Widget _buildContactItem(Contact contact) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(context,
-            SlideRightRoute(page: ContactDetailPage(contact: contact)));
-      },
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: primaryColor.withOpacity(0.2),
-            foregroundColor: primaryColor,
-            backgroundImage:
-                contact.avatar.isNotEmpty ? NetworkImage(contact.avatar) : null,
-            child: contact.avatar.isEmpty
-                ? Text(
-                    contact.nama.isNotEmpty
-                        ? contact.nama[0].toUpperCase()
-                        : '?',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  )
-                : null,
+  Widget _buildContactItem(Contact contact, int index) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
           ),
-          title: Row(
-            children: [
-              Expanded(
-                child: Text(contact.nama,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              if (contact.isFavorite)
-                const Icon(Icons.star, color: Colors.amber, size: 16),
-            ],
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            Navigator.push(
+              context,
+              SlideRightRoute(page: ContactDetailPage(contact: contact)),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Hero(
+                  tag: 'avatar_${contact.nama}',
+                  child: Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [
+                          primaryBlue.withOpacity(0.8),
+                          secondaryBlue.withOpacity(0.8)
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: primaryBlue.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: contact.avatar.isNotEmpty
+                        ? ClipOval(
+                            child: Image.network(
+                              contact.avatar,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  _buildAvatarText(contact.nama),
+                            ),
+                          )
+                        : _buildAvatarText(contact.nama),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              contact.nama,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (contact.isFavorite)
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Colors.amber.shade100,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.star,
+                                color: Colors.amber.shade600,
+                                size: 16,
+                              ),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        contact.noHp,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                      if (contact.grup.isNotEmpty)
+                        Container(
+                          margin: const EdgeInsets.only(top: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: lightBlue,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            contact.grup,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: darkBlue,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.grey.shade400,
+                  size: 16,
+                ),
+              ],
+            ),
           ),
-          subtitle: Text(contact.noHp),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAvatarText(String nama) {
+    return Center(
+      child: Text(
+        nama.isNotEmpty ? nama[0].toUpperCase() : '?',
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
@@ -477,12 +917,19 @@ class _ContactListPageState extends State<ContactListPage> {
   Widget _buildSuspensionWidget(String tag) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-      color: backgroundColor,
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: lightBlue.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Text(
         tag,
-        style: const TextStyle(
-            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black54),
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: darkBlue,
+        ),
       ),
     );
   }

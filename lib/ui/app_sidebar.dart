@@ -25,7 +25,7 @@ class AppSidebar extends StatelessWidget {
               padding: const EdgeInsets.only(top: 32, bottom: 8),
               child: Center(
                 child: Image.asset(
-                  'assets/KuyKontak.png',
+                  'assets/KuyKontaka.png',
                   height: 70,
                 ),
               ),
