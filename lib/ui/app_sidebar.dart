@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kontak_app_m/ui/theme.dart';
 
 class AppSidebar extends StatelessWidget {
   final int totalContacts;
   final VoidCallback onShowFavorites;
   final VoidCallback onShowSettings;
+  
   const AppSidebar({
     super.key,
     required this.totalContacts,
@@ -14,88 +16,183 @@ class AppSidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: MediaQuery.of(context).size.width * 0.75,
       child: Container(
-        color: Theme.of(context).drawerTheme.backgroundColor,
-        child: ListView(
-          padding: EdgeInsets.zero,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              primaryColor.withOpacity(0.05),
+              secondaryColor.withOpacity(0.05),
+            ],
+          ),
+        ),
+        child: Column(
           children: [
-            // Logo di atas
+            // Header dengan logo
             Container(
-              color: Colors.transparent,
-              padding: const EdgeInsets.only(top: 32, bottom: 8),
+              padding: const EdgeInsets.only(top: 40, bottom: 20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [primaryColor, secondaryColor],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
               child: Center(
-                child: Image.asset(
-                  'assets/KuyKontaka.png',
-                  height: 70,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/KuyKontak.png',
+                      height: 60,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Menu Aplikasi',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white.withOpacity(0.9),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            // Tulisan Menu di bawah logo
+
+            // Card informasi kontak
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 18, bottom: 6),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                  letterSpacing: 1.2,
+              padding: const EdgeInsets.all(16),
+              child: Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-            ),
-            // Jumlah kontak
-            Card(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              color: Theme.of(context).cardColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              child: ListTile(
-                leading: Icon(Icons.people,
-                    color: Theme.of(context).colorScheme.primary),
-                title: Text(
-                  'Jumlah Kontak: $totalContacts',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                child: ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: lightBlue,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.people,
+                      color: darkBlue,
+                    ),
+                  ),
+                  title: Text(
+                    'Total Kontak',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                  subtitle: Text(
+                    '$totalContacts',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: primaryColor,
+                    ),
                   ),
                 ),
               ),
             ),
-            // Menu: Kontak Favorit
-            ListTile(
-              leading: Icon(Icons.star, color: Colors.amber.shade700),
-              title: const Text('Kontak Favorit'),
-              onTap: onShowFavorites,
-              textColor: Theme.of(context).textTheme.bodyLarge?.color,
-              iconColor: Colors.amber.shade700,
+
+            // Menu navigasi
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  _buildMenuTile(
+                    context,
+                    icon: Icons.star,
+                    title: 'Kontak Favorit',
+                    color: Colors.amber.shade600,
+                    onTap: onShowFavorites,
+                  ),
+                  _buildMenuTile(
+                    context,
+                    icon: Icons.settings,
+                    title: 'Pengaturan',
+                    color: primaryColor,
+                    onTap: onShowSettings,
+                  ),
+                  _buildMenuTile(
+                    context,
+                    icon: Icons.help_outline,
+                    title: 'Bantuan',
+                    color: Colors.grey.shade600,
+                    onTap: () {
+                      // Tambahkan navigasi ke halaman bantuan
+                    },
+                  ),
+                ],
+              ),
             ),
-            // Menu: Pengaturan
-            ListTile(
-              leading: Icon(Icons.settings,
-                  color: Theme.of(context).colorScheme.primary),
-              title: const Text('Pengaturan'),
-              onTap: onShowSettings,
-              textColor: Theme.of(context).textTheme.bodyLarge?.color,
-            ),
-            const Divider(height: 24, thickness: 1),
+
+            // Footer
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 8),
-              child: Text(
-                'KuyKontak v1.0',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.color
-                      ?.withOpacity(0.7),
-                  fontStyle: FontStyle.italic,
-                ),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  const Divider(),
+                  Text(
+                    'KuyKontak v1.0',
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '© 2023 KuyKontak Team',
+                    style: TextStyle(
+                      color: Colors.grey.shade500,
+                      fontSize: 10,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildMenuTile(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.2),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: color),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: Colors.grey.shade800,
+        ),
+      ),
+      trailing: Icon(
+        Icons.chevron_right,
+        color: Colors.grey.shade400,
+      ),
+      onTap: () {
+        Navigator.pop(context);
+        onTap();
+      },
     );
   }
 }

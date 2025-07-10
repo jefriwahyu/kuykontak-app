@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 
 // Warna utama dari mockup
 const Color primaryColor = Colors.blue; // Warna aksen biru
+const Color secondaryColor = Color(0xFF42A5F5);
 const Color backgroundColor =
     Color(0xFFF5F5F7); // Warna latar belakang sedikit abu-abu
 const Color cardColor = Colors.white; // Warna untuk card atau input field
 const Color textColor = Colors.black87;
+const Color accentColor = Color(0xFF64B5F6);
+const Color darkBlue = Color(0xFF0D47A1);
+const Color lightBlue = Color(0xFFE3F2FD);
 const Color deleteColor = Colors.red;
 
 ThemeData buildAppTheme() {

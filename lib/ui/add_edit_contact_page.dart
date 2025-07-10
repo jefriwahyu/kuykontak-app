@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:kontak_app_m/model/contact.dart';
 import 'package:kontak_app_m/bloc/contact_bloc.dart';
 import 'package:kontak_app_m/helpers/contact_service.dart';
+import 'package:kontak_app_m/ui/theme.dart';
 
 class AddEditContactPage extends StatefulWidget {
   final Contact? contact;
@@ -16,13 +17,15 @@ class AddEditContactPage extends StatefulWidget {
 
 class _AddEditContactPageState extends State<AddEditContactPage> {
   final _formKey = GlobalKey<FormState>();
+  final _picker = ImagePicker();
 
   late TextEditingController _namaController;
   late TextEditingController _noHpController;
   late TextEditingController _emailController;
-  late TextEditingController _alamatController; // Controller baru
-  String? _selectedGrup; // Variabel baru
-  final List<String> _grupOptions = ['Keluarga', 'Teman', 'Kerja']; // Opsi grup
+  late TextEditingController _alamatController;
+  late TextEditingController _catatanController;
+  String? _selectedGrup;
+  final List<String> _grupOptions = ['Keluarga', 'Teman', 'Kerja', 'Lainnya'];
 
   Uint8List? _imageBytes;
   String? _imageName;
@@ -38,15 +41,14 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
     _noHpController = TextEditingController();
     _emailController = TextEditingController();
     _alamatController = TextEditingController();
+    _catatanController = TextEditingController();
 
     if (isEditMode) {
       _namaController.text = widget.contact!.nama;
       _noHpController.text = widget.contact!.noHp;
       _emailController.text = widget.contact!.email;
       _alamatController.text = widget.contact!.alamat;
-      if (widget.contact!.grup.isNotEmpty) {
-        _selectedGrup = widget.contact!.grup;
-      }
+      _selectedGrup = widget.contact!.grup.isNotEmpty ? widget.contact!.grup : null;
     }
   }
 
@@ -56,120 +58,166 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
     _noHpController.dispose();
     _emailController.dispose();
     _alamatController.dispose();
+    _catatanController.dispose();
     super.dispose();
   }
 
   Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final bytes = await pickedFile.readAsBytes();
-      setState(() {
-        _imageBytes = bytes;
-        _imageName = pickedFile.name;
-        _isAvatarRemoved = false;
-      });
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        final bytes = await pickedFile.readAsBytes();
+        setState(() {
+          _imageBytes = bytes;
+          _imageName = pickedFile.name;
+          _isAvatarRemoved = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Gagal memilih gambar'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
   void _onSave() async {
-    if (_formKey.currentState!.validate() && !_isSaving) {
-      setState(() {
-        _isSaving = true;
-      });
+    if (!_formKey.currentState!.validate() || _isSaving) return;
 
+    setState(() => _isSaving = true);
+
+    try {
       String? avatarUrl;
       if (_isAvatarRemoved) {
         avatarUrl = '';
-      } else if (_imageBytes != null && _imageName != null) {
-        avatarUrl =
-            await ContactService.uploadAvatar(_imageBytes!, _imageName!);
-        if (avatarUrl == null) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text('Gagal mengupload gambar.'),
-                  backgroundColor: Colors.red),
-            );
-          }
-          setState(() {
-            _isSaving = false;
-          });
-          return;
-        }
+      } else if (_imageBytes != null) {
+        avatarUrl = await ContactService.uploadAvatar(_imageBytes!, _imageName!);
+        if (avatarUrl == null) throw Exception('Gagal upload avatar');
       } else if (isEditMode) {
         avatarUrl = widget.contact!.avatar;
       }
 
       final contactData = {
-        'nama': _namaController.text,
-        'no_hp': _noHpController.text,
-        'email': _emailController.text,
-        'alamat': _alamatController.text,
+        'nama': _namaController.text.trim(),
+        'no_hp': _noHpController.text.trim(),
+        'email': _emailController.text.trim(),
+        'alamat': _alamatController.text.trim(),
+        'catatan': _catatanController.text.trim(),
         'grup': _selectedGrup ?? '',
         'avatar': avatarUrl ?? '',
       };
 
       if (mounted) {
-        context.read<ContactBloc>().add(isEditMode
-            ? UpdateContact(widget.contact!.id, contactData)
-            : AddContact(contactData));
+        context.read<ContactBloc>().add(
+          isEditMode
+              ? UpdateContact(widget.contact!.id, contactData)
+              : AddContact(contactData),
+        );
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(isEditMode
-                ? 'Kontak berhasil diperbarui!'
-                : 'Kontak baru berhasil disimpan!'),
+            content: Text(isEditMode 
+                ? 'Kontak berhasil diperbarui!' 
+                : 'Kontak baru berhasil ditambahkan!'),
             backgroundColor: Colors.green,
           ),
         );
-        int popCount = isEditMode ? 2 : 1;
-        for (int i = 0; i < popCount; i++) {
-          if (Navigator.canPop(context)) {
-            Navigator.pop(context);
-          }
-        }
+
+        Navigator.pop(context);
+        if (isEditMode) Navigator.pop(context);
       }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool hasImage = (isEditMode &&
-            widget.contact!.avatar.isNotEmpty &&
-            !_isAvatarRemoved) ||
-        _imageBytes != null;
+    final bool hasExistingImage = isEditMode && 
+        widget.contact!.avatar.isNotEmpty && 
+        !_isAvatarRemoved;
+    final bool hasNewImage = _imageBytes != null;
+    final bool showImage = hasExistingImage || hasNewImage;
+
     return Scaffold(
-      appBar: AppBar(title: Text(isEditMode ? 'Edit Kontak' : 'Tambah Kontak')),
+      appBar: AppBar(
+        title: Text(isEditMode ? 'Edit Kontak' : 'Tambah Kontak'),
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        backgroundColor: primaryColor,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               const SizedBox(height: 20),
               Stack(
+                alignment: Alignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: _pickImage,
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: _imageBytes != null
-                          ? MemoryImage(_imageBytes!)
-                          : (hasImage
-                              ? NetworkImage(widget.contact!.avatar)
-                              : null) as ImageProvider?,
-                      child: _isSaving
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : (!hasImage
-                              ? const Icon(Icons.add_a_photo,
-                                  size: 40, color: Colors.white60)
-                              : null),
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [
+                          primaryColor.withOpacity(0.2),
+                          secondaryColor.withOpacity(0.2)
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                    child: ClipOval(
+                      child: showImage
+                          ? Image(
+                              image: hasNewImage
+                                  ? MemoryImage(_imageBytes!)
+                                  : NetworkImage(widget.contact!.avatar) 
+                                  as ImageProvider,
+                              fit: BoxFit.cover,
+                              loadingBuilder: (context, child, progress) {
+                                return progress == null 
+                                    ? child 
+                                    : const CircularProgressIndicator();
+                              },
+                              errorBuilder: (_, __, ___) => _buildDefaultAvatar(),
+                            )
+                          : _buildDefaultAvatar(),
                     ),
                   ),
-                  if (hasImage && !_isSaving)
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: FloatingActionButton.small(
+                      backgroundColor: primaryColor,
+                      onPressed: _pickImage,
+                      child: const Icon(Icons.camera_alt, color: Colors.white),
+                    ),
+                  ),
+                  if (showImage && !_isSaving)
                     Positioned(
-                      top: -4,
-                      right: -4,
+                      top: 0,
+                      right: 0,
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
@@ -179,88 +227,161 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
                           });
                         },
                         child: Container(
-                          padding: const EdgeInsets.all(2),
+                          padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              shape: BoxShape.circle,
-                              border:
-                                  Border.all(color: Colors.white, width: 2)),
-                          child: const Icon(Icons.close,
-                              size: 18, color: Colors.black54),
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                          child: const Icon(Icons.close, 
+                              size: 16, color: Colors.white),
                         ),
                       ),
                     ),
                 ],
               ),
-              const SizedBox(height: 30),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      TextFormField(
-                          controller: _namaController,
-                          decoration: const InputDecoration(labelText: 'Nama'),
-                          validator: (v) => (v == null || v.isEmpty)
-                              ? 'Nama wajib diisi'
-                              : null),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                          controller: _noHpController,
-                          decoration:
-                              const InputDecoration(labelText: 'No. Hp'),
-                          keyboardType: TextInputType.phone,
-                          validator: (v) => (v == null || v.isEmpty)
-                              ? 'No. Hp wajib diisi'
-                              : null),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                          controller: _emailController,
-                          decoration:
-                              const InputDecoration(labelText: 'E-mail'),
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (v) =>
-                              (v != null && v.isNotEmpty && !v.contains('@'))
-                                  ? 'Email tidak valid'
-                                  : null),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                          controller: _alamatController,
-                          decoration:
-                              const InputDecoration(labelText: 'Alamat'),
-                          maxLines: 3),
-                      const SizedBox(height: 16),
-                      DropdownButtonFormField<String>(
-                        value: _selectedGrup,
-                        decoration: const InputDecoration(labelText: 'Grup'),
-                        items: _grupOptions.map((String value) {
-                          return DropdownMenuItem<String>(
-                              value: value, child: Text(value));
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedGrup = newValue;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 32),
+              _buildInputCard(),
+              const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _isSaving ? null : _onSave,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
                   child: _isSaving
-                      ? const Text('Menyimpan...')
-                      : const Text('Simpan'),
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          isEditMode ? 'UPDATE KONTAK' : 'SIMPAN KONTAK',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDefaultAvatar() {
+    return Center(
+      child: Icon(
+        Icons.person,
+        size: 50,
+        color: Colors.grey.shade400,
+      ),
+    );
+  }
+
+  Widget _buildInputCard() {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            _buildTextFormField(
+              controller: _namaController,
+              label: 'Nama Lengkap',
+              hint: 'Masukkan nama lengkap',
+              validator: (v) => v!.isEmpty ? 'Nama wajib diisi' : null,
+            ),
+            const SizedBox(height: 16),
+            _buildTextFormField(
+              controller: _noHpController,
+              label: 'Nomor HP',
+              hint: 'Masukkan nomor handphone',
+              keyboardType: TextInputType.phone,
+              validator: (v) => v!.isEmpty ? 'Nomor HP wajib diisi' : null,
+            ),
+            const SizedBox(height: 16),
+            _buildTextFormField(
+              controller: _emailController,
+              label: 'Email',
+              hint: 'Masukkan alamat email',
+              keyboardType: TextInputType.emailAddress,
+              validator: (v) => v!.isNotEmpty && !v.contains('@') 
+                  ? 'Email tidak valid' 
+                  : null,
+            ),
+            const SizedBox(height: 16),
+            _buildTextFormField(
+              controller: _alamatController,
+              label: 'Alamat',
+              hint: 'Masukkan alamat lengkap',
+              maxLines: 2,
+            ),
+            const SizedBox(height: 16),
+            _buildTextFormField(
+              controller: _catatanController,
+              label: 'Catatan',
+              hint: 'Tambahkan catatan (opsional)',
+              maxLines: 2,
+            ),
+            const SizedBox(height: 16),
+            DropdownButtonFormField<String>(
+              value: _selectedGrup,
+              decoration: InputDecoration(
+                labelText: 'Grup',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              items: _grupOptions
+                  .map((e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e),
+                      ))
+                  .toList(),
+              onChanged: (value) => setState(() => _selectedGrup = value),
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextFormField({
+    required TextEditingController controller,
+    required String label,
+    String? hint,
+    TextInputType? keyboardType,
+    int maxLines = 1,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      validator: validator,
     );
   }
 }
