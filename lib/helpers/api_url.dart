@@ -7,10 +7,8 @@ const ApiType currentApi = ApiType.express;
 
 class ApiUrl {
   //Definisikan base URL murni (tanpa path)
-  static const String _expressBase =
-      'http://10.200.4.166:5000'; // Sesuaikan port
-  static const String _ci4Base =
-      'https://kontak-api.tinagers.com'; // Sesuaikan port
+  static const String _expressBase = 'https://manu.my.id'; // Sesuaikan port
+  static const String _ci4Base = 'http://localhost:8080'; // Sesuaikan port
 
   //Definisikan path lengkap untuk setiap endpoint
   static const String _expressContactsPath = '/api/kontak';

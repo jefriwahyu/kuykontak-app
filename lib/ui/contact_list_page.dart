@@ -76,7 +76,63 @@ class _ContactListPageState extends State<ContactListPage> {
   }
 
   Future<void> _syncContacts() async {
-    context.read<ContactBloc>().add(SyncContacts());
+    // Tampilkan loading snackbar
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          content: Text('Memulai sinkronisasi...'),
+          backgroundColor: Colors.blue),
+    );
+
+    // 1. Minta izin akses kontak
+    if (await Permission.contacts.request().isGranted) {
+      // 2. Baca kontak dari perangkat
+      List<FC.Contact> deviceContacts = await FC.FlutterContacts.getContacts(
+        withProperties: true, // Ambil semua properti (nomor, email, dll)
+      );
+
+      // 3. Ubah data ke format JSON yang benar
+      List<Map<String, dynamic>> contactsToSync = [];
+      for (var contact in deviceContacts) {
+        if (contact.phones.isNotEmpty && contact.displayName.isNotEmpty) {
+          contactsToSync.add({
+            'nama': contact.displayName,
+            'no_hp': contact.phones.first.number
+                .replaceAll(RegExp(r'[\\s-]'), ''), // Bersihkan nomor HP
+            'email':
+                contact.emails.isNotEmpty ? contact.emails.first.address : ''
+          });
+        }
+      }
+
+      // 4. Kirim data ke service
+      try {
+        final message = await ContactService.syncContacts(contactsToSync);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message), backgroundColor: Colors.green),
+          );
+          // 5. Muat ulang daftar kontak di UI untuk menampilkan data baru
+          context.read<ContactBloc>().add(LoadContacts());
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text('Gagal: ${e.toString()}'),
+                backgroundColor: Colors.red),
+          );
+        }
+      }
+    } else {
+      // Tangani jika izin ditolak
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Izin akses kontak ditolak.'),
+              backgroundColor: Colors.orange),
+        );
+      }
+    }
   }
 
   void _showSettingsDialog() {

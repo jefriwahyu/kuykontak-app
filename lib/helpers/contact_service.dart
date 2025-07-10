@@ -48,8 +48,20 @@ class ContactService {
     }
   }
 
-  static Future<void> syncContacts() async {
-    await ContactService.syncContacts();
+  static Future<String> syncContacts(
+      List<Map<String, dynamic>> contacts) async {
+    try {
+      final response = await _dio
+          .post('${ApiUrl.contactsUrl}/sync', data: {'contacts': contacts});
+      return response.data['message'] ?? 'Sinkronisasi selesai.';
+    } on DioException catch (e) {
+      // Tangani error dengan lebih baik
+      final errorMessage =
+          e.response?.data['message'] ?? 'Gagal melakukan sinkronisasi.';
+      throw Exception(errorMessage);
+    } catch (e) {
+      throw Exception('Terjadi kesalahan tidak terduga.');
+    }
   }
 
   static Future<void> toggleFavorite(String id, bool isFavorite) async {

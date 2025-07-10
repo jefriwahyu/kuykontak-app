@@ -126,19 +126,5 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         emit(ContactError(e.toString()));
       }
     });
-
-    on<SyncContacts>((event, emit) async {
-      emit(ContactLoading());
-      try {
-        // Panggil fungsi sinkronisasi di ContactService (misal: syncContacts)
-        await ContactService.syncContacts(
-            /* tambahkan argumen yang diperlukan di sini, misal: userId atau contacts */);
-        // Setelah sinkronisasi, muat ulang daftar kontak
-        final contacts = await ContactService.getContacts();
-        emit(ContactLoaded(contacts));
-      } catch (e) {
-        emit(ContactError(e.toString()));
-      }
-    });
   }
 }
