@@ -23,9 +23,8 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
   late TextEditingController _noHpController;
   late TextEditingController _emailController;
   late TextEditingController _alamatController;
-  late TextEditingController _catatanController;
   String? _selectedGrup;
-  final List<String> _grupOptions = ['Keluarga', 'Teman', 'Kerja', 'Lainnya'];
+  final List<String> _grupOptions = ['Keluarga', 'Teman', 'Kerja', ''];
 
   Uint8List? _imageBytes;
   String? _imageName;
@@ -41,14 +40,14 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
     _noHpController = TextEditingController();
     _emailController = TextEditingController();
     _alamatController = TextEditingController();
-    _catatanController = TextEditingController();
 
     if (isEditMode) {
       _namaController.text = widget.contact!.nama;
       _noHpController.text = widget.contact!.noHp;
       _emailController.text = widget.contact!.email;
       _alamatController.text = widget.contact!.alamat;
-      _selectedGrup = widget.contact!.grup.isNotEmpty ? widget.contact!.grup : null;
+      _selectedGrup =
+          widget.contact!.grup.isNotEmpty ? widget.contact!.grup : null;
     }
   }
 
@@ -58,7 +57,6 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
     _noHpController.dispose();
     _emailController.dispose();
     _alamatController.dispose();
-    _catatanController.dispose();
     super.dispose();
   }
 
@@ -95,7 +93,8 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
       if (_isAvatarRemoved) {
         avatarUrl = '';
       } else if (_imageBytes != null) {
-        avatarUrl = await ContactService.uploadAvatar(_imageBytes!, _imageName!);
+        avatarUrl =
+            await ContactService.uploadAvatar(_imageBytes!, _imageName!);
         if (avatarUrl == null) throw Exception('Gagal upload avatar');
       } else if (isEditMode) {
         avatarUrl = widget.contact!.avatar;
@@ -106,22 +105,21 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
         'no_hp': _noHpController.text.trim(),
         'email': _emailController.text.trim(),
         'alamat': _alamatController.text.trim(),
-        'catatan': _catatanController.text.trim(),
         'grup': _selectedGrup ?? '',
         'avatar': avatarUrl ?? '',
       };
 
       if (mounted) {
         context.read<ContactBloc>().add(
-          isEditMode
-              ? UpdateContact(widget.contact!.id, contactData)
-              : AddContact(contactData),
-        );
+              isEditMode
+                  ? UpdateContact(widget.contact!.id, contactData)
+                  : AddContact(contactData),
+            );
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(isEditMode 
-                ? 'Kontak berhasil diperbarui!' 
+            content: Text(isEditMode
+                ? 'Kontak berhasil diperbarui!'
                 : 'Kontak baru berhasil ditambahkan!'),
             backgroundColor: Colors.green,
           ),
@@ -146,9 +144,8 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
 
   @override
   Widget build(BuildContext context) {
-    final bool hasExistingImage = isEditMode && 
-        widget.contact!.avatar.isNotEmpty && 
-        !_isAvatarRemoved;
+    final bool hasExistingImage =
+        isEditMode && widget.contact!.avatar.isNotEmpty && !_isAvatarRemoved;
     final bool hasNewImage = _imageBytes != null;
     final bool showImage = hasExistingImage || hasNewImage;
 
@@ -192,15 +189,16 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
                           ? Image(
                               image: hasNewImage
                                   ? MemoryImage(_imageBytes!)
-                                  : NetworkImage(widget.contact!.avatar) 
-                                  as ImageProvider,
+                                  : NetworkImage(widget.contact!.avatar)
+                                      as ImageProvider,
                               fit: BoxFit.cover,
                               loadingBuilder: (context, child, progress) {
-                                return progress == null 
-                                    ? child 
+                                return progress == null
+                                    ? child
                                     : const CircularProgressIndicator();
                               },
-                              errorBuilder: (_, __, ___) => _buildDefaultAvatar(),
+                              errorBuilder: (_, __, ___) =>
+                                  _buildDefaultAvatar(),
                             )
                           : _buildDefaultAvatar(),
                     ),
@@ -233,7 +231,7 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.white, width: 2),
                           ),
-                          child: const Icon(Icons.close, 
+                          child: const Icon(Icons.close,
                               size: 16, color: Colors.white),
                         ),
                       ),
@@ -304,7 +302,18 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
               controller: _namaController,
               label: 'Nama Lengkap',
               hint: 'Masukkan nama lengkap',
-              validator: (v) => v!.isEmpty ? 'Nama wajib diisi' : null,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Nama wajib diisi';
+                }
+                if (value.length < 3) {
+                  return 'Nama harus minimal 3 karakter';
+                }
+                if (value.length > 50) {
+                  return 'Nama terlalu panjang (maks 50 karakter)';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 16),
             _buildTextFormField(
@@ -312,7 +321,16 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
               label: 'Nomor HP',
               hint: 'Masukkan nomor handphone',
               keyboardType: TextInputType.phone,
-              validator: (v) => v!.isEmpty ? 'Nomor HP wajib diisi' : null,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Nomor HP wajib diisi';
+                }
+                final phoneRegex = RegExp(r'^[0-9]{10,13}$');
+                if (!phoneRegex.hasMatch(value)) {
+                  return 'Nomor HP harus 10-13 digit angka';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 16),
             _buildTextFormField(
@@ -320,9 +338,21 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
               label: 'Email',
               hint: 'Masukkan alamat email',
               keyboardType: TextInputType.emailAddress,
-              validator: (v) => v!.isNotEmpty && !v.contains('@') 
-                  ? 'Email tidak valid' 
-                  : null,
+              validator: (value) {
+                if (value != null && value.isNotEmpty) {
+                  final emailRegex = RegExp(
+                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                    caseSensitive: false,
+                  );
+                  if (!emailRegex.hasMatch(value)) {
+                    return 'Masukkan email yang valid';
+                  }
+                  if (value.length > 100) {
+                    return 'Email terlalu panjang (maks 100 karakter)';
+                  }
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 16),
             _buildTextFormField(
@@ -330,13 +360,17 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
               label: 'Alamat',
               hint: 'Masukkan alamat lengkap',
               maxLines: 2,
-            ),
-            const SizedBox(height: 16),
-            _buildTextFormField(
-              controller: _catatanController,
-              label: 'Catatan',
-              hint: 'Tambahkan catatan (opsional)',
-              maxLines: 2,
+              validator: (value) {
+                if (value != null && value.isNotEmpty) {
+                  if (value.length < 10) {
+                    return 'Alamat terlalu pendek (min 10 karakter)';
+                  }
+                  if (value.length > 200) {
+                    return 'Alamat terlalu panjang (maks 200 karakter)';
+                  }
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
@@ -350,7 +384,7 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
               items: _grupOptions
                   .map((e) => DropdownMenuItem(
                         value: e,
-                        child: Text(e),
+                        child: Text(e.isEmpty ? 'Tidak ada grup' : e),
                       ))
                   .toList(),
               onChanged: (value) => setState(() => _selectedGrup = value),

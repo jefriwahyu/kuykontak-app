@@ -5,7 +5,7 @@ class AppSidebar extends StatelessWidget {
   final int totalContacts;
   final VoidCallback onShowFavorites;
   final VoidCallback onShowSettings;
-  
+
   const AppSidebar({
     super.key,
     required this.totalContacts,
@@ -69,32 +69,44 @@ class AppSidebar extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: ListTile(
-                  leading: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: lightBlue,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.people,
-                      color: darkBlue,
-                    ),
-                  ),
-                  title: Text(
-                    'Total Kontak',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey.shade800,
-                    ),
-                  ),
-                  subtitle: Text(
-                    '$totalContacts',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: primaryColor,
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: lightBlue,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.people,
+                          color: darkBlue,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Total Kontak',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          Text(
+                            '$totalContacts',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -110,22 +122,19 @@ class AppSidebar extends StatelessWidget {
                     icon: Icons.star,
                     title: 'Kontak Favorit',
                     color: Colors.amber.shade600,
-                    onTap: onShowFavorites,
+                    onTap: () {
+                      onShowFavorites();
+                      // Navigator.pop(context);
+                    },
                   ),
                   _buildMenuTile(
                     context,
                     icon: Icons.settings,
                     title: 'Pengaturan',
                     color: primaryColor,
-                    onTap: onShowSettings,
-                  ),
-                  _buildMenuTile(
-                    context,
-                    icon: Icons.help_outline,
-                    title: 'Bantuan',
-                    color: Colors.grey.shade600,
                     onTap: () {
-                      // Tambahkan navigasi ke halaman bantuan
+                      Navigator.pop(context);
+                      onShowSettings();
                     },
                   ),
                 ],
@@ -171,16 +180,17 @@ class AppSidebar extends StatelessWidget {
   }) {
     return ListTile(
       leading: Container(
-        padding: const EdgeInsets.all(6),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: color.withOpacity(0.2),
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Icon(icon, color: color),
       ),
       title: Text(
         title,
         style: TextStyle(
+          fontSize: 16,
           fontWeight: FontWeight.w500,
           color: Colors.grey.shade800,
         ),
@@ -189,10 +199,7 @@ class AppSidebar extends StatelessWidget {
         Icons.chevron_right,
         color: Colors.grey.shade400,
       ),
-      onTap: () {
-        Navigator.pop(context);
-        onTap();
-      },
+      onTap: onTap,
     );
   }
 }
