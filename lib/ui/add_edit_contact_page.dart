@@ -37,6 +37,8 @@ class _AddEditContactPageState extends State<AddEditContactPage>
   bool _isSaving = false;
   bool _isAvatarRemoved = false;
 
+  late FocusNode _noHpFocusNode;
+
   bool get isEditMode => widget.contact != null;
 
   @override
@@ -61,10 +63,11 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     _noHpController = TextEditingController();
     _emailController = TextEditingController();
     _alamatController = TextEditingController();
+    _noHpFocusNode = FocusNode();
 
     if (isEditMode) {
       _namaController.text = widget.contact!.nama;
-      _noHpController.text = widget.contact!.noHp;
+      _noHpController.text = unformatNomor(widget.contact!.noHp);
       _emailController.text = widget.contact!.email;
       _alamatController.text = widget.contact!.alamat;
       _selectedGrup =
@@ -72,6 +75,24 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     }
 
     _animationController.forward();
+
+    // Listener untuk otomatis ubah +62 ke 0 saat fokus, dan sebaliknya saat unfokus
+    _noHpFocusNode.addListener(() {
+      if (_noHpFocusNode.hasFocus) {
+        // Saat fokus, ubah +62 ke 0
+        if (_noHpController.text.startsWith('+62')) {
+          _noHpController.text = unformatNomor(_noHpController.text);
+          _noHpController.selection = TextSelection.fromPosition(
+            TextPosition(offset: _noHpController.text.length),
+          );
+        }
+      } else {
+        // Saat unfokus, ubah 0 ke +62
+        if (_noHpController.text.startsWith('0')) {
+          _noHpController.text = formatNomor(_noHpController.text);
+        }
+      }
+    });
   }
 
   @override
@@ -81,6 +102,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     _noHpController.dispose();
     _emailController.dispose();
     _alamatController.dispose();
+    _noHpFocusNode.dispose();
     super.dispose();
   }
 
@@ -142,7 +164,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
 
       final contactData = {
         'nama': _namaController.text.trim(),
-        'no_hp': _noHpController.text.trim(),
+        'no_hp': formatNomor(_noHpController.text.trim()), // <-- ubah di sini
         'email': _emailController.text.trim(),
         'alamat': _alamatController.text.trim(),
         'grup': _selectedGrup ?? '',
@@ -541,13 +563,16 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                                   keyboardType: TextInputType.phone,
                                   isDark: isDark,
                                   fontSize: fontSize,
+                                  focusNode:
+                                      _noHpFocusNode, // <-- tambahkan ini
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Nomor HP wajib diisi';
                                     }
                                     final phoneRegex =
                                         RegExp(r'^[0-9]{10,13}$');
-                                    if (!phoneRegex.hasMatch(value)) {
+                                    if (!phoneRegex
+                                        .hasMatch(unformatNomor(value))) {
                                       return 'Nomor HP harus 10-13 digit angka';
                                     }
                                     return null;
@@ -681,6 +706,20 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     );
   }
 
+  String unformatNomor(String nomor) {
+    if (nomor.startsWith('+62')) {
+      return '0${nomor.substring(3)}';
+    }
+    return nomor;
+  }
+
+  String formatNomor(String nomor) {
+    if (nomor.startsWith('0')) {
+      return '+62${nomor.substring(1)}';
+    }
+    return nomor;
+  }
+
   Widget _buildDefaultAvatar(String initials, Color avatarColor) {
     return Container(
       decoration: BoxDecoration(
@@ -797,6 +836,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     TextInputType? keyboardType,
     int maxLines = 1,
     String? Function(String?)? validator,
+    FocusNode? focusNode,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -886,6 +926,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
           keyboardType: keyboardType,
           maxLines: maxLines,
           validator: validator,
+          focusNode: focusNode,
         ),
       ],
     );
