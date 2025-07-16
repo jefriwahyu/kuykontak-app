@@ -72,4 +72,30 @@ class Contact extends ISuspensionBean {
       'isFavorite': isFavorite,
     };
   }
+
+  Contact copyWith({
+    String? id,
+    String? nama,
+    String? email,
+    String? noHp,
+    String? alamat,
+    String? avatar,
+    String? grup,
+    String? createdAt,
+    String? updatedAt,
+    bool? isFavorite,
+  }) {
+    return Contact(
+      id: id ?? this.id,
+      nama: nama ?? this.nama,
+      email: email ?? this.email,
+      noHp: noHp ?? this.noHp,
+      alamat: alamat ?? this.alamat,
+      avatar: avatar ?? this.avatar,
+      grup: grup ?? this.grup,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }

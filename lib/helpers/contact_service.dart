@@ -1,7 +1,9 @@
 // lib/helpers/contact_service.dart
 
 import 'dart:typed_data'; // Pastikan import ini ada
+import 'dart:convert'; // Tambahkan ini untuk jsonDecode
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'package:kontak_app_m/helpers/api_url.dart';
 import 'package:kontak_app_m/model/contact.dart';
 
@@ -64,11 +66,24 @@ class ContactService {
     }
   }
 
-  static Future<void> toggleFavorite(String id, bool isFavorite) async {
-    final url = '${ApiUrl.contactsUrl}/$id/favorite';
-    final response = await _dio.patch(url, data: {'isFavorite': isFavorite});
-    if (response.statusCode != 200) {
-      throw Exception('Gagal update favorite');
+  // Mengembalikan Map yang berisi ID dan status favorit baru
+  static Future<Map<String, dynamic>> toggleFavorite(String id) async {
+    final url =
+        ApiUrl.toggleFavoriteUrl(id); // Menggunakan dio, URL cukup String
+
+    try {
+      final response = await _dio.patch(url); // Menggunakan _dio
+
+      // Dio secara otomatis menangani status error, jadi kita bisa langsung ke sini jika sukses
+      // Langsung kembalikan map 'data' dari respons JSON
+      return response.data['data'] as Map<String, dynamic>;
+    } on DioException catch (e) {
+      // Tangani error spesifik dari Dio
+      print('Dio error: ${e.message}');
+      throw Exception('Gagal mengubah status favorit.');
+    } catch (e) {
+      // Tangani error lainnya
+      throw Exception('Terjadi kesalahan: $e');
     }
   }
 }

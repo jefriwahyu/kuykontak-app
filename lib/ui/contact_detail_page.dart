@@ -1,10 +1,14 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kontak_app_m/bloc/contact_bloc.dart';
+import 'package:kontak_app_m/helpers/avatar_helper.dart';
 import 'package:kontak_app_m/model/contact.dart';
 import 'package:kontak_app_m/ui/add_edit_contact_page.dart';
-import 'package:kontak_app_m/ui/theme.dart';
 import 'package:kontak_app_m/helpers/slide_right_route.dart';
+import 'package:provider/provider.dart';
+import 'package:kontak_app_m/ui/theme_controller.dart';
+import 'package:flutter/services.dart';
 
 class ContactDetailPage extends StatefulWidget {
   final Contact contact;
@@ -16,358 +20,579 @@ class ContactDetailPage extends StatefulWidget {
 
 class _ContactDetailPageState extends State<ContactDetailPage> {
   late bool _isFavorite;
-  int _favoriteCount = 0;
+  final ScrollController _scrollController = ScrollController();
+
+  // Variabel untuk animasi
+  double _avatarSize = 100.0;
+  double _nameOpacity = 1.0;
+  double _nameFontSize = 24.0;
+  bool _showNameInAppBar = false;
+  double _avatarTopPosition = 120.0;
+
+  // Konstanta untuk perhitungan animasi
+  static const double _maxAvatarSize = 100.0;
+  static const double _minAvatarSize = 40.0;
+  static const double _maxNameSize = 24.0;
+  static const double _minNameSize = 18.0;
+  static const double _scrollThreshold = 120.0;
 
   @override
   void initState() {
     super.initState();
     _isFavorite = widget.contact.isFavorite;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateFavoriteCount();
+    _scrollController.addListener(_handleScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_handleScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _handleScroll() {
+    final offset = _scrollController.offset;
+    double progress = (offset / _scrollThreshold).clamp(0.0, 1.0);
+
+    setState(() {
+      _avatarSize = lerpDouble(_maxAvatarSize, _minAvatarSize, progress)!;
+      _nameFontSize = lerpDouble(_maxNameSize, _minNameSize, progress)!;
+      _nameOpacity = lerpDouble(1.0, 0.0, progress)!;
+      _avatarTopPosition = 120.0 - (offset * 0.4);
+      _showNameInAppBar = progress >= 0.9;
     });
-  }
-
-  void _updateFavoriteCount() {
-    final bloc = context.read<ContactBloc>();
-    final state = bloc.state;
-    if (state is ContactLoaded) {
-      setState(() {
-        _favoriteCount = state.contacts.where((c) => c.isFavorite).length;
-      });
-    }
-  }
-
-  Widget _buildDetailItem(String label, String value) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.grey.shade600,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Divider(color: Colors.grey.shade200, height: 1),
-        ],
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ContactBloc, ContactState>(
-      listener: (context, state) {
-        if (state is ContactActionSuccess) {
-          if (Navigator.canPop(context)) {
-            Navigator.of(context).pop();
-          }
-        }
-        if (state is ContactError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Gagal: ${state.message}'),
-              backgroundColor: Colors.red,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          );
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Detail Kontak'),
-          titleTextStyle: const TextStyle(
-            color: Colors.white, // Warna teks putih
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-          backgroundColor: primaryColor,
-          elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.white),
-          actions: [
-            IconButton(
-              icon: Icon(
-                _isFavorite ? Icons.star : Icons.star_border,
-                color: Colors.white,
-              ),
-              onPressed: (_favoriteCount >= 5 && !_isFavorite)
-                  ? () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                              'Maaf, jumlah kontak favorite sudah mencapai batas maksimal (5 kontak).'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  : () {
-                      setState(() {
-                        _isFavorite = !_isFavorite;
-                      });
-                      context.read<ContactBloc>().add(
-                            ToggleFavorite(widget.contact.id, _isFavorite),
-                          );
-                    },
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [primaryColor, secondaryColor],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+    // Panggil helper di dalam build method untuk mendapatkan data avatar
+    final initials = AvatarHelper.getInitials(widget.contact.nama);
+    final avatarColor = AvatarHelper.getAvatarColor(widget.contact.id);
+
+    return Consumer<ThemeController>(
+      builder: (context, theme, _) {
+        final isDark = theme.isDarkTheme;
+        final fontSize = theme.fontSize;
+
+        return BlocListener<ContactBloc, ContactState>(
+          listener: (context, state) {
+            if (state is ContactActionSuccess) {
+              if (Navigator.canPop(context)) {
+                Navigator.of(context).pop();
+              }
+            }
+            if (state is ContactError) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Gagal: ${state.message}'),
+                backgroundColor: Colors.red,
+              ));
+            }
+          },
+          child: Scaffold(
+            backgroundColor:
+                isDark ? const Color(0xFF121212) : const Color(0xFFF8F9FA),
+            body: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                SliverAppBar(
+                  expandedHeight: 280.0,
+                  pinned: true,
+                  stretch: true,
+                  elevation: 2.0,
+                  backgroundColor: isDark
+                      ? const Color(0xFF1C2B5D)
+                      : const Color(0xFF1E88E5),
+                  leading: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
-                ),
-                child: Center(
-                  child: Hero(
-                    tag: 'avatar_${widget.contact.nama}',
-                    child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          colors: [
-                            primaryColor.withOpacity(0.8),
-                            secondaryColor.withOpacity(0.8)
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: primaryColor.withOpacity(0.3),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                        image: widget.contact.avatar.isNotEmpty
-                            ? DecorationImage(
-                                image: NetworkImage(widget.contact.avatar),
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                      ),
-                      child: widget.contact.avatar.isEmpty
-                          ? Center(
-                              child: Text(
-                                widget.contact.nama.isNotEmpty
-                                    ? widget.contact.nama[0].toUpperCase()
-                                    : '?',
-                                style: const TextStyle(
-                                  fontSize: 48,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            )
-                          : null,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(16),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
+                  title: AnimatedOpacity(
+                    opacity: _showNameInAppBar ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 300),
+                    child: Text(
                       widget.contact.nama,
                       style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                      textAlign: TextAlign.center,
+                          color: Colors.white, fontWeight: FontWeight.bold),
                     ),
-                    if (widget.contact.grup.isNotEmpty)
-                      Container(
-                        margin: const EdgeInsets.only(top: 8, bottom: 16),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: lightBlue,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          widget.contact.grup,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: darkBlue,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    _buildDetailItem('Nomor HP', widget.contact.noHp),
-                    _buildDetailItem('Email', widget.contact.email),
-                    _buildDetailItem('Alamat', widget.contact.alamat),
-                    _buildDetailItem('Grup', widget.contact.grup),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        icon: const Icon(Icons.edit),
-                        label: const Text('Edit Kontak'),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: primaryColor,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            SlideRightRoute(
-                              page: AddEditContactPage(contact: widget.contact),
+                  ),
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: isDark
+                                  ? [
+                                      const Color(0xFF1E3A8A),
+                                      const Color(0xFF1C2B5D)
+                                    ]
+                                  : [
+                                      const Color(0xFF1E88E5),
+                                      const Color(0xFF42A5F5)
+                                    ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        icon: const Icon(Icons.delete),
-                        label: const Text('Hapus'),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: deleteColor,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        onPressed: () {
-                          _showDeleteConfirmation(context);
-                        },
+                        Positioned(
+                          top: _avatarTopPosition,
+                          left: 0,
+                          right: 0,
+                          child: Column(
+                            children: [
+                              Hero(
+                                tag: 'avatar_${widget.contact.id}',
+                                child: CircleAvatar(
+                                  radius: _avatarSize / 2,
+                                  backgroundImage:
+                                      widget.contact.avatar.isNotEmpty
+                                          ? NetworkImage(widget.contact.avatar)
+                                          : null,
+                                  // --- LOGIKA AVATAR BARU DITERAPKAN DI SINI ---
+                                  backgroundColor: widget.contact.avatar.isEmpty
+                                      ? avatarColor.withOpacity(0.9)
+                                      : Colors.transparent,
+                                  child: widget.contact.avatar.isEmpty
+                                      ? Text(
+                                          initials,
+                                          style: TextStyle(
+                                              fontSize: _avatarSize *
+                                                  (initials.length > 1
+                                                      ? 0.4
+                                                      : 0.45),
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      : null,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              AnimatedOpacity(
+                                opacity: _nameOpacity,
+                                duration: const Duration(milliseconds: 200),
+                                child: Text(
+                                  widget.contact.nama,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: _nameFontSize,
+                                    fontWeight: FontWeight.bold,
+                                    shadows: [
+                                      const Shadow(
+                                          blurRadius: 2, color: Colors.black26)
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    IconButton(
+                      icon: Icon(
+                        _isFavorite ? Icons.star : Icons.star_border,
+                        color:
+                            _isFavorite ? Colors.amber.shade300 : Colors.white,
+                        size: 28,
                       ),
+                      onPressed: () {
+                        setState(() => _isFavorite = !_isFavorite);
+                        context.read<ContactBloc>().add(
+                            ToggleFavorite(widget.contact.id, _isFavorite));
+                      },
                     ),
                   ],
                 ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+                    child: Column(
+                      children: [
+                        if (widget.contact.grup.isNotEmpty)
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 20),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? Color(0xFF1E1E1E)
+                                  : Colors.white, // Warna surface
+                              borderRadius: BorderRadius.circular(30),
+                              border: isDark
+                                  ? Border.all(color: Colors.grey.shade800)
+                                  : null,
+                            ),
+                            child: Text(
+                              widget.contact.grup,
+                              style: TextStyle(
+                                color: isDark
+                                    ? Color(0xFF64B5F6)
+                                    : Color(0xFF1E88E5), // Warna aksen
+                                fontSize: fontSize * 0.9,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        Card(
+                          elevation: isDark ? 4 : 2,
+                          color:
+                              isDark ? const Color(0xFF1E1E1E) : Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              children: [
+                                _buildDetailItem(Icons.phone, 'Nomor HP',
+                                    widget.contact.noHp, theme, true),
+                                _buildDetailItem(Icons.email_outlined, 'Email',
+                                    widget.contact.email, theme, true),
+                                _buildDetailItem(
+                                    Icons.location_on_outlined,
+                                    'Alamat',
+                                    widget.contact.alamat,
+                                    theme,
+                                    true),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                icon: const Icon(Icons.edit),
+                                label: Text('Edit',
+                                    style: TextStyle(fontSize: fontSize)),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: isDark
+                                      ? const Color(0xFF64B5F6)
+                                      : const Color(0xFF1E88E5),
+                                  side: BorderSide(
+                                      color: isDark
+                                          ? const Color(0xFF64B5F6)
+                                          : const Color(0xFF1E88E5)),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12)),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      SlideRightRoute(
+                                          page: AddEditContactPage(
+                                              contact: widget.contact)));
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                icon: const Icon(Icons.delete),
+                                label: Text('Hapus',
+                                    style: TextStyle(fontSize: fontSize)),
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.red.shade600,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12)),
+                                ),
+                                onPressed: () {
+                                  _showDeleteConfirmation(context, theme);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailItem(IconData icon, String label, String value,
+      ThemeController theme, bool isClickable) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          hoverColor: theme.isDarkTheme
+              ? const Color(0xFF64B5F6).withOpacity(0.08)
+              : const Color(0xFF1E88E5).withOpacity(0.04),
+          splashColor: theme.isDarkTheme
+              ? const Color(0xFF64B5F6).withOpacity(0.12)
+              : const Color(0xFF1E88E5).withOpacity(0.08),
+          highlightColor: theme.isDarkTheme
+              ? const Color(0xFF64B5F6).withOpacity(0.06)
+              : const Color(0xFF1E88E5).withOpacity(0.03),
+          onTap: (isClickable && value.isNotEmpty)
+              ? () {
+                  Clipboard.setData(ClipboardData(text: value));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('$label berhasil disalin'),
+                      duration: const Duration(seconds: 1),
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  );
+                }
+              : null,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: theme.isDarkTheme
+                    ? Colors.grey.shade800
+                    : Colors.grey.shade200,
+                width: 1,
               ),
-            ],
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: theme.isDarkTheme
+                        ? const Color(0xFF64B5F6).withOpacity(0.12)
+                        : const Color(0xFFE3F2FD),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: theme.isDarkTheme
+                            ? const Color(0xFF64B5F6).withOpacity(0.1)
+                            : const Color(0xFF1E88E5).withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    icon,
+                    color: theme.isDarkTheme
+                        ? const Color(0xFF64B5F6)
+                        : const Color(0xFF1E88E5),
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: TextStyle(
+                          color: theme.isDarkTheme
+                              ? Colors.grey.shade400
+                              : Colors.grey.shade600,
+                          fontSize: theme.fontSize * 0.85,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        value.isNotEmpty ? value : '-',
+                        style: TextStyle(
+                          fontSize: theme.fontSize * 1.0,
+                          fontWeight: FontWeight.w600,
+                          color: theme.isDarkTheme
+                              ? Colors.white.withOpacity(0.9)
+                              : Colors.black87,
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (isClickable && value.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Icon(
+                      Icons.copy_rounded,
+                      size: 16,
+                      color: theme.isDarkTheme
+                          ? Colors.grey.shade500
+                          : Colors.grey.shade400,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  void _showDeleteConfirmation(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.warning_amber_rounded,
-                color: Colors.amber.shade600,
-                size: 48,
+  void _showDeleteConfirmation(BuildContext context, ThemeController theme) {
+    showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        barrierLabel: '',
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionDuration: const Duration(milliseconds: 300),
+        pageBuilder: (ctx, anim1, anim2) {
+          return ScaleTransition(
+            scale: CurvedAnimation(
+              parent: anim1,
+              curve: Curves.easeOutBack,
+            ),
+            child: AlertDialog(
+              backgroundColor:
+                  theme.isDarkTheme ? const Color(0xFF2D2D2D) : Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: BorderSide(
+                    color: theme.isDarkTheme
+                        ? Colors.red.shade800
+                        : Colors.red.shade300,
+                    width: 1.5),
               ),
-              const SizedBox(height: 16),
-              const Text(
-                'Hapus Kontak?',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Apakah Anda yakin ingin menghapus kontak "${widget.contact.nama}"?',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Row(
+              elevation: 8,
+              shadowColor: Colors.red.withOpacity(0.3),
+              title: Column(
                 children: [
-                  Expanded(
-                    child: OutlinedButton(
-                        onPressed: () => Navigator.of(ctx).pop(),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: deleteColor,
-                          side: BorderSide(color: deleteColor),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text('Batal')),
+                  Icon(
+                    Icons.warning_rounded,
+                    size: 48,
+                    color: Colors.red.shade400,
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(ctx).pop();
-                        context
-                            .read<ContactBloc>()
-                            .add(DeleteContact(widget.contact.id));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: deleteColor,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text('Hapus'),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Hapus Kontak?',
+                    style: TextStyle(
+                      fontSize: theme.fontSize * 1.2,
+                      fontWeight: FontWeight.bold,
+                      color: theme.isDarkTheme ? Colors.white : Colors.black87,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+              content: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Anda akan menghapus kontak ',
+                      style: TextStyle(
+                        fontSize: theme.fontSize,
+                        color: theme.isDarkTheme
+                            ? Colors.grey.shade400
+                            : Colors.grey.shade600,
+                      ),
+                    ),
+                    TextSpan(
+                      text: widget.contact.nama,
+                      style: TextStyle(
+                        fontSize: theme.fontSize,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            theme.isDarkTheme ? Colors.white : Colors.black87,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' secara permanen.',
+                      style: TextStyle(
+                        fontSize: theme.fontSize,
+                        color: theme.isDarkTheme
+                            ? Colors.grey.shade400
+                            : Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actionsAlignment: MainAxisAlignment.spaceAround,
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  style: TextButton.styleFrom(
+                    foregroundColor: theme.isDarkTheme
+                        ? Colors.white70
+                        : Colors.grey.shade700,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    'Batal',
+                    style: TextStyle(
+                      fontSize: theme.fontSize,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                    context
+                        .read<ContactBloc>()
+                        .add(DeleteContact(widget.contact.id));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red.shade600,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                    shadowColor: Colors.red.withOpacity(0.4),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(width: 6),
+                      Text(
+                        'Ya, Hapus',
+                        style: TextStyle(
+                          fontSize: theme.fontSize,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+        transitionBuilder: (ctx, anim1, anim2, child) {
+          return FadeTransition(
+            opacity: anim1,
+            child: child,
+          );
+        });
   }
 }
