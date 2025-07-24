@@ -179,7 +179,6 @@ class _ContactListPageState extends State<ContactListPage>
                   children: [
                     Stack(
                       children: [
-                        // PERBAIKAN 1: Tambahkan Ikon Pengaturan di Judul
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

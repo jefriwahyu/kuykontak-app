@@ -1,9 +1,7 @@
 // lib/helpers/contact_service.dart
 
-import 'dart:typed_data'; // Pastikan import ini ada
-import 'dart:convert'; // Tambahkan ini untuk jsonDecode
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
 import 'package:kontak_app_m/helpers/api_url.dart';
 import 'package:kontak_app_m/model/contact.dart';
 

@@ -1,18 +1,14 @@
-// lib/helpers/api_url.dart
-
 // Enum untuk memilih jenis API
 enum ApiType { express, codeigniter }
 
 // Ganti ke ApiType.codeigniter jika ingin menguji backend CI4
 const ApiType currentApi =
-    ApiType.codeigniter; // <-- GANTI KE CODEIGNITER UNTUK MENGUJI
+    ApiType.express; // <-- GANTI KE CODEIGNITER UNTUK MENGUJI
 // -----------------------------------------
 
 class ApiUrl {
   // Definisikan base URL murni (tanpa path)
   static const String _expressBase = 'https://manu.my.id';
-
-  // PENTING: Ganti localhost ke 10.0.2.2 untuk emulator Android
   static const String _ci4Base = 'https://kontak-api.tinagers.com';
 
   // Definisikan path lengkap untuk setiap endpoint
@@ -44,15 +40,16 @@ class ApiUrl {
     }
   }
 
-  // === TAMBAHKAN FUNGSI BARU INI ===
-  // Fungsi untuk membuat URL toggle favorite dengan ID
+// Lokasi: lib/helpers/api_url.dart
+
   static String toggleFavoriteUrl(String id) {
     if (currentApi == ApiType.express) {
-      // URL untuk Express: .../api/kontak/favorite/:id
-      return _expressBase + _expressToggleFavoritePath + '/$id';
+      // PERBAIKAN: Susun URL secara manual agar ID berada di tengah
+      // Hasilnya akan menjadi: https://.../api/kontak/ID_KONTAK/favorite
+      return '$_expressBase$_expressContactsPath/$id/favorite';
     } else {
-      // URL untuk CI4: .../api/contacts/favorite/:id
-      return _ci4Base + _ci4ToggleFavoritePath + '/$id';
+      // URL untuk CI4 sudah benar
+      return '$_ci4Base$_ci4ToggleFavoritePath/$id';
     }
   }
 }
