@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'bloc/contact_bloc.dart';
 import 'ui/contact_list_page.dart';
+import 'ui/landing_page.dart';
 import 'package:kontak_app_m/ui/theme.dart';
 import 'package:kontak_app_m/ui/theme_controller.dart';
+import 'ui/landing_page.dart';
 
 void main() {
   runApp(
@@ -27,7 +29,11 @@ class MyApp extends StatelessWidget {
         title: 'Aplikasi Kontak',
         debugShowCheckedModeBanner: false,
         theme: buildAppTheme(),
-        home: const ContactListPage(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const LandingPage(),
+          '/home': (context) => ContactListPage(),
+        },
       ),
     );
   }

@@ -228,6 +228,14 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     }
   }
 
+  List<Contact> get _allContacts {
+    final state = context.read<ContactBloc>().state;
+    if (state is ContactLoaded) {
+      return state.contacts;
+    }
+    return [];
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeController = Provider.of<ThemeController>(context);
@@ -563,17 +571,24 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                                   keyboardType: TextInputType.phone,
                                   isDark: isDark,
                                   fontSize: fontSize,
-                                  focusNode:
-                                      _noHpFocusNode, // <-- tambahkan ini
+                                  focusNode: _noHpFocusNode,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Nomor HP wajib diisi';
                                     }
                                     final phoneRegex =
                                         RegExp(r'^[0-9]{10,13}$');
-                                    if (!phoneRegex
-                                        .hasMatch(unformatNomor(value))) {
+                                    final inputNomor = unformatNomor(value);
+                                    if (!phoneRegex.hasMatch(inputNomor)) {
                                       return 'Nomor HP harus 10-13 digit angka';
+                                    }
+                                    // Cek duplikat nomor HP
+                                    final exists = _allContacts.any((c) =>
+                                        unformatNomor(c.noHp) == inputNomor &&
+                                        (!isEditMode ||
+                                            c.id != widget.contact!.id));
+                                    if (exists) {
+                                      return 'Nomor HP sudah terdaftar';
                                     }
                                     return null;
                                   },
@@ -600,6 +615,16 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                                       }
                                       if (value.length > 100) {
                                         return 'Email terlalu panjang (maks 100 karakter)';
+                                      }
+                                      // Cek duplikat email
+                                      final exists = _allContacts.any((c) =>
+                                          c.email.toLowerCase() ==
+                                              value.toLowerCase() &&
+                                          c.email.isNotEmpty &&
+                                          (!isEditMode ||
+                                              c.id != widget.contact!.id));
+                                      if (exists) {
+                                        return 'Email sudah terdaftar';
                                       }
                                     }
                                     return null;
