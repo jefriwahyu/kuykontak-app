@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'bloc/contact_bloc.dart';
 import 'ui/contact_list_page.dart';
-import 'ui/landing_page.dart';
+import 'ui/splash_screen.dart';
 import 'package:kontak_app_m/ui/theme.dart';
 import 'package:kontak_app_m/ui/theme_controller.dart';
-import 'ui/landing_page.dart';
 
 void main() {
   runApp(
@@ -31,7 +30,7 @@ class MyApp extends StatelessWidget {
         theme: buildAppTheme(),
         initialRoute: '/',
         routes: {
-          '/': (context) => const LandingPage(),
+          '/': (context) => const SplashScreen(),
           '/home': (context) => ContactListPage(),
         },
       ),
