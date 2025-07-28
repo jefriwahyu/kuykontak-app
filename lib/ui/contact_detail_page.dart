@@ -10,8 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:kontak_app_m/ui/theme_controller.dart';
 import 'package:flutter/services.dart';
 
+// Halaman detail kontak dengan animasi scroll dan opsi edit/hapus
 class ContactDetailPage extends StatefulWidget {
-  final Contact contact;
+  final Contact contact; // Data kontak yang akan ditampilkan
   const ContactDetailPage({super.key, required this.contact});
 
   @override
@@ -19,17 +20,18 @@ class ContactDetailPage extends StatefulWidget {
 }
 
 class _ContactDetailPageState extends State<ContactDetailPage> {
-  late bool _isFavorite;
-  final ScrollController _scrollController = ScrollController();
+  late bool _isFavorite; // Status favorit kontak
+  final ScrollController _scrollController =
+      ScrollController(); // Controller untuk scroll effect
 
-  // Variabel untuk animasi
+  // Variabel animasi untuk efek parallax
   double _avatarSize = 100.0;
   double _nameOpacity = 1.0;
   double _nameFontSize = 24.0;
   bool _showNameInAppBar = false;
   double _avatarTopPosition = 120.0;
 
-  // Konstanta untuk perhitungan animasi
+  // Konstanta untuk perhitungan animasi scroll
   static const double _maxAvatarSize = 100.0;
   static const double _minAvatarSize = 40.0;
   static const double _maxNameSize = 24.0;
@@ -40,7 +42,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
   void initState() {
     super.initState();
     _isFavorite = widget.contact.isFavorite;
-    _scrollController.addListener(_handleScroll);
+    _scrollController.addListener(_handleScroll); // Setup listener untuk scroll
   }
 
   @override
@@ -50,22 +52,24 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
     super.dispose();
   }
 
+  // Handler untuk efek animasi saat scroll
   void _handleScroll() {
     final offset = _scrollController.offset;
     double progress = (offset / _scrollThreshold).clamp(0.0, 1.0);
 
     setState(() {
+      // Interpolasi nilai untuk animasi smooth
       _avatarSize = lerpDouble(_maxAvatarSize, _minAvatarSize, progress)!;
       _nameFontSize = lerpDouble(_maxNameSize, _minNameSize, progress)!;
       _nameOpacity = lerpDouble(1.0, 0.0, progress)!;
-      _avatarTopPosition = 120.0 - (offset * 0.4);
-      _showNameInAppBar = progress >= 0.9;
+      _avatarTopPosition = 120.0 - (offset * 0.4); // Efek parallax
+      _showNameInAppBar = progress >= 0.9; // Toggle visibility nama di appbar
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Panggil helper di dalam build method untuk mendapatkan data avatar
+    // Generate avatar dari helper
     final initials = AvatarHelper.getInitials(widget.contact.nama);
     final avatarColor = AvatarHelper.getAvatarColor(widget.contact.id);
 
@@ -76,10 +80,9 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
 
         return BlocListener<ContactBloc, ContactState>(
           listener: (context, state) {
+            // Handle state changes dari BLoC
             if (state is ContactActionSuccess) {
-              if (Navigator.canPop(context)) {
-                Navigator.of(context).pop();
-              }
+              Navigator.of(context).pop();
             }
             if (state is ContactError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -94,6 +97,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
             body: CustomScrollView(
               controller: _scrollController,
               slivers: [
+                // AppBar dengan efek collapse
                 SliverAppBar(
                   expandedHeight: 280.0,
                   pinned: true,
@@ -119,6 +123,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                     background: Stack(
                       fit: StackFit.expand,
                       children: [
+                        // Background gradient
                         Container(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
@@ -136,6 +141,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                             ),
                           ),
                         ),
+                        // Avatar dan nama dengan animasi
                         Positioned(
                           top: _avatarTopPosition,
                           left: 0,
@@ -150,7 +156,6 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                                       widget.contact.avatar.isNotEmpty
                                           ? NetworkImage(widget.contact.avatar)
                                           : null,
-                                  // --- LOGIKA AVATAR BARU DITERAPKAN DI SINI ---
                                   backgroundColor: widget.contact.avatar.isEmpty
                                       ? avatarColor.withOpacity(0.9)
                                       : Colors.transparent,
@@ -193,6 +198,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                     ),
                   ),
                   actions: [
+                    // Tombol favorit
                     IconButton(
                       icon: Icon(
                         _isFavorite ? Icons.star : Icons.star_border,
@@ -208,20 +214,20 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                     ),
                   ],
                 ),
+                // Konten detail kontak
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
                     child: Column(
                       children: [
+                        // Badge grup kontak
                         if (widget.contact.grup.isNotEmpty)
                           Container(
                             margin: const EdgeInsets.only(bottom: 20),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 8),
                             decoration: BoxDecoration(
-                              color: isDark
-                                  ? Color(0xFF1E1E1E)
-                                  : Colors.white, // Warna surface
+                              color: isDark ? Color(0xFF1E1E1E) : Colors.white,
                               borderRadius: BorderRadius.circular(30),
                               border: isDark
                                   ? Border.all(color: Colors.grey.shade800)
@@ -232,12 +238,13 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                               style: TextStyle(
                                 color: isDark
                                     ? Color(0xFF64B5F6)
-                                    : Color(0xFF1E88E5), // Warna aksen
+                                    : Color(0xFF1E88E5),
                                 fontSize: fontSize * 0.9,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
+                        // Card detail kontak
                         Card(
                           elevation: isDark ? 4 : 2,
                           color:
@@ -263,8 +270,10 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                           ),
                         ),
                         const SizedBox(height: 24),
+                        // Tombol aksi
                         Row(
                           children: [
+                            // Tombol edit
                             Expanded(
                               child: OutlinedButton.icon(
                                 icon: const Icon(Icons.edit),
@@ -293,6 +302,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                               ),
                             ),
                             const SizedBox(width: 16),
+                            // Tombol hapus
                             Expanded(
                               child: ElevatedButton.icon(
                                 icon: const Icon(Icons.delete),
@@ -325,6 +335,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
     );
   }
 
+  // Widget builder untuk item detail kontak
   Widget _buildDetailItem(IconData icon, String label, String value,
       ThemeController theme, bool isClickable) {
     return Padding(
@@ -334,6 +345,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
+          // Efek visual berdasarkan tema
           hoverColor: theme.isDarkTheme
               ? const Color(0xFF64B5F6).withOpacity(0.08)
               : const Color(0xFF1E88E5).withOpacity(0.04),
@@ -343,6 +355,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
           highlightColor: theme.isDarkTheme
               ? const Color(0xFF64B5F6).withOpacity(0.06)
               : const Color(0xFF1E88E5).withOpacity(0.03),
+          // Fungsi copy ke clipboard
           onTap: (isClickable && value.isNotEmpty)
               ? () {
                   Clipboard.setData(ClipboardData(text: value));
@@ -374,6 +387,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Icon
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   width: 44,
@@ -402,6 +416,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                   ),
                 ),
                 const SizedBox(width: 16),
+                // Konten teks
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -432,6 +447,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                     ],
                   ),
                 ),
+                // Icon copy jika bisa diklik
                 if (isClickable && value.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(left: 8),
@@ -451,6 +467,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
     );
   }
 
+  // Dialog konfirmasi hapus kontak
   void _showDeleteConfirmation(BuildContext context, ThemeController theme) {
     showGeneralDialog(
         context: context,
@@ -532,6 +549,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
               ),
               actionsAlignment: MainAxisAlignment.spaceAround,
               actions: [
+                // Tombol batal
                 TextButton(
                   onPressed: () => Navigator.of(ctx).pop(),
                   style: TextButton.styleFrom(
@@ -552,6 +570,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                     ),
                   ),
                 ),
+                // Tombol konfirmasi hapus
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(ctx).pop();
