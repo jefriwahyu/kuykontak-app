@@ -1,79 +1,80 @@
 import 'package:flutter/material.dart';
 
-// Warna utama dari mockup
-const Color primaryColor = Colors.blue; // Warna aksen biru
-const Color secondaryColor = Color(0xFF42A5F5);
+// Palette warna utama aplikasi
+const Color primaryColor = Colors.blue; // Warna primer biru untuk aksen utama
+const Color secondaryColor = Color(0xFF42A5F5); // Warna sekunder biru muda
 const Color backgroundColor =
-    Color(0xFFF5F5F7); // Warna latar belakang sedikit abu-abu
-const Color cardColor = Colors.white; // Warna untuk card atau input field
-const Color textColor = Colors.black87;
-const Color accentColor = Color(0xFF64B5F6);
-const Color darkBlue = Color(0xFF0D47A1);
-const Color lightBlue = Color(0xFFE3F2FD);
-const Color deleteColor = Colors.red;
+    Color(0xFFF5F5F7); // Warna background abu-abu terang
+const Color cardColor = Colors.white; // Warna dasar untuk card dan input field
+const Color textColor = Colors.black87; // Warna teks utama
+const Color accentColor = Color(0xFF64B5F6); // Warna aksen tambahan
+const Color darkBlue = Color(0xFF0D47A1); // Warna biru tua untuk elemen khusus
+const Color lightBlue = Color(0xFFE3F2FD); // Warna biru sangat muda
+const Color deleteColor = Colors.red; // Warna untuk aksi penghapusan
 
 ThemeData buildAppTheme() {
   return ThemeData(
-    brightness: Brightness.light,
-    primaryColor: primaryColor,
-    scaffoldBackgroundColor: backgroundColor,
-    fontFamily: 'Poppins', // Anda bisa ganti font sesuai selera
+    brightness: Brightness.light, // Mode tema terang
+    primaryColor: primaryColor, // Warna utama aplikasi
+    scaffoldBackgroundColor: backgroundColor, // Warna background scaffold
+    fontFamily: 'Poppins', // Font family default aplikasi
 
-    // Tema untuk AppBar
+    // Konfigurasi tema AppBar
     appBarTheme: const AppBarTheme(
-      backgroundColor: backgroundColor,
-      foregroundColor:
-          textColor, // Warna untuk ikon (seperti tombol kembali) dan teks
-      elevation: 0,
-      centerTitle: true,
+      backgroundColor: backgroundColor, // Warna background AppBar
+      foregroundColor: textColor, // Warna teks dan ikon AppBar
+      elevation: 0, // Menghilangkan shadow
+      centerTitle: true, // Judul AppBar di tengah
       titleTextStyle: TextStyle(
         color: textColor,
         fontSize: 20,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.bold, // Gaya teks judul AppBar
       ),
     ),
 
-    // Tema untuk Text Field
+    // Konfigurasi tema Input/Text Field
     inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: cardColor,
-      labelStyle: const TextStyle(color: Colors.black54),
+      filled: true, // Mengaktifkan fill color
+      fillColor: cardColor, // Warna background input field
+      labelStyle: const TextStyle(color: Colors.black54), // Gaya teks label
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(12), // Border radius default
+        borderSide: BorderSide.none, // Tanpa border line
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12), // Border radius saat enabled
         borderSide: BorderSide.none,
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: primaryColor, width: 2),
+        borderRadius: BorderRadius.circular(12), // Border radius saat focused
+        borderSide: const BorderSide(
+            color: primaryColor, width: 2), // Border saat focus
       ),
     ),
 
-    // Tema untuk Card
+    // Konfigurasi tema Card
     cardTheme: CardTheme(
-      color: cardColor,
-      elevation: 1,
-      shadowColor: Colors.black12,
+      color: cardColor, // Warna background card
+      elevation: 1, // Tinggi shadow card
+      shadowColor: Colors.black12, // Warna shadow card
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16), // Border radius card
       ),
     ),
 
-    // Tema untuk Tombol
+    // Konfigurasi tema Elevated Button
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        backgroundColor: primaryColor, // Warna background button
+        foregroundColor: Colors.white, // Warna teks button
+        padding:
+            const EdgeInsets.symmetric(vertical: 16), // Padding vertikal button
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Border radius button
         ),
         textStyle: const TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.bold, // Gaya teks button
         ),
       ),
     ),
