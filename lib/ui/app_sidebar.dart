@@ -3,10 +3,11 @@ import 'package:kontak_app_m/ui/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:kontak_app_m/ui/theme_controller.dart';
 
+// Sidebar aplikasi dengan menu navigasi dan info kontak
 class AppSidebar extends StatelessWidget {
-  final int totalContacts;
-  final VoidCallback onShowFavorites;
-  final VoidCallback onShowSettings;
+  final int totalContacts; // Jumlah total kontak
+  final VoidCallback onShowFavorites; // Callback untuk tampilkan favorit
+  final VoidCallback onShowSettings; // Callback untuk tampilkan pengaturan
 
   const AppSidebar({
     super.key,
@@ -19,11 +20,13 @@ class AppSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ThemeController>(
       builder: (context, themeController, child) {
+        // Ambil preferensi tema dari controller
         final isDark = themeController.isDarkTheme;
         final fontSize = themeController.fontSize;
 
         return Drawer(
-          width: MediaQuery.of(context).size.width * 0.75,
+          width: MediaQuery.of(context).size.width *
+              0.75, // Lebar sidebar 75% layar
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -42,7 +45,7 @@ class AppSidebar extends StatelessWidget {
             ),
             child: Column(
               children: [
-                // Header dengan logo
+                // Header dengan logo aplikasi
                 Container(
                   padding: const EdgeInsets.only(top: 40, bottom: 20),
                   decoration: BoxDecoration(
@@ -68,7 +71,7 @@ class AppSidebar extends StatelessWidget {
                         Text(
                           'Menu Aplikasi',
                           style: TextStyle(
-                            fontSize: fontSize * 0.9, // Responsive font size
+                            fontSize: fontSize * 0.9, // Ukuran font responsif
                             fontWeight: FontWeight.w600,
                             color: Colors.white.withOpacity(0.9),
                           ),
@@ -78,7 +81,7 @@ class AppSidebar extends StatelessWidget {
                   ),
                 ),
 
-                // Card informasi kontak
+                // Card informasi jumlah kontak
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Card(
@@ -91,6 +94,7 @@ class AppSidebar extends StatelessWidget {
                       padding: const EdgeInsets.all(12),
                       child: Row(
                         children: [
+                          // Icon kontak
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
@@ -113,8 +117,7 @@ class AppSidebar extends StatelessWidget {
                               Text(
                                 'Total Kontak',
                                 style: TextStyle(
-                                  fontSize:
-                                      fontSize * 0.7, // Responsive font size
+                                  fontSize: fontSize * 0.7,
                                   color: isDark
                                       ? Colors.grey.shade300
                                       : Colors.grey.shade600,
@@ -123,8 +126,7 @@ class AppSidebar extends StatelessWidget {
                               Text(
                                 '$totalContacts',
                                 style: TextStyle(
-                                  fontSize:
-                                      fontSize * 1.0, // Responsive font size
+                                  fontSize: fontSize * 1.0,
                                   fontWeight: FontWeight.bold,
                                   color: isDark
                                       ? const Color(0xFF64B5F6)
@@ -139,11 +141,12 @@ class AppSidebar extends StatelessWidget {
                   ),
                 ),
 
-                // Menu navigasi
+                // Daftar menu navigasi
                 Expanded(
                   child: ListView(
                     padding: EdgeInsets.zero,
                     children: [
+                      // Menu kontak favorit
                       _buildMenuTile(
                         context,
                         icon: Icons.star,
@@ -151,11 +154,11 @@ class AppSidebar extends StatelessWidget {
                         color: Colors.amber.shade600,
                         onTap: () {
                           onShowFavorites();
-                          // Navigator.pop(context);
                         },
                         isDark: isDark,
                         fontSize: fontSize,
                       ),
+                      // Menu pengaturan
                       _buildMenuTile(
                         context,
                         icon: Icons.settings,
@@ -172,7 +175,7 @@ class AppSidebar extends StatelessWidget {
                   ),
                 ),
 
-                // Footer
+                // Footer dengan versi aplikasi
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -188,7 +191,7 @@ class AppSidebar extends StatelessWidget {
                           color: isDark
                               ? Colors.grey.shade400
                               : Colors.grey.shade600,
-                          fontSize: fontSize * 0.6, // Responsive font size
+                          fontSize: fontSize * 0.6,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -198,7 +201,7 @@ class AppSidebar extends StatelessWidget {
                           color: isDark
                               ? Colors.grey.shade500
                               : Colors.grey.shade500,
-                          fontSize: fontSize * 0.5, // Responsive font size
+                          fontSize: fontSize * 0.5,
                         ),
                       ),
                     ],
@@ -212,6 +215,7 @@ class AppSidebar extends StatelessWidget {
     );
   }
 
+  // Widget untuk membuat item menu
   Widget _buildMenuTile(
     BuildContext context, {
     required IconData icon,
@@ -243,7 +247,7 @@ class AppSidebar extends StatelessWidget {
         title: Text(
           title,
           style: TextStyle(
-            fontSize: fontSize * 0.8, // Responsive font size
+            fontSize: fontSize * 0.8,
             fontWeight: FontWeight.w500,
             color: isDark ? Colors.grey.shade200 : Colors.grey.shade800,
           ),

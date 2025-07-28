@@ -9,8 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:kontak_app_m/ui/theme_controller.dart';
 import 'package:kontak_app_m/helpers/avatar_helper.dart';
 
+// Halaman untuk menambah/mengedit kontak
 class AddEditContactPage extends StatefulWidget {
-  final Contact? contact;
+  final Contact? contact; // Kontak yang akan diedit (null jika tambah baru)
   const AddEditContactPage({super.key, this.contact});
 
   @override
@@ -19,12 +20,14 @@ class AddEditContactPage extends StatefulWidget {
 
 class _AddEditContactPageState extends State<AddEditContactPage>
     with SingleTickerProviderStateMixin {
+  // Form dan controller
   final _formKey = GlobalKey<FormState>();
   final _picker = ImagePicker();
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
+  // Controller untuk text field
   late TextEditingController _namaController;
   late TextEditingController _noHpController;
   late TextEditingController _emailController;
@@ -32,6 +35,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
   String? _selectedGrup;
   final List<String> _grupOptions = ['Keluarga', 'Teman', 'Kerja', 'Lainnya'];
 
+  // Variabel untuk gambar avatar
   Uint8List? _imageBytes;
   String? _imageName;
   bool _isSaving = false;
@@ -39,11 +43,13 @@ class _AddEditContactPageState extends State<AddEditContactPage>
 
   late FocusNode _noHpFocusNode;
 
+  // Cek apakah dalam mode edit
   bool get isEditMode => widget.contact != null;
 
   @override
   void initState() {
     super.initState();
+    // Setup animasi
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -59,12 +65,14 @@ class _AddEditContactPageState extends State<AddEditContactPage>
       curve: Curves.easeOutCubic,
     ));
 
+    // Inisialisasi controller
     _namaController = TextEditingController();
     _noHpController = TextEditingController();
     _emailController = TextEditingController();
     _alamatController = TextEditingController();
     _noHpFocusNode = FocusNode();
 
+    // Jika mode edit, isi field dengan data kontak
     if (isEditMode) {
       _namaController.text = widget.contact!.nama;
       _noHpController.text = unformatNomor(widget.contact!.noHp);
@@ -76,7 +84,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
 
     _animationController.forward();
 
-    // Listener untuk otomatis ubah +62 ke 0 saat fokus, dan sebaliknya saat unfokus
+    // Listener untuk format nomor HP
     _noHpFocusNode.addListener(() {
       if (_noHpFocusNode.hasFocus) {
         // Saat fokus, ubah +62 ke 0
@@ -97,6 +105,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
 
   @override
   void dispose() {
+    // Cleanup controller dan animasi
     _animationController.dispose();
     _namaController.dispose();
     _noHpController.dispose();
@@ -106,6 +115,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     super.dispose();
   }
 
+  // Pilih gambar dari gallery
   Future<void> _pickImage() async {
     try {
       final pickedFile = await _picker.pickImage(
@@ -145,6 +155,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     }
   }
 
+  // Handler saat tombol simpan ditekan
   void _onSave() async {
     if (!_formKey.currentState!.validate() || _isSaving) return;
 
@@ -162,9 +173,10 @@ class _AddEditContactPageState extends State<AddEditContactPage>
         avatarUrl = widget.contact!.avatar;
       }
 
+      // Siapkan data kontak untuk disimpan
       final contactData = {
         'nama': _namaController.text.trim(),
-        'no_hp': formatNomor(_noHpController.text.trim()), // <-- ubah di sini
+        'no_hp': formatNomor(_noHpController.text.trim()),
         'email': _emailController.text.trim(),
         'alamat': _alamatController.text.trim(),
         'grup': _selectedGrup ?? '',
@@ -174,12 +186,14 @@ class _AddEditContactPageState extends State<AddEditContactPage>
       };
 
       if (mounted) {
+        // Kirim event ke BLoC
         context.read<ContactBloc>().add(
               isEditMode
                   ? UpdateContact(widget.contact!.id, contactData)
                   : AddContact(contactData),
             );
 
+        // Tampilkan snackbar sukses
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
@@ -200,6 +214,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
           ),
         );
 
+        // Tutup halaman
         Navigator.pop(context);
         if (isEditMode) Navigator.pop(context);
       }
@@ -228,6 +243,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     }
   }
 
+  // Dapatkan semua kontak dari state BLoC
   List<Contact> get _allContacts {
     final state = context.read<ContactBloc>().state;
     if (state is ContactLoaded) {
@@ -242,11 +258,13 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     final isDark = themeController.isDarkTheme;
     final fontSize = themeController.fontSize;
 
+    // Cek status gambar avatar
     final bool hasExistingImage =
         isEditMode && widget.contact!.avatar.isNotEmpty && !_isAvatarRemoved;
     final bool hasNewImage = _imageBytes != null;
     final bool showImage = hasExistingImage || hasNewImage;
 
+    // Siapkan inisial dan warna avatar
     final initials = isEditMode
         ? AvatarHelper.getInitials(widget.contact!.nama)
         : AvatarHelper.getInitials(_namaController.text);
@@ -282,6 +300,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
         },
         child: CustomScrollView(
           slivers: [
+            // AppBar dengan animasi
             SliverAppBar(
               expandedHeight: 60.0,
               pinned: true,
@@ -325,10 +344,11 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                       key: _formKey,
                       child: Column(
                         children: [
-                          // Avatar Section without "Foto Profil" text
+                          // Widget avatar dengan opsi upload/hapus
                           Stack(
                             alignment: Alignment.center,
                             children: [
+                              // Background lingkaran
                               Container(
                                 width: 120,
                                 height: 120,
@@ -346,6 +366,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                                   ),
                                 ),
                               ),
+                              // Avatar container
                               Container(
                                 width: 110,
                                 height: 110,
@@ -406,6 +427,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                                           initials, avatarColor),
                                 ),
                               ),
+                              // Tombol kamera
                               Positioned(
                                 bottom: 5,
                                 right: 5,
@@ -432,6 +454,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                                   ),
                                 ),
                               ),
+                              // Tombol hapus gambar
                               if (showImage && !_isSaving)
                                 Positioned(
                                   top: 5,
@@ -477,7 +500,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                           ),
                           const SizedBox(height: 16),
 
-                          // Form Section with compact spacing
+                          // Form input data kontak
                           Container(
                             padding: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
@@ -498,6 +521,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                // Header form
                                 Row(
                                   children: [
                                     Container(
@@ -539,7 +563,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                                 ),
                                 const SizedBox(height: 12),
 
-                                // Name Field
+                                // Field nama
                                 _buildEnhancedTextField(
                                   controller: _namaController,
                                   label: 'Nama Lengkap',
@@ -562,7 +586,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                                 ),
                                 const SizedBox(height: 12),
 
-                                // Phone Field
+                                // Field nomor HP
                                 _buildEnhancedTextField(
                                   controller: _noHpController,
                                   label: 'Nomor HP',
@@ -595,7 +619,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                                 ),
                                 const SizedBox(height: 12),
 
-                                // Email Field
+                                // Field email
                                 _buildEnhancedTextField(
                                   controller: _emailController,
                                   label: 'Email',
@@ -632,7 +656,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                                 ),
                                 const SizedBox(height: 12),
 
-                                // Address Field
+                                // Field alamat
                                 _buildEnhancedTextField(
                                   controller: _alamatController,
                                   label: 'Alamat',
@@ -655,14 +679,14 @@ class _AddEditContactPageState extends State<AddEditContactPage>
                                 ),
                                 const SizedBox(height: 12),
 
-                                // Group Dropdown
+                                // Dropdown grup
                                 _buildEnhancedGroupDropdown(isDark, fontSize),
                               ],
                             ),
                           ),
                           const SizedBox(height: 16),
 
-                          // Save Button with icon
+                          // Tombol simpan
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
@@ -731,6 +755,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     );
   }
 
+  // Helper untuk format nomor HP
   String unformatNomor(String nomor) {
     if (nomor.startsWith('+62')) {
       return '0${nomor.substring(3)}';
@@ -745,6 +770,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     return nomor;
   }
 
+  // Widget untuk avatar default
   Widget _buildDefaultAvatar(String initials, Color avatarColor) {
     return Container(
       decoration: BoxDecoration(
@@ -770,6 +796,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     );
   }
 
+  // Widget dropdown grup
   Widget _buildEnhancedGroupDropdown(bool isDark, double fontSize) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -851,6 +878,7 @@ class _AddEditContactPageState extends State<AddEditContactPage>
     );
   }
 
+  // Widget untuk text field yang sudah di-style
   Widget _buildEnhancedTextField({
     required TextEditingController controller,
     required String label,
