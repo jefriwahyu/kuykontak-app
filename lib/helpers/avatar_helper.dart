@@ -1,8 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+// Kumpulan fungsi bantuan untuk membuat avatar.
 class AvatarHelper {
-  // Daftar warna yang akan digunakan secara acak
+  // Palet warna yang tersedia untuk latar belakang avatar.
   static final List<Color> _avatarColors = [
     Colors.red.shade400,
     Colors.green.shade400,
@@ -20,26 +21,30 @@ class AvatarHelper {
     Colors.deepOrange.shade400,
   ];
 
-  // Fungsi untuk mendapatkan inisial dari nama
+  // Mendapatkan 1-2 huruf inisial dari nama lengkap.
   static String getInitials(String name) {
     if (name.isEmpty) return '?';
-    // Pisahkan nama berdasarkan spasi dan hapus bagian yang kosong
+
+    // Pisahkan nama berdasarkan spasi untuk mendapatkan setiap kata.
     List<String> words =
         name.trim().split(' ').where((s) => s.isNotEmpty).toList();
 
     if (words.length == 1) {
+      // Jika hanya satu kata, ambil huruf pertamanya.
       return words[0][0].toUpperCase();
     } else if (words.length > 1) {
-      // Ambil huruf pertama dari kata pertama dan kata terakhir
+      // Jika lebih dari satu kata, ambil inisial dari kata pertama dan terakhir.
       return (words[0][0] + words.last[0]).toUpperCase();
     }
+
     return '?';
   }
 
-  // Fungsi untuk mendapatkan warna konsisten berdasarkan ID
+  // Memilih warna yang konsisten dari palet berdasarkan ID.
   static Color getAvatarColor(String id) {
     if (id.isEmpty) return _avatarColors[0];
-    // Gunakan hash code dari ID untuk memilih warna dari daftar
+
+    // Hashcode ID dipakai agar ID yang sama selalu mendapat warna yang sama.
     return _avatarColors[id.hashCode % _avatarColors.length];
   }
 }

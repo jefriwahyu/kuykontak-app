@@ -1,5 +1,3 @@
-// Lokasi: lib/helpers/api_url.dart
-
 // Mengelola semua URL endpoint untuk API.
 class ApiUrl {
   // Base URL utama untuk API.
