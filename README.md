@@ -286,28 +286,6 @@ curl http://localhost:8080/api/contacts
 
 ---
 
-<table>
-<tr>
-<td align="center" width="100%">
-
-### 🏠 **Halaman Awal**
-<img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="250" alt="Halaman Awal KuyKontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
-
-*✨ Tampilan halaman awal aplikasi KuyKontak*
-
-</td>
-</tr>
-</table>
-
----
-
-## 📸 Screenshot Tampilan
-<div align="center">
-
-### 🎨 **Preview Aplikasi KuyKontak** 🎨
-
----
-
 ### 🏠 **Halaman Awal**
 <p align="center">
 <img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="250" alt="Halaman Awal KuyKontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
