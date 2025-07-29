@@ -298,7 +298,7 @@ curl http://localhost:8080/api/contacts
 ### 📋 **Halaman List Kontak**
 
 <p align="center">
-<img src="https://github.com/user-attachments/assets/6f6ddbdf-0279-44cb-b572-1989c29ab9cb" width="200" alt="List Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/86a4d57e-b812-48dc-ba17-1eb91e21b2a1" width="200" alt="List Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img src="https://github.com/user-attachments/assets/9efc8e3e-b50a-48d1-8de8-9f57f633ebb0" width="200" alt="List Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
@@ -311,7 +311,7 @@ curl http://localhost:8080/api/contacts
 ### ➕ **Halaman Menambah Kontak**
 
 <p align="center">
-<img src="https://github.com/user-attachments/assets/479682de-7c58-4540-97a2-bccb65df44e9" width="200" alt="Tambah Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/100bb07b-a56e-4307-808d-db1b08d09e60" width="200" alt="Tambah Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img src="screenshots/add-contact-dark.png" width="200" alt="Tambah Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
@@ -324,7 +324,7 @@ curl http://localhost:8080/api/contacts
 ### 👤 **Halaman Detail Kontak**
 
 <p align="center">
-<img src="screenshots/contact-detail-light.png" width="200" alt="Detail Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/2979f367-e614-4ee0-a6ef-863bc7be411b" width="200" alt="Detail Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img src="screenshots/contact-detail-dark.png" width="200" alt="Detail Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
@@ -337,7 +337,7 @@ curl http://localhost:8080/api/contacts
 ### ✏️ **Halaman Edit Kontak**
 
 <p align="center">
-<img src="screenshots/edit-contact-light.png" width="200" alt="Edit Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/2e5567d7-a9e7-495a-9228-40b298f8d24b" width="200" alt="Edit Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img src="screenshots/edit-contact-dark.png" width="200" alt="Edit Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
@@ -350,7 +350,7 @@ curl http://localhost:8080/api/contacts
 ### ⭐ **Menambah Kontak Favorite**
 
 <p align="center">
-<img src="screenshots/add-favorite-light.png" width="200" alt="Tambah Favorite Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/c0d3ae18-1df2-4643-8e0f-01c5552d50f5" width="200" alt="Tambah Favorite Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img src="screenshots/add-favorite-dark.png" width="200" alt="Tambah Favorite Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
@@ -363,7 +363,7 @@ curl http://localhost:8080/api/contacts
 ### ❤️ **Halaman List Favorite**
 
 <p align="center">
-<img src="screenshots/favorite-list-light.png" width="200" alt="List Favorite Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/31d5e910-f935-4671-9166-4565360f5e86" width="200" alt="List Favorite Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img src="screenshots/favorite-list-dark.png" width="200" alt="List Favorite Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
@@ -376,7 +376,7 @@ curl http://localhost:8080/api/contacts
 ### 🗑️ **Menghapus Kontak**
 
 <p align="center">
-<img src="screenshots/delete-contact-light.png" width="200" alt="Hapus Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/f8576d74-9da9-41fa-8517-54df1ced49d8" width="200" alt="Hapus Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img src="screenshots/delete-contact-dark.png" width="200" alt="Hapus Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
@@ -389,7 +389,7 @@ curl http://localhost:8080/api/contacts
 ### 🔄 **Sinkronisasi**
 
 <p align="center">
-<img src="screenshots/sync-light.png" width="200" alt="Sinkronisasi Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/54178e17-05e3-4381-8f2b-231e14e409b8" width="200" alt="Sinkronisasi Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img src="screenshots/sync-dark.png" width="200" alt="Sinkronisasi Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
@@ -402,7 +402,7 @@ curl http://localhost:8080/api/contacts
 ### ⚙️ **Pengaturan**
 
 <p align="center">
-<img src="screenshots/settings-light.png" width="200" alt="Pengaturan Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/975e84b5-3999-4240-b751-4d7a1e4f9fa5" width="200" alt="Pengaturan Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img src="screenshots/settings-dark.png" width="200" alt="Pengaturan Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
