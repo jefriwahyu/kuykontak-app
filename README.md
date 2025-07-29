@@ -23,7 +23,7 @@
 
 ## 🎯 Deskripsi
 
-**KuyKontak** adalah aplikasi pengelola kontak canggih yang membantu Anda menyimpan dan mengatur daftar kontak dengan mudah. Dibangun dengan **Flutter** untuk antarmuka pengguna yang responsif dan **CodeIgniter 4** sebagai **REST API backend**. Backend API-nya terpisah di repositori [kontak-api-ci4](https://github.com/jefriwahyu/kontak-api-ci4), memastikan struktur yang rapi antara frontend dan backend. Aplikasi ini menawarkan tampilan yang user-friendly serta fitur-fitur modern untuk memaksimalkan pengelolaan kontak sehari-hari.
+**KuyKontak** adalah aplikasi pengelola kontak canggih yang membantu Anda menyimpan dan mengatur daftar kontak dengan mudah. Dibangun dengan **Flutter** untuk antarmuka pengguna yang responsif dan **CodeIgniter 4** sebagai **REST API backend**. Backend API lokal-nya terpisah di repositori [kontak-api-ci4](https://github.com/jefriwahyu/kontak-api-ci4), memastikan struktur yang rapi antara frontend dan backend. Aplikasi ini menawarkan tampilan yang user-friendly serta fitur-fitur modern untuk memaksimalkan pengelolaan kontak sehari-hari.
 
 ---
 
@@ -192,7 +192,7 @@ flutter run -d chrome  # Google Chrome
 
 <div align="center">
 
-> 💡 **Note**: Bagian ini **opsional** jika Anda menggunakan production API: 
+> 💡 **Note**: Bagian ini **opsional** jika Anda menggunakan production API, karena pada projek menggunakan API yang sudah di hosting, jika ingin menggunakan lokal, anda bisa melihat cara penginstalan backend lokal di bawah: 
 > 
 > **🌐 https://kontak-api.tinagers.com/**
 
