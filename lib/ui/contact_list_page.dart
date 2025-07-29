@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:azlistview/azlistview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +14,7 @@ import 'package:kontak_app_m/ui/app_sidebar.dart';
 import 'package:provider/provider.dart';
 import 'package:kontak_app_m/ui/theme_controller.dart';
 
+/// Halaman utama aplikasi untuk menampilkan dan mengelola daftar kontak.
 class ContactListPage extends StatefulWidget {
   const ContactListPage({super.key});
 
@@ -24,19 +24,22 @@ class ContactListPage extends StatefulWidget {
 
 class _ContactListPageState extends State<ContactListPage>
     with TickerProviderStateMixin {
-  List<Contact> _allContacts = [];
-  List<Contact> _filteredContacts = [];
-  AnimationController? _listAnimationController;
-  late AnimationController _syncAnimationController;
+  // --- State Lokal untuk data dan UI ---
+  List<Contact> _allContacts = []; // Master list dari BLoC.
+  List<Contact> _filteredContacts =
+      []; // List yang ditampilkan setelah difilter.
+  AnimationController? _listAnimationController; // Animasi daftar kontak.
+  late AnimationController
+      _syncAnimationController; // Animasi ikon sinkronisasi.
 
   final List<String> _kategori = ['Semua', 'Keluarga', 'Teman', 'Kerja'];
   String _selectedKategori = 'Semua';
   String _searchKeyword = '';
   bool _showingFavoritesOnly = false;
   final TextEditingController _searchController = TextEditingController();
-  bool _isSyncing = false;
+  bool _isSyncing = false; // Mencegah sinkronisasi ganda.
 
-  // --- Palet Warna ---
+  // --- Palet warna aplikasi ---
   static const Color primaryBlue = Color(0xFF1E88E5);
   static const Color secondaryBlue = Color(0xFF42A5F5);
   static const Color accentBlue = Color(0xFF64B5F6);
@@ -57,11 +60,13 @@ class _ContactListPageState extends State<ContactListPage>
     _syncAnimationController =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
 
+    // Memuat kontak saat halaman pertama kali dibuka.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final currentState = context.read<ContactBloc>().state;
       if (currentState is! ContactLoaded) {
         context.read<ContactBloc>().add(LoadContacts());
       } else {
+        // Gunakan data yang sudah ada di BLoC jika tersedia.
         setState(() {
           _allContacts = currentState.contacts;
           _runFilter();
@@ -72,12 +77,14 @@ class _ContactListPageState extends State<ContactListPage>
 
   @override
   void dispose() {
+    // Membersihkan semua controller untuk mencegah memory leak.
     _listAnimationController?.dispose();
     _syncAnimationController.dispose();
     _searchController.dispose();
     super.dispose();
   }
 
+  /// Menjalankan logika filter pada daftar kontak.
   void _runFilter() {
     List<Contact> results;
     if (_showingFavoritesOnly) {
@@ -94,21 +101,24 @@ class _ContactListPageState extends State<ContactListPage>
             .toList();
       }
     }
+    // Menyiapkan data untuk ditampilkan di AzListView (diurutkan dan diberi tag).
     SuspensionUtil.sortListBySuspensionTag(results);
     SuspensionUtil.setShowSuspensionStatus(results);
     setState(() => _filteredContacts = results);
     _listAnimationController?.forward(from: 0.0);
   }
 
+  /// Memulai proses sinkronisasi kontak dari perangkat ke server.
   Future<void> _syncContacts() async {
     if (_isSyncing) return;
     setState(() => _isSyncing = true);
 
-    // Tampilkan loading dialog
+    // Menampilkan dialog loading saat proses berjalan.
     _showSyncLoadingDialog();
     _syncAnimationController.repeat();
 
     try {
+      // Meminta izin, mengambil kontak, mengirim ke server, lalu refresh UI.
       if (await Permission.contacts.request().isGranted) {
         List<FC.Contact> deviceContacts =
             await FC.FlutterContacts.getContacts(withProperties: true);
@@ -126,31 +136,32 @@ class _ContactListPageState extends State<ContactListPage>
         }
         final message = await ContactService.syncContacts(contactsToSync);
 
-        // Tutup loading dialog
+        // Memberi feedback ke pengguna setelah selesai.
         if (mounted) {
-          Navigator.of(context).pop(); // Tutup dialog loading
+          Navigator.of(context).pop(); // Tutup dialog.
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(message), backgroundColor: Colors.green.shade600));
           context.read<ContactBloc>().add(LoadContacts());
         }
       } else {
-        // Tutup loading dialog
+        // Menangani jika izin ditolak.
         if (mounted) {
-          Navigator.of(context).pop(); // Tutup dialog loading
+          Navigator.of(context).pop(); // Tutup dialog.
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text('Izin akses kontak ditolak.'),
               backgroundColor: Colors.orange));
         }
       }
     } catch (e) {
-      // Tutup loading dialog
+      // Menangani jika terjadi error.
       if (mounted) {
-        Navigator.of(context).pop(); // Tutup dialog loading
+        Navigator.of(context).pop(); // Tutup dialog.
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Gagal sinkronisasi: ${e.toString()}'),
             backgroundColor: Colors.red));
       }
     } finally {
+      // Blok ini selalu dijalankan untuk mereset state sinkronisasi.
       if (mounted) {
         _syncAnimationController.stop(canceled: false);
         _syncAnimationController.reset();
@@ -159,6 +170,7 @@ class _ContactListPageState extends State<ContactListPage>
     }
   }
 
+  /// Menampilkan dialog pengaturan tema dan ukuran font.
   void _showSettingsDialog() {
     final themeController =
         Provider.of<ThemeController>(context, listen: false);
@@ -243,22 +255,17 @@ class _ContactListPageState extends State<ContactListPage>
                                 : Colors.black87),
                       ),
                       trailing: SwitchTheme(
-                        // 1. Bungkus dengan SwitchTheme
                         data: SwitchThemeData(
-                          // 2. Atur warna garis luar (outline)
                           trackOutlineColor:
                               MaterialStateProperty.resolveWith((states) {
-                            // Tentukan warna track berdasarkan tema
                             final activeColor = theme.isDarkTheme
                                 ? accentBlue.withOpacity(0.5)
                                 : primaryBlue.withOpacity(0.5);
                             final inactiveColor = Colors.grey.shade200;
 
-                            // Jika switch aktif, buat warna outline sama dengan warna track aktif
                             if (states.contains(MaterialState.selected)) {
                               return activeColor;
                             }
-                            // Jika tidak, buat warna outline sama dengan warna track tidak aktif
                             return inactiveColor;
                           }),
                         ),
@@ -284,7 +291,6 @@ class _ContactListPageState extends State<ContactListPage>
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // PERBAIKAN 2: Tambahkan Ikon Ukuran Font
                               Row(
                                 children: [
                                   Icon(
@@ -338,10 +344,12 @@ class _ContactListPageState extends State<ContactListPage>
     );
   }
 
+  /// Menampilkan dialog loading saat proses sinkronisasi.
   void _showSyncLoadingDialog() {
     showDialog(
       context: context,
-      barrierDismissible: false, // Tidak bisa di-dismiss saat loading
+      barrierDismissible:
+          false, // Dialog tidak bisa ditutup dengan tap di luar.
       builder: (context) {
         return Consumer<ThemeController>(
           builder: (context, theme, _) {
@@ -363,7 +371,7 @@ class _ContactListPageState extends State<ContactListPage>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Animated sync icon
+                    // Ikon sync yang berputar.
                     RotationTransition(
                       turns: _syncAnimationController,
                       child: Container(
@@ -403,7 +411,7 @@ class _ContactListPageState extends State<ContactListPage>
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Progress indicator
+                    // Indikator progress linear.
                     LinearProgressIndicator(
                       backgroundColor: theme.isDarkTheme
                           ? Colors.grey.shade700
@@ -424,6 +432,7 @@ class _ContactListPageState extends State<ContactListPage>
 
   @override
   Widget build(BuildContext context) {
+    // Menggunakan Consumer untuk mendapatkan state tema saat ini.
     return Consumer<ThemeController>(
       builder: (context, theme, child) {
         return Scaffold(
@@ -431,10 +440,9 @@ class _ContactListPageState extends State<ContactListPage>
           body: Column(
             children: [
               _buildModernAppBar(theme),
-
-              // PERBAIKAN 2: Posisi widget diubah
               _buildSearchBar(theme),
 
+              // Menampilkan header favorit atau chip kategori.
               if (_showingFavoritesOnly)
                 _buildFavoriteHeader(theme)
               else
@@ -442,19 +450,21 @@ class _ContactListPageState extends State<ContactListPage>
 
               const SizedBox(height: 8),
               Expanded(
+                // BlocListener untuk Aksi (contoh: update state lokal).
                 child: BlocListener<ContactBloc, ContactState>(
                   listener: (context, state) {
                     if (state is ContactLoaded) {
                       setState(() {
                         _allContacts = state.contacts;
-                        _runFilter();
+                        _runFilter(); // Jalankan filter setelah data baru diterima.
                       });
                     }
                   },
+                  // BlocBuilder untuk membangun UI berdasarkan state.
                   child: BlocBuilder<ContactBloc, ContactState>(
                     builder: (context, state) {
+                      // Tampilkan loading indicator.
                       if (state is ContactLoading || state is ContactInitial) {
-                        // PERBAIKAN: Custom loading indicator dengan warna tema
                         return Center(
                           child: CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
@@ -464,7 +474,9 @@ class _ContactListPageState extends State<ContactListPage>
                           ),
                         );
                       }
+                      // Tampilkan daftar kontak jika data sudah dimuat.
                       if (state is ContactLoaded) {
+                        // Tampilkan pesan jika tidak ada kontak.
                         if (_filteredContacts.isEmpty) {
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -500,6 +512,7 @@ class _ContactListPageState extends State<ContactListPage>
                             ],
                           );
                         }
+                        // Tampilkan AzListView jika ada kontak.
                         return AzListView(
                           data: _filteredContacts,
                           itemCount: _filteredContacts.length,
@@ -511,21 +524,19 @@ class _ContactListPageState extends State<ContactListPage>
                             final avatarColor =
                                 AvatarHelper.getAvatarColor(contact.id);
 
-                            // PERBAIKAN: Tambahkan logika untuk menampilkan header
-                            // 'isShowSuspension' adalah properti dari AzListView untuk menandai
-                            // item pertama dari setiap grup abjad.
+                            // Logika untuk menampilkan header alfabet.
                             final bool offstage = !contact.isShowSuspension;
 
                             return FadeTransition(
                               opacity: _listAnimationController!,
                               child: Column(
                                 children: [
-                                  // Widget Offstage akan menyembunyikan header jika tidak diperlukan
+                                  // Header alfabet ('A', 'B', 'C', ...).
                                   Offstage(
                                     offstage: offstage,
                                     child: _buildSuspensionWidget(tag, theme),
                                   ),
-                                  // Item kontak tetap ditampilkan seperti biasa
+                                  // Widget untuk setiap item kontak.
                                   _buildContactItem(
                                       contact, theme, initials, avatarColor),
                                 ],
@@ -561,6 +572,7 @@ class _ContactListPageState extends State<ContactListPage>
                                       color: Colors.white, fontSize: 24.0))),
                         );
                       }
+                      // Tampilan fallback jika terjadi error.
                       return Center(
                           child: Text('Kontak tidak ditemukan.',
                               style: TextStyle(
@@ -601,6 +613,7 @@ class _ContactListPageState extends State<ContactListPage>
     );
   }
 
+  /// Membangun AppBar kustom dengan gradient.
   Widget _buildModernAppBar(ThemeController theme) {
     return Container(
         decoration: BoxDecoration(
@@ -642,6 +655,7 @@ class _ContactListPageState extends State<ContactListPage>
                     ]))));
   }
 
+  /// Membangun search bar untuk mencari kontak.
   Widget _buildSearchBar(ThemeController theme) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -688,6 +702,7 @@ class _ContactListPageState extends State<ContactListPage>
                     borderSide: BorderSide.none))));
   }
 
+  /// Membangun daftar chip untuk filter kategori.
   Widget _buildCategoryChips(ThemeController theme) {
     return SizedBox(
         height: 40,
@@ -732,7 +747,7 @@ class _ContactListPageState extends State<ContactListPage>
             }));
   }
 
-  // PERBAIKAN 2: Mengganti _buildNewFavoriteHeader dengan _buildFavoriteHeader
+  /// Membangun header yang ditampilkan saat mode favorit aktif.
   Widget _buildFavoriteHeader(ThemeController theme) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -762,10 +777,8 @@ class _ContactListPageState extends State<ContactListPage>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Left side dengan icon dan text
           Row(
             children: [
-              // Animated star icon
               TweenAnimationBuilder(
                 tween: Tween<double>(begin: 0.0, end: 1.0),
                 duration: const Duration(milliseconds: 1000),
@@ -814,8 +827,6 @@ class _ContactListPageState extends State<ContactListPage>
               ),
             ],
           ),
-
-          // Right side dengan back button
           Material(
             color: Colors.transparent,
             child: InkWell(
@@ -843,17 +854,14 @@ class _ContactListPageState extends State<ContactListPage>
     );
   }
 
+  /// Membangun widget untuk satu item kontak dalam daftar.
   Widget _buildContactItem(Contact contact, ThemeController theme,
       String initials, Color avatarColor) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: MouseRegion(
-        onEnter: (_) {
-          // Trigger hover state
-        },
-        onExit: (_) {
-          // Exit hover state
-        },
+        onEnter: (_) {},
+        onExit: (_) {},
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
@@ -865,15 +873,12 @@ class _ContactListPageState extends State<ContactListPage>
                 Navigator.push(context,
                     SlideRightRoute(page: ContactDetailPage(contact: contact)));
               },
-              // Enhanced hover effect
               hoverColor: theme.isDarkTheme
                   ? primaryBlue.withOpacity(0.15)
                   : primaryBlue.withOpacity(0.08),
-              // Enhanced splash effect saat diklik
               splashColor: theme.isDarkTheme
                   ? primaryBlue.withOpacity(0.25)
                   : primaryBlue.withOpacity(0.15),
-              // Highlight color saat pressed
               highlightColor: theme.isDarkTheme
                   ? primaryBlue.withOpacity(0.2)
                   : primaryBlue.withOpacity(0.1),
@@ -883,7 +888,6 @@ class _ContactListPageState extends State<ContactListPage>
                 decoration: BoxDecoration(
                   color: theme.isDarkTheme ? darkSurface : Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  // Tambahkan shadow yang subtle
                   boxShadow: [
                     BoxShadow(
                       color: theme.isDarkTheme
@@ -896,7 +900,7 @@ class _ContactListPageState extends State<ContactListPage>
                 ),
                 child: Row(
                   children: [
-                    // Avatar dengan efek hover
+                    // Avatar dengan Hero animation untuk transisi.
                     Hero(
                       tag: 'avatar_${contact.id}',
                       child: AnimatedContainer(
@@ -945,6 +949,7 @@ class _ContactListPageState extends State<ContactListPage>
                                 ),
                               ),
                               const SizedBox(width: 8),
+                              // Menampilkan ikon bintang jika favorit.
                               if (contact.isFavorite)
                                 Container(
                                   padding: const EdgeInsets.all(2.0),
@@ -976,6 +981,7 @@ class _ContactListPageState extends State<ContactListPage>
                                   : Colors.grey.shade600,
                             ),
                           ),
+                          // Menampilkan label grup jika ada.
                           if (contact.grup.isNotEmpty)
                             Padding(
                               padding: const EdgeInsets.only(top: 6.0),
@@ -1003,7 +1009,6 @@ class _ContactListPageState extends State<ContactListPage>
                         ],
                       ),
                     ),
-                    // Animated arrow icon
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       child: Icon(
@@ -1022,12 +1027,12 @@ class _ContactListPageState extends State<ContactListPage>
     );
   }
 
+  /// Membangun header alfabet ('A', 'B', 'C', ...) untuk AzListView.
   Widget _buildSuspensionWidget(String tag, ThemeController theme) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       color: theme.isDarkTheme ? darkBg : const Color(0xFFF0F2F5),
       child: Row(
-        // PERBAIKAN: Kembalikan ke tengah
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(

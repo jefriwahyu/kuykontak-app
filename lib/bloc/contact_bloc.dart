@@ -74,6 +74,13 @@ class ContactLoading extends ContactState {}
 // State ketika aksi sukses (tambah/edit/hapus)
 class ContactActionSuccess extends ContactState {}
 
+class ContactDeleteSuccess extends ContactState {
+  final String contactName;
+  const ContactDeleteSuccess(this.contactName);
+  @override
+  List<Object?> get props => [contactName];
+}
+
 // State ketika data kontak berhasil dimuat
 class ContactLoaded extends ContactState {
   final List<Contact> contacts;
@@ -127,8 +134,12 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     // Handler untuk menghapus kontak
     on<DeleteContact>((event, emit) async {
       try {
+        // Ambil nama kontak sebelum dihapus untuk notifikasi
+        final contacts = await ContactService.getContacts();
+        final contactToDelete = contacts.firstWhere((c) => c.id == event.id);
+
         await ContactService.deleteContact(event.id);
-        emit(ContactActionSuccess());
+        emit(ContactDeleteSuccess(contactToDelete.nama));
         add(LoadContacts());
       } catch (e) {
         emit(ContactError(e.toString()));

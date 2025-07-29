@@ -7,8 +7,10 @@ import 'ui/splash_screen.dart';
 import 'package:kontak_app_m/ui/theme.dart';
 import 'package:kontak_app_m/ui/theme_controller.dart';
 
+// Main function sebagai entry point aplikasi
 void main() {
   runApp(
+    // Menggunakan ChangeNotifierProvider untuk manajemen state theme
     ChangeNotifierProvider(
       create: (_) => ThemeController(),
       child: const MyApp(),
@@ -16,22 +18,27 @@ void main() {
   );
 }
 
+// Widget root dari aplikasi
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Membungkus seluruh aplikasi dengan BlocProvider
+    // Membungkus aplikasi dengan BlocProvider untuk manajemen state kontak
     return BlocProvider(
+      // Inisialisasi ContactBloc dan langsung memuat kontak saat pertama kali dibuat
       create: (context) => ContactBloc()..add(LoadContacts()),
       child: MaterialApp(
         title: 'Aplikasi Kontak',
-        debugShowCheckedModeBanner: false,
-        theme: buildAppTheme(),
-        initialRoute: '/',
+        debugShowCheckedModeBanner: false, // Menyembunyikan debug banner
+        theme: buildAppTheme(), // Menerapkan tema kustom
+        initialRoute: '/', // Route awal aplikasi
         routes: {
-          '/': (context) => const SplashScreen(),
-          '/home': (context) => ContactListPage(),
+          // Daftar route yang tersedia dalam aplikasi
+          '/': (context) =>
+              const SplashScreen(), // Screen splash saat pertama kali dibuka
+          '/home': (context) =>
+              ContactListPage(), // Halaman utama daftar kontak
         },
       ),
     );

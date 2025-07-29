@@ -84,6 +84,26 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
             if (state is ContactActionSuccess) {
               Navigator.of(context).pop();
             }
+            if (state is ContactDeleteSuccess) {
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Row(
+                  children: [
+                    Icon(Icons.check_circle, color: Colors.white, size: 20),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text('${state.contactName} berhasil dihapus'),
+                    ),
+                  ],
+                ),
+                backgroundColor: Colors.green.shade600,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                duration: Duration(seconds: 2),
+              ));
+            }
             if (state is ContactError) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('Gagal: ${state.message}'),
