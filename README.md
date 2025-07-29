@@ -450,29 +450,28 @@ curl http://localhost:8080/api/contacts
 
 <div align="center">
 
-# Tim Developer
-
-<div align="center" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
-
-<div style="text-align: center;">
-  <h3>Jefri Wahyu</h3>
-  <p>📌 Flutter Developer</p>
-  [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/jefriwahyu)
-</div>
-
-<div style="text-align: center;">
-  <h3>Laura Diva</h3>
-  <p>📍 Full Stack Engineer</p>
-  [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Jazeera99)
-</div>
-
-<div style="text-align: center;">
-  <h3>Aqmal Alfareza</h3>
-  <p>☁️ Cloud Enthusiast</p>
-  [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Mallwee21)
-</div>
-
-</div>
+<table align="center">
+  <tr>
+    <td align="center" width="300">
+      <h3>Jefri Wahyu</h3>
+      <a href="https://github.com/jefriwahyu" target="_blank">
+        <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
+      </a>
+    </td>
+    <td align="center" width="300">
+      <h3>Laura Diva</h3>
+      <a href="https://github.com/Jazeera99" target="_blank">
+        <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
+      </a>
+    </td>
+    <td align="center" width="300">
+      <h3>Aqmal Alfareza</h3>
+      <a href="https://github.com/Mallwee21" target="_blank">
+        <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
+      </a>
+    </td>
+  </tr>
+</table>
 
 <br>
 
