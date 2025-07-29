@@ -339,7 +339,7 @@ curl http://localhost:8080/api/contacts
 <p align="center">
 <img src="https://github.com/user-attachments/assets/2e5567d7-a9e7-495a-9228-40b298f8d24b" width="200" alt="Edit Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<img src="screenshots/edit-contact-dark.png" width="200" alt="Edit Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/86842a70-5a07-429b-8c9d-98d893bc12ae" width="200" alt="Edit Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
 <p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
@@ -391,7 +391,7 @@ curl http://localhost:8080/api/contacts
 <p align="center">
 <img src="https://github.com/user-attachments/assets/54178e17-05e3-4381-8f2b-231e14e409b8" width="200" alt="Sinkronisasi Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<img src="screenshots/sync-dark.png" width="200" alt="Sinkronisasi Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/19b64ca1-fca0-41cc-9769-5082448a4461" width="200" alt="Sinkronisasi Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
 <p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
