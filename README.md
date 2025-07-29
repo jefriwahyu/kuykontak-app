@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![KuyKontak Banner](https://github.com/user-attachments/assets/a9fc790b-4087-4351-80ef-4de222b9d714)
+<img src="https://github.com/user-attachments/assets/a9fc790b-4087-4351-80ef-4de222b9d714" alt="KuyKontak Banner" width="300" height="150">
 
 **🚀 Aplikasi Manajemen Kontak Modern dengan Flutter & CodeIgniter 4**
 
