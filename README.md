@@ -41,28 +41,11 @@
 | **Hapus Kontak**     | Hapus kontak yang tidak diperlukan           |
 | **Sinkronisasi Device** | Hubungkan dengan kontak lokal di ponsel      |
 | **Validasi Input**       | Memvalidasi data kontak yang diinputkan user                 |
-| **Modern UI**        | Antarmuka intuitif dan kekinian              |
+| **Modern UI**        | Antarmuka yang kekinian              |
 
 </div>
 
 ---
-
-### Alternatif versi card (jika prefer grid):
-
-<div align="center" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-
-<div>
-<h3>⭐ Kontak Favorit</h3>
-<p>Tandai kontak penting</p>
-</div>
-
-<div>
-<h3>🎨 Tema Dinamis</h3>
-<p>Gelap/terang otomatis</p>
-</div>
-
-<!-- Lanjutkan dengan div lainnya -->
-</div>
 
 ### 🛠️ Tech Stack
 
