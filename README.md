@@ -169,11 +169,13 @@ flutter run -d edge    # Microsoft Edge
 flutter run -d chrome  # Google Chrome
 ```
 
-<div align="center">
-🎉 **Selamat! Aplikasi KuyKontak sudah siap digunakan!** 🎉
+<div align="center" style="text-decoration:bold'">
+🎉 Selamat! Aplikasi KuyKontak sudah siap digunakan! 🎉
 </div>
 
 ---
+
+<br>
 
 ### 🚀 B. Setup Backend API (Development Lokal)
 <div align="center">
