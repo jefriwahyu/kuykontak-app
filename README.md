@@ -300,7 +300,7 @@ curl http://localhost:8080/api/contacts
 <p align="center">
 <img src="https://github.com/user-attachments/assets/86a4d57e-b812-48dc-ba17-1eb91e21b2a1" width="200" alt="List Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://github.com/user-attachments/assets/9efc8e3e-b50a-48d1-8de8-9f57f633ebb0" width="200" alt="List Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/3ba6aba2-ba5c-4152-bb52-125148dfd834" width="200" alt="List Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
 <p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
@@ -326,7 +326,7 @@ curl http://localhost:8080/api/contacts
 <p align="center">
 <img src="https://github.com/user-attachments/assets/2979f367-e614-4ee0-a6ef-863bc7be411b" width="200" alt="Detail Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<img src="screenshots/contact-detail-dark.png" width="200" alt="Detail Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/2c045014-b7d9-43ab-83c8-a20e28e6e511" width="200" alt="Detail Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
 <p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
@@ -352,7 +352,7 @@ curl http://localhost:8080/api/contacts
 <p align="center">
 <img src="https://github.com/user-attachments/assets/c0d3ae18-1df2-4643-8e0f-01c5552d50f5" width="200" alt="Tambah Favorite Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<img src="screenshots/add-favorite-dark.png" width="200" alt="Tambah Favorite Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/9ca01d78-54e7-452c-9fbb-569709ee838e" width="200" alt="Tambah Favorite Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
 <p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
@@ -365,7 +365,7 @@ curl http://localhost:8080/api/contacts
 <p align="center">
 <img src="https://github.com/user-attachments/assets/31d5e910-f935-4671-9166-4565360f5e86" width="200" alt="List Favorite Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<img src="screenshots/favorite-list-dark.png" width="200" alt="List Favorite Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/073f77c4-3f0a-49dc-90a0-8a3a9a898e60" width="200" alt="List Favorite Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
 <p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
@@ -404,7 +404,7 @@ curl http://localhost:8080/api/contacts
 <p align="center">
 <img src="https://github.com/user-attachments/assets/975e84b5-3999-4240-b751-4d7a1e4f9fa5" width="200" alt="Pengaturan Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<img src="screenshots/settings-dark.png" width="200" alt="Pengaturan Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/924ad661-666c-4f7d-8175-61af72112bd5" width="200" alt="Pengaturan Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
 <p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
