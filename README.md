@@ -295,8 +295,6 @@ curl http://localhost:8080/api/contacts
 *✨ Tampilan halaman awal aplikasi KuyKontak*
 
 ---
-<img width="310" height="629" alt="image" src="https://github.com/user-attachments/assets/3d5418d1-880c-47b9-8027-6a1b5b8e4ea7" />
-
 
 ### 📋 **Halaman List Kontak**
 
