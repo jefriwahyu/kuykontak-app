@@ -227,11 +227,6 @@ cp env .env
 
 #### 5️⃣ Setup Database & Import File SQL
 ```bash
-# 📥 Download file SQL dari repository
-# 1. Buka https://github.com/jefriwahyu/kontak-api-ci4
-# 2. Cari file database (.sql) di folder database/
-# 3. Download file tersebut ke komputer Anda
-```
 
 **🔧 Setup Database menggunakan Laragon & phpMyAdmin:**
 1. **Buka Laragon** dan klik **"Start All"**
@@ -244,7 +239,7 @@ cp env .env
    - Pilih database **`kontak-api`** yang baru dibuat
    - Klik tab **"Import"** 
    - Klik **"Choose File"** pada bagian **"File to import"**
-   - Pilih file SQL yang sudah didownload
+   - Pilih file SQL yang ada di folder projek flutter
    - Klik **"Go"** untuk mengimport
 
 #### 6️⃣ Konfigurasi Database di .env
