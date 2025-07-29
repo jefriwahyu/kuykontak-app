@@ -2,60 +2,138 @@
 
 <div align="center">
 
-**Aplikasi Manajemen Kontak Modern dengan Flutter & CodeIgniter 4**
+![KuyKontak Banner](https://via.placeholder.com/800x300/4285F4/FFFFFF?text=📱+KuyKontak+App)
+
+**🚀 Aplikasi Manajemen Kontak Modern dengan Flutter & CodeIgniter 4**
 
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
 [![CodeIgniter](https://img.shields.io/badge/CodeIgniter-EF4223?style=for-the-badge&logo=codeigniter&logoColor=white)](https://codeigniter.com)
 [![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
 
+<img src="https://img.shields.io/github/stars/jefriwahyu/kuykontak-app?style=social" alt="GitHub stars">
+<img src="https://img.shields.io/github/forks/jefriwahyu/kuykontak-app?style=social" alt="GitHub forks">
+
+*✨ Kelola kontak Anda dengan mudah, cepat, dan efisien! ✨*
+
 </div>
 
 ---
 
-## 📋 Deskripsi
+## 🎯 Deskripsi
 
-**KuyKontak** adalah aplikasi mobile manajemen kontak yang dikembangkan menggunakan **Flutter** dan **CodeIgniter 4** sebagai backend API. Aplikasi ini memungkinkan pengguna untuk menyimpan, mengelola, dan mengatur informasi kontak dengan mudah dan efisien melalui interface mobile yang intuitif.
+<div align="center">
+<img src="https://via.placeholder.com/100x100/FF6B6B/FFFFFF?text=📱" alt="App Icon" style="border-radius: 20px;">
+</div>
 
-### ✨ Fitur Utama
+**KuyKontak** adalah aplikasi mobile manajemen kontak yang revolusioner! Dikembangkan menggunakan teknologi terdepan **Flutter** dan **CodeIgniter 4** sebagai backend API yang powerful. Aplikasi ini memberikan pengalaman yang seamless untuk menyimpan, mengelola, dan mengatur informasi kontak dengan interface mobile yang super intuitif dan modern.
 
-🎯 **Tambah Kontak** - Menambahkan kontak baru dengan informasi lengkap  
-✏️ **Edit Kontak** - Mengubah informasi kontak yang sudah ada  
-🗑️ **Hapus Kontak** - Menghapus kontak yang tidak diperlukan  
-🔍 **Pencarian Kontak** - Mencari kontak berdasarkan nama atau nomor telepon  
-📂 **Kategorisasi** - Mengorganisir kontak dalam kategori tertentu  
-🔄 **Sinkronisasi Real-time** - Data tersinkronisasi dengan server  
-📱 **Interface Mobile** - Tampilan yang responsif dan user-friendly untuk perangkat mobile
+<div align="center">
 
-### 🛠️ Teknologi yang Digunakan
+### 🌟 *"Kontak management made simple and beautiful!"* 🌟
 
-- **Mobile App**: Flutter (Dart)
-- **Backend API**: CodeIgniter 4 (PHP)
-- **Database**: MySQL
-- **Server**: Apache/Nginx
-- **API**: RESTful API
+</div>
 
 ---
 
-## 📦 Langkah-langkah Penginstalan
+## ✨ Fitur Unggulan
 
-### 🔧 Prasyarat
+<div align="center">
 
-Pastikan tools berikut sudah terinstall di sistem Anda:
+| 🎯 | ✏️ | 🗑️ | 🔍 |
+|:---:|:---:|:---:|:---:|
+| **Tambah Kontak** | **Edit Kontak** | **Hapus Kontak** | **Pencarian Cerdas** |
+| *Menambah kontak baru dengan info lengkap* | *Mengubah informasi yang sudah ada* | *Menghapus kontak yang tidak diperlukan* | *Cari berdasarkan nama atau nomor* |
 
-**📱 Untuk Flutter Development**
-- [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white)](https://flutter.dev/docs/get-started/install) (versi 3.0+)
-- [![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)](https://git-scm.com/)
-- [![Android Studio](https://img.shields.io/badge/Android%20Studio-3DDC84?style=flat&logo=android-studio&logoColor=white)](https://developer.android.com/studio) atau [![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=flat&logo=visual-studio-code&logoColor=white)](https://code.visualstudio.com/)
+| 📂 | 🔄 | 📱 | ⚡ |
+|:---:|:---:|:---:|:---:|
+| **Kategorisasi** | **Sinkronisasi** | **Mobile UI** | **Super Fast** |
+| *Organisir kontak dalam kategori* | *Data real-time dengan server* | *Interface responsive & user-friendly* | *Performa tinggi & smooth* |
 
-**🚀 Untuk Backend Development (Opsional)**
-- [![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat&logo=php&logoColor=white)](https://www.php.net/downloads.php) (versi 8.0+)
-- [![Composer](https://img.shields.io/badge/Composer-885630?style=flat&logo=composer&logoColor=white)](https://getcomposer.org/)
-- [![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)](https://dev.mysql.com/downloads/)
-- [![XAMPP](https://img.shields.io/badge/XAMPP-FB7A24?style=flat&logo=xampp&logoColor=white)](https://www.apachefriends.org/) atau [![Laragon](https://img.shields.io/badge/Laragon-0E83CD?style=flat&logoColor=white)](https://laragon.org/)
+</div>
+
+---
+
+### 🛠️ Tech Stack
+
+<div align="center">
+
+```
+📱 Frontend: Flutter (Dart) → 🚀 Backend: CodeIgniter 4 (PHP) → 🗄️ Database: MySQL
+```
+
+<table>
+<tr>
+<td align="center"><strong>Mobile Development</strong></td>
+<td align="center"><strong>Backend API</strong></td>
+<td align="center"><strong>Database & Server</strong></td>
+</tr>
+<tr>
+<td align="center">
+<img src="https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white" height="25"/><br>
+<img src="https://img.shields.io/badge/Dart-0175C2?style=flat&logo=dart&logoColor=white" height="25"/>
+</td>
+<td align="center">
+<img src="https://img.shields.io/badge/CodeIgniter-EF4223?style=flat&logo=codeigniter&logoColor=white" height="25"/><br>
+<img src="https://img.shields.io/badge/PHP-777BB4?style=flat&logo=php&logoColor=white" height="25"/>
+</td>
+<td align="center">
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white" height="25"/><br>
+<img src="https://img.shields.io/badge/Apache-D22128?style=flat&logo=apache&logoColor=white" height="25"/>
+</td>
+</tr>
+</table>
+
+</div>
+
+---
+
+## 🚀 Langkah-langkah Penginstalan
+
+### 🔧 Prasyarat System
+
+<div align="center">
+
+**Pastikan tools berikut sudah terinstall di sistem Anda:**
+
+</div>
+
+<details>
+<summary>📱 <strong>Untuk Flutter Development</strong> (Klik untuk expand)</summary>
+
+<br>
+
+| Tool | Version | Link Download |
+|------|---------|---------------|
+| ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white) | 3.0+ | [Download Flutter](https://flutter.dev/docs/get-started/install) |
+| ![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white) | Latest | [Download Git](https://git-scm.com/) |
+| ![Android Studio](https://img.shields.io/badge/Android%20Studio-3DDC84?style=flat&logo=android-studio&logoColor=white) | Latest | [Download Android Studio](https://developer.android.com/studio) |
+| ![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=flat&logo=visual-studio-code&logoColor=white) | Latest | [Download VS Code](https://code.visualstudio.com/) |
+
+</details>
+
+<details>
+<summary>🚀 <strong>Untuk Backend Development (Opsional)</strong> (Klik untuk expand)</summary>
+
+<br>
+
+| Tool | Version | Link Download |
+|------|---------|---------------|
+| ![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat&logo=php&logoColor=white) | 8.0+ | [Download PHP](https://www.php.net/downloads.php) |
+| ![Composer](https://img.shields.io/badge/Composer-885630?style=flat&logo=composer&logoColor=white) | Latest | [Download Composer](https://getcomposer.org/) |
+| ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white) | 8.0+ | [Download MySQL](https://dev.mysql.com/downloads/) |
+| ![XAMPP](https://img.shields.io/badge/XAMPP-FB7A24?style=flat&logo=xampp&logoColor=white) | Latest | [Download XAMPP](https://www.apachefriends.org/) |
+
+</details>
 
 ---
 
 ### 📱 A. Setup Aplikasi Flutter
+
+<div align="center">
+
+**🎯 Ikuti langkah-langkah berikut untuk menjalankan aplikasi Flutter:**
+
+</div>
 
 #### 1️⃣ Clone Repository
 ```bash
@@ -69,35 +147,60 @@ flutter pub get
 ```
 
 #### 3️⃣ Konfigurasi API Endpoint
-Edit file `lib/config/api_config.dart`:
+
+Edit file `lib/helpers/api_url.dart`:
+
+> 💡 **Info**: API CI4 sudah di hosting dan siap digunakan! Jika hosting habis masa aktifnya, dapat menggunakan localhost dengan mengkonfigurasi class ApiUrl.
 
 ```dart
-class ApiConfig {
-  // 🌐 Production API (Recommended)
-  static const String baseUrl = 'https://kontak-api.tinagers.com/';
-  
-  // 🏠 Local Development (Uncomment jika testing di localhost)
-  // static const String baseUrl = 'http://localhost/kontak-api-ci4/public/';
-}
+static const String _ci4Base = 'https://kontak-api.tinagers.com';
+
+// 🏠 Jika ingin menggunakan localhost, ganti dengan:
+// static const String _ci4Base = 'http://localhost:8080';
 ```
 
 #### 4️⃣ Jalankan Aplikasi
+
+<div align="center">
+
+**Pilih platform yang ingin Anda gunakan:**
+
+</div>
+
 ```bash
 # 📱 Cek device yang tersedia
 flutter devices
 
-# 🚀 Run di emulator/device
+# 🚀 Run di emulator/device Android/iOS
 flutter run
 
-# 📦 Build APK untuk production
-flutter build apk --release
+# 🌐 Run di browser
+flutter run -d edge    # Microsoft Edge
+flutter run -d chrome  # Google Chrome
 ```
+
+<div align="center">
+
+🎉 **Selamat! Aplikasi KuyKontak sudah siap digunakan!** 🎉
+
+</div>
 
 ---
 
-### 🚀 B. Setup Backend API (Untuk Development Lokal)
+### 🚀 B. Setup Backend API (Development Lokal)
 
-> 💡 **Note**: Bagian ini opsional jika Anda hanya ingin menggunakan production API: `https://kontak-api.tinagers.com/`
+<div align="center">
+
+> 💡 **Note**: Bagian ini **opsional** jika Anda menggunakan production API: 
+> 
+> **🌐 https://kontak-api.tinagers.com/**
+
+</div>
+
+<details>
+<summary>🔧 <strong>Klik untuk melihat setup backend lengkap</strong></summary>
+
+<br>
 
 #### 1️⃣ Clone Backend Repository
 ```bash
@@ -116,9 +219,9 @@ cp env .env
 ```
 
 Edit file `.env`:
-```bash
+```ini
 #--------------------------------------------------------------------
-# DATABASE
+# 🗄️ DATABASE CONFIGURATION
 #--------------------------------------------------------------------
 database.default.hostname = localhost
 database.default.database = kuykontak_db
@@ -128,12 +231,12 @@ database.default.DBDriver = MySQLi
 database.default.port = 3306
 
 #--------------------------------------------------------------------
-# ENVIRONMENT
+# 🌍 ENVIRONMENT
 #--------------------------------------------------------------------
 CI_ENVIRONMENT = development
 
 #--------------------------------------------------------------------
-# APP
+# 🚀 APPLICATION
 #--------------------------------------------------------------------
 app.baseURL = 'http://localhost/kontak-api-ci4/public/'
 ```
@@ -153,17 +256,21 @@ php spark migrate
 
 #### 6️⃣ Jalankan Server
 ```bash
-# Built-in PHP server
+# 🚀 Built-in PHP server (Recommended)
 php spark serve
 
-# Atau akses via XAMPP/Laragon
+# 🌐 Atau akses via XAMPP/Laragon
 # http://localhost/kontak-api-ci4/public/
 ```
 
-#### 7️⃣ Test API
+#### 7️⃣ Test API Connection
 ```bash
 curl http://localhost:8080/api/contacts
 ```
+
+✅ **Jika berhasil, Anda akan melihat response JSON dari API!**
+
+</details>
 
 ---
 
@@ -171,65 +278,131 @@ curl http://localhost:8080/api/contacts
 
 <div align="center">
 
-### 🏠 Halaman Utama
-<img src="screenshots/homepage.png" width="250" alt="Halaman Utama KuyKontak"/>
-
-*Tampilan halaman utama dengan daftar kontak yang elegan*
+### 🎨 **Preview Aplikasi KuyKontak** 🎨
 
 ---
 
-### ➕ Tambah Kontak
-<img src="screenshots/add-contact.png" width="250" alt="Tambah Kontak"/>
+<table>
+<tr>
+<td align="center" width="50%">
 
-*Form intuitif untuk menambahkan kontak baru*
+### 🏠 **Halaman Utama**
+<img src="screenshots/homepage.png" width="250" alt="Halaman Utama KuyKontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+
+*✨ Tampilan halaman utama dengan daftar kontak yang elegan dan modern*
+
+</td>
+<td align="center" width="50%">
+
+### ➕ **Tambah Kontak**
+<img src="screenshots/add-contact.png" width="250" alt="Tambah Kontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+
+*🎯 Form intuitif dan user-friendly untuk menambahkan kontak baru*
+
+</td>
+</tr>
+</table>
 
 ---
 
-### 👤 Detail Kontak
-<img src="screenshots/contact-detail.png" width="250" alt="Detail Kontak"/>
+<table>
+<tr>
+<td align="center" width="33%">
 
-*Halaman detail dengan informasi kontak lengkap*
+### 👤 **Detail Kontak**
+<img src="screenshots/contact-detail.png" width="200" alt="Detail Kontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 
----
+*📋 Interface detail dengan informasi kontak yang lengkap dan terorganisir*
 
-### 🔍 Pencarian Kontak
-<img src="screenshots/search-contact.png" width="250" alt="Pencarian Kontak"/>
+</td>
+<td align="center" width="33%">
 
-*Fitur pencarian cerdas dan responsif*
+### 🔍 **Pencarian Kontak**
+<img src="screenshots/search-contact.png" width="200" alt="Pencarian Kontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 
----
+*⚡ Fitur pencarian yang cerdas, cepat, dan responsif*
 
-### ✏️ Edit Kontak
-<img src="screenshots/edit-contact.png" width="250" alt="Edit Kontak"/>
+</td>
+<td align="center" width="33%">
 
-*Interface untuk mengubah informasi kontak*
+### ✏️ **Edit Kontak**
+<img src="screenshots/edit-contact.png" width="200" alt="Edit Kontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+
+*🔧 Interface yang smooth untuk mengubah informasi kontak*
+
+</td>
+</tr>
+</table>
 
 </div>
 
 ---
 
-## 🎥 Link Video Demo
+## 🎥 Video Demo
 
 <div align="center">
 
-[![Demo Video KuyKontak App](https://img.shields.io/badge/▶️%20TONTON%20VIDEO%20DEMO-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/your-video-link)
+### 🎬 **Demo Video Lengkap KuyKontak App**
 
-**[🎬 Klik di sini untuk menonton demo video lengkap](https://youtu.be/your-video-link)**
+<a href="https://youtu.be/your-video-link">
+<img src="https://via.placeholder.com/600x300/FF0000/FFFFFF?text=▶️+PLAY+VIDEO+DEMO" alt="Video Demo KuyKontak" style="border-radius: 10px; cursor: pointer;"/>
+</a>
+
+<br><br>
+
+[![Demo Video KuyKontak App](https://img.shields.io/badge/▶️%20TONTON%20VIDEO%20DEMO-FF0000?style=for-the-badge&logo=youtube&logoColor=white&labelColor=black)](https://youtu.be/your-video-link)
+
+**[🎬 Klik di sini untuk menonton demo video lengkap!](https://youtu.be/your-video-link)**
+
+---
+
+### 📹 **Yang Ditampilkan di Video:**
+
+<table>
+<tr>
+<td align="center" width="25%">
+⚡<br><strong>Instalasi & Setup</strong><br><em>Step-by-step installation guide</em>
+</td>
+<td align="center" width="25%">
+🎯<br><strong>Demo Fitur</strong><br><em>Walkthrough semua fitur unggulan</em>
+</td>
+<td align="center" width="25%">
+📱<br><strong>User Experience</strong><br><em>Tutorial lengkap penggunaan app</em>
+</td>
+<td align="center" width="25%">
+🔧<br><strong>Developer Tips</strong><br><em>Best practices untuk development</em>
+</td>
+</tr>
+</table>
 
 </div>
-
-### 📹 Yang Ditampilkan di Video:
-- ⚡ **Instalasi & Setup** - Cara install dan menjalankan aplikasi
-- 🎯 **Demo Fitur** - Walkthrough semua fitur utama aplikasi
-- 📱 **Penggunaan** - Tutorial lengkap cara menggunakan aplikasi
-- 🔧 **Tips Development** - Panduan untuk developer
 
 ---
 
 <div align="center">
 
-**Made with ❤️ by [Jefri Wahyu](https://github.com/jefriwahyu)**
+## 👨‍💻 Developer
+
+<img src="https://github.com/jefriwahyu.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
+
+**Jefri Wahyu**
+
+*🚀 Flutter Developer | 💻 Full Stack Engineer | ☁️ Cloud Enthusiast*
 
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/jefriwahyu)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/jefriwahyu)
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:jefriwahyu@example.com)
+
+---
+
+### 🌟 **Jika project ini membantu Anda, jangan lupa untuk memberikan ⭐ star!**
+
+**Made with ❤️ and ☕ by Jefri Wahyu**
+
+<img src="https://img.shields.io/github/last-commit/jefriwahyu/kuykontak-app?style=flat&color=blue" alt="Last Commit">
+<img src="https://img.shields.io/badge/Status-Active-brightgreen" alt="Status">
+<img src="https://img.shields.io/badge/Maintained-Yes-blue" alt="Maintained">
+
+*📅 Last updated: July 2025*
 
 </div>
