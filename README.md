@@ -460,7 +460,6 @@ curl http://localhost:8080/api/kontak
     <td align="center" width="300" style="border: none; padding: 20px;">
       <img src="https://github.com/jefriwahyu.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
       <h3>🚀 Jefri Wahyu</h3>
-      <p><em>Full Stack Developer</em></p>
       <a href="https://github.com/jefriwahyu" target="_blank">
         <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
       </a>
@@ -468,7 +467,6 @@ curl http://localhost:8080/api/kontak
     <td align="center" width="300" style="border: none; padding: 20px;">
       <img src="https://github.com/Jazeera99.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
       <h3>🎨 Laura Diva</h3>
-      <p><em>UI/UX Designer</em></p>
       <a href="https://github.com/Jazeera99" target="_blank">
         <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
       </a>
@@ -476,7 +474,6 @@ curl http://localhost:8080/api/kontak
     <td align="center" width="300" style="border: none; padding: 20px;">
       <img src="https://github.com/Mallwee21.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
       <h3>💻 Aqmal Alfareza</h3>
-      <p><em>Mobile Developer</em></p>
       <a href="https://github.com/Mallwee21" target="_blank">
         <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
       </a>
