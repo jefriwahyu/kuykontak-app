@@ -498,13 +498,3 @@ curl http://localhost:8080/api/kontak
 </div>
 
 ---
-
-<div align="center">
-
-## 💝 Dukungan
-
-Jika proyek ini membantu Anda, jangan lupa untuk memberikan ⭐ di repository ini!
-
-**Made with ❤️ by Tim KuyKontak**
-
-</div>
