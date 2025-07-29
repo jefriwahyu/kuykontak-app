@@ -193,8 +193,6 @@ flutter run -d chrome  # Google Chrome
 <div align="center">
 
 > 💡 **Note**: Bagian ini **opsional** jika Anda menggunakan production API, karena pada projek menggunakan API yang sudah di hosting, jika ingin menggunakan lokal, anda bisa melihat cara penginstalan backend lokal di bawah: 
-> 
-> **🌐 https://kontak-api.tinagers.com/**
 
 </div>
 
