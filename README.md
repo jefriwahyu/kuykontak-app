@@ -39,15 +39,20 @@
 
 <div align="center">
 
-| 🎯 | ✏️ | 🗑️ | 🔍 |
+| ⭐ | 🎨 | 🔤 | 🔍 |
 |:---:|:---:|:---:|:---:|
-| **Tambah Kontak** | **Edit Kontak** | **Hapus Kontak** | **Pencarian Cerdas** |
-| *Menambah kontak baru dengan info lengkap* | *Mengubah informasi yang sudah ada* | *Menghapus kontak yang tidak diperlukan* | *Cari berdasarkan nama atau nomor* |
+| **Kontak Favorite** | **Tema Gelap & Terang** | **Ukuran Font** | **Pencarian Cerdas** |
+| *Tandai kontak penting sebagai favorit* | *Mode gelap dan terang untuk kenyamanan* | *Sesuaikan ukuran font sesuai kebutuhan* | *Cari kontak dengan mudah dan cepat* |
 
-| 📂 | 🔄 | 📱 | ⚡ |
+| 🔽 | ➕ | ✏️ | 🗑️ |
 |:---:|:---:|:---:|:---:|
-| **Kategorisasi** | **Sinkronisasi** | **Mobile UI** | **Super Fast** |
-| *Organisir kontak dalam kategori* | *Data real-time dengan server* | *Interface responsive & user-friendly* | *Performa tinggi & smooth* |
+| **Filter Kontak** | **Tambah Kontak** | **Edit Kontak** | **Hapus Kontak** |
+| *Filter dan sortir kontak dengan mudah* | *Menambah kontak baru dengan info lengkap* | *Mengubah informasi yang sudah ada* | *Menghapus kontak yang tidak diperlukan* |
+
+| 📱 | 🔄 | ⚡ | 🌟 |
+|:---:|:---:|:---:|:---:|
+| **Sinkronisasi Device** | **Real-time Sync** | **Super Fast** | **Modern UI** |
+| *Sinkronisasi dengan kontak Android lokal* | *Data tersinkron real-time dengan server* | *Performa tinggi & responsive* | *Interface modern & user-friendly* |
 
 </div>
 
@@ -121,7 +126,7 @@
 | ![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat&logo=php&logoColor=white) | 8.0+ | [Download PHP](https://www.php.net/downloads.php) |
 | ![Composer](https://img.shields.io/badge/Composer-885630?style=flat&logo=composer&logoColor=white) | Latest | [Download Composer](https://getcomposer.org/) |
 | ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white) | 8.0+ | [Download MySQL](https://dev.mysql.com/downloads/) |
-| ![XAMPP](https://img.shields.io/badge/XAMPP-FB7A24?style=flat&logo=xampp&logoColor=white) | Latest | [Download XAMPP](https://www.apachefriends.org/) |
+| ![Laragon](https://img.shields.io/badge/Laragon-0E83CD?style=flat&logoColor=white) | Latest | [Download Laragon](https://laragon.org/) |
 
 </details>
 
@@ -259,7 +264,7 @@ php spark migrate
 # 🚀 Built-in PHP server (Recommended)
 php spark serve
 
-# 🌐 Atau akses via XAMPP/Laragon
+# 🌐 Atau akses via Laragon
 # http://localhost/kontak-api-ci4/public/
 ```
 
@@ -286,18 +291,18 @@ curl http://localhost:8080/api/contacts
 <tr>
 <td align="center" width="50%">
 
-### 🏠 **Halaman Utama**
+### 🏠 **Halaman Utama & Favorit**
 <img src="screenshots/homepage.png" width="250" alt="Halaman Utama KuyKontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 
-*✨ Tampilan halaman utama dengan daftar kontak yang elegan dan modern*
+*✨ Tampilan halaman utama dengan daftar kontak dan fitur favorit*
 
 </td>
 <td align="center" width="50%">
 
-### ➕ **Tambah Kontak**
-<img src="screenshots/add-contact.png" width="250" alt="Tambah Kontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+### 🎨 **Tema Gelap & Terang**
+<img src="screenshots/dark-light-theme.png" width="250" alt="Dark Light Theme" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 
-*🎯 Form intuitif dan user-friendly untuk menambahkan kontak baru*
+*🌙 Mode gelap dan terang untuk kenyamanan mata pengguna*
 
 </td>
 </tr>
@@ -309,26 +314,49 @@ curl http://localhost:8080/api/contacts
 <tr>
 <td align="center" width="33%">
 
-### 👤 **Detail Kontak**
-<img src="screenshots/contact-detail.png" width="200" alt="Detail Kontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+### ➕ **Tambah Kontak**
+<img src="screenshots/add-contact.png" width="200" alt="Tambah Kontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 
-*📋 Interface detail dengan informasi kontak yang lengkap dan terorganisir*
+*🎯 Form intuitif untuk menambahkan kontak baru*
+
+</td>
+<td align="center" width="33%">
+
+### 🔍 **Pencarian & Filter**
+<img src="screenshots/search-filter.png" width="200" alt="Pencarian dan Filter" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+
+*⚡ Fitur pencarian dan filter yang powerful*
 
 </td>
 <td align="center" width="33%">
 
-### 🔍 **Pencarian Kontak**
-<img src="screenshots/search-contact.png" width="200" alt="Pencarian Kontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+### ⚙️ **Pengaturan Font**
+<img src="screenshots/font-settings.png" width="200" alt="Pengaturan Font" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 
-*⚡ Fitur pencarian yang cerdas, cepat, dan responsif*
+*🔤 Sesuaikan ukuran font sesuai kebutuhan*
 
 </td>
-<td align="center" width="33%">
+</tr>
+</table>
+
+---
+
+<table>
+<tr>
+<td align="center" width="50%">
 
 ### ✏️ **Edit Kontak**
-<img src="screenshots/edit-contact.png" width="200" alt="Edit Kontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="screenshots/edit-contact.png" width="250" alt="Edit Kontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 
 *🔧 Interface yang smooth untuk mengubah informasi kontak*
+
+</td>
+<td align="center" width="50%">
+
+### 📱 **Sinkronisasi Device**
+<img src="screenshots/sync-device.png" width="250" alt="Sinkronisasi Device" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+
+*🔄 Sinkronisasi dengan kontak Android lokal secara otomatis*
 
 </td>
 </tr>
@@ -360,17 +388,20 @@ curl http://localhost:8080/api/contacts
 
 <table>
 <tr>
-<td align="center" width="25%">
-⚡<br><strong>Instalasi & Setup</strong><br><em>Step-by-step installation guide</em>
+<td align="center" width="20%">
+⚡<br><strong>Setup & Install</strong><br><em>Panduan instalasi lengkap</em>
 </td>
-<td align="center" width="25%">
-🎯<br><strong>Demo Fitur</strong><br><em>Walkthrough semua fitur unggulan</em>
+<td align="center" width="20%">
+⭐<br><strong>Fitur Favorit</strong><br><em>Demo kontak favorit</em>
 </td>
-<td align="center" width="25%">
-📱<br><strong>User Experience</strong><br><em>Tutorial lengkap penggunaan app</em>
+<td align="center" width="20%">
+🎨<br><strong>Dark/Light Mode</strong><br><em>Switch tema gelap terang</em>
 </td>
-<td align="center" width="25%">
-🔧<br><strong>Developer Tips</strong><br><em>Best practices untuk development</em>
+<td align="center" width="20%">
+🔍<br><strong>Search & Filter</strong><br><em>Pencarian dan filter kontak</em>
+</td>
+<td align="center" width="20%">
+📱<br><strong>Device Sync</strong><br><em>Sinkronisasi kontak Android</em>
 </td>
 </tr>
 </table>
