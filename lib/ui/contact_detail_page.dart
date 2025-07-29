@@ -227,9 +227,16 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                         size: 28,
                       ),
                       onPressed: () {
-                        setState(() => _isFavorite = !_isFavorite);
+                        setState(() {
+                          _isFavorite = !_isFavorite;
+                        });
+
+                        print(
+                            'Toggle favorite: ${widget.contact.nama} to $_isFavorite');
+
                         context.read<ContactBloc>().add(
-                            ToggleFavorite(widget.contact.id, _isFavorite));
+                              ToggleFavorite(widget.contact.id, _isFavorite),
+                            );
                       },
                     ),
                   ],
