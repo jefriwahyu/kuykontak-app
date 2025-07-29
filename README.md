@@ -461,13 +461,13 @@ curl http://localhost:8080/api/contacts
 
 **Laura Diva**
 
+<img src="https://github.com/Mallwee21.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
+
+**Aqmal Alfareza**
+
 
 
 *🚀 Flutter Developer | 💻 Full Stack Engineer | ☁️ Cloud Enthusiast*
-
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/jefriwahyu)(https://github.com/Jazeera99)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/jefriwahyu)
-[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:jefriwahyu@example.com)
 
 ---
 
