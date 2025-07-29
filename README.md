@@ -13,7 +13,7 @@
 <img src="https://img.shields.io/github/stars/jefriwahyu/kuykontak-app?style=social" alt="GitHub stars">
 <img src="https://img.shields.io/github/forks/jefriwahyu/kuykontak-app?style=social" alt="GitHub forks">
 
-**🔗 Backend Repository**: [kontak-api-ci4](https://github.com/jefriwahyu/kontak-api-ci4)
+**🔗 Backend**: [kontak-api-ci4](https://github.com/jefriwahyu/kontak-api-ci4)
 
 **✨ Kelola kontak Anda dengan aman, cepat, dan mudah! ✨**
 
@@ -22,13 +22,7 @@
 ---
 
 ## 🎯 Deskripsi
-
-**KuyKontak** adalah aplikasi manajemen kontak modern yang dirancang untuk memudahkan pengelolaan kontak Anda! Dibangun menggunakan **Flutter** untuk frontend yang responsif dan **CodeIgniter 4** sebagai REST API backend yang powerful. 
-
-> 📌 **Note**: Backend API berada dalam repositori terpisah di [kontak-api-ci4](https://github.com/jefriwahyu/kontak-api-ci4) untuk pemisahan yang lebih baik antara frontend dan backend.
-
-Aplikasi ini menyediakan antarmuka yang intuitif dan modern untuk menyimpan, mengorganisir, dan mengelola daftar kontak dengan berbagai fitur canggih yang memudahkan aktivitas sehari-hari Anda.
-
+**KuyKontak** adalah aplikasi pengelola kontak canggih yang membantu Anda menyimpan dan mengatur daftar kontak dengan mudah. Dibangun dengan **Flutter** untuk antarmuka pengguna yang responsif dan **CodeIgniter 4** sebagai **REST API backend** yang handal. Backend API-nya terpisah di repositori [kontak-api-ci4](https://github.com/jefriwahyu/kontak-api-ci4), memastikan struktur yang rapi antara frontend dan backend. Aplikasi ini menawarkan tampilan yang user-friendly serta fitur-fitur modern untuk memaksimalkan pengelolaan kontak sehari-hari.
 ---
 
 ## ✨ Fitur Unggulan
