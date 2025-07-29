@@ -415,8 +415,12 @@ curl http://localhost:8080/api/contacts
 ## 👨‍💻 Developer
 
 <img src="https://github.com/jefriwahyu.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
-
 **Jefri Wahyu**
+
+<img src="https://github.com/Jazeera99.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
+**Laura Diva**
+
+
 
 *🚀 Flutter Developer | 💻 Full Stack Engineer | ☁️ Cloud Enthusiast*
 
@@ -428,7 +432,7 @@ curl http://localhost:8080/api/contacts
 
 ### 🌟 **Jika project ini membantu Anda, jangan lupa untuk memberikan ⭐ star!**
 
-**Made with ❤️ and ☕ by Jefri Wahyu**
+**Made with ❤️ and ☕ by Jefri Wahyu, Laura Diva**
 
 <img src="https://img.shields.io/github/last-commit/jefriwahyu/kuykontak-app?style=flat&color=blue" alt="Last Commit">
 <img src="https://img.shields.io/badge/Status-Active-brightgreen" alt="Status">
