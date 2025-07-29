@@ -100,7 +100,6 @@
 |------|---------|---------------|
 | ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white) | 3.0+ | [Download Flutter](https://flutter.dev/docs/get-started/install) |
 | ![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white) | Latest | [Download Git](https://git-scm.com/) |
-| ![Android Studio](https://img.shields.io/badge/Android%20Studio-3DDC84?style=flat&logo=android-studio&logoColor=white) | Latest | [Download Android Studio](https://developer.android.com/studio) |
 | ![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=flat&logo=visual-studio-code&logoColor=white) | Latest | [Download VS Code](https://code.visualstudio.com/) |
 
 </details>
