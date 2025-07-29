@@ -288,17 +288,19 @@ curl http://localhost:8080/api/contacts
 
 ### 🏠 **Halaman Awal**
 <p align="center">
-<img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="250" alt="Halaman Awal KuyKontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img width="310" height="629" alt="image" src="https://github.com/user-attachments/assets/b5dff8ae-72ea-49d2-a187-4193eab9132d" />
+
 </p>
 
 *✨ Tampilan halaman awal aplikasi KuyKontak*
 
 ---
+<img width="301" height="640" alt="image" src="https://github.com/user-attachments/assets/6f6ddbdf-0279-44cb-b572-1989c29ab9cb" />
 
 ### 📋 **Halaman List Kontak**
 
 <p align="center">
-<img src="https://github.com/user-attachments/assets/d49acc20-ed45-4943-b718-097d5b63ea5d" width="200" alt="List Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/6f6ddbdf-0279-44cb-b572-1989c29ab9cb" width="200" alt="List Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img src="https://github.com/user-attachments/assets/9efc8e3e-b50a-48d1-8de8-9f57f633ebb0" width="200" alt="List Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
@@ -311,7 +313,7 @@ curl http://localhost:8080/api/contacts
 ### ➕ **Halaman Menambah Kontak**
 
 <p align="center">
-<img src="screenshots/add-contact-light.png" width="200" alt="Tambah Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/479682de-7c58-4540-97a2-bccb65df44e9" width="200" alt="Tambah Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <img src="screenshots/add-contact-dark.png" width="200" alt="Tambah Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
