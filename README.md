@@ -298,9 +298,9 @@ curl http://localhost:8080/api/contacts
 ### 📋 **Halaman List Kontak**
 
 <p align="center">
-<img src="screenshots/contact-list-light.png" width="200" alt="List Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="200" alt="List Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<img src="screenshots/contact-list-dark.png" width="200" alt="List Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="200" alt="List Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 </p>
 <p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
