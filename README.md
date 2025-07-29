@@ -29,20 +29,19 @@
 
 <div align="center">
 
-| Fitur          | Ikon | Deskripsi                                      |
-|----------------|:----:|-----------------------------------------------|
-| **Kontak Favorit**  | ⭐   | Tandai kontak penting sebagai favorit         |
-| **Tema Gelap & Terang** | 🎨 | Mode gelap/terang untuk kenyamanan mata      |
-| **Ukuran Font**     | 🔤   | Sesuaikan ukuran teks sesuai kebutuhan       |
-| **Pencarian Cerdas** | 🔍   | Temukan kontak secara instan                 |
-| **Filter Kontak**    | 🔽   | Urutkan kontak dengan kriteria tertentu      |
-| **Tambah Kontak**    | ➕   | Buat kontak baru dengan informasi lengkap    |
-| **Edit Kontak**      | ✏️   | Perbarui detail kontak dengan mudah          |
-| **Hapus Kontak**     | 🗑️   | Hapus kontak yang tidak diperlukan           |
-| **Sinkronisasi Device** | 📱 | Hubungkan dengan kontak lokal di ponsel      |
-| **Real-time Sync**   | 🔄   | Data selalu up-to-date di semua perangkat    |
-| **Super Fast**       | ⚡   | Performa cepat dan responsif                 |
-| **Modern UI**        | 🌟   | Antarmuka intuitif dan kekinian              |
+| Fitur          | Deskripsi                                      |
+|----------------|-----------------------------------------------|
+| **Kontak Favorit**  | Tandai kontak penting sebagai favorit         |
+| **Tema Gelap & Terang** | Mode gelap/terang untuk kenyamanan mata      |
+| **Ukuran Font**     | Sesuaikan ukuran teks sesuai kebutuhan       |
+| **Pencarian Cerdas** | Temukan kontak secara instan                 |
+| **Filter Kontak**    | Urutkan kontak dengan kriteria tertentu      |
+| **Tambah Kontak**    | Buat kontak baru dengan informasi lengkap    |
+| **Edit Kontak**      | Perbarui detail kontak dengan mudah          |
+| **Hapus Kontak**     | Hapus kontak yang tidak diperlukan           |
+| **Sinkronisasi Device** | Hubungkan dengan kontak lokal di ponsel      |
+| **Validasi Input**       | Memvalidasi data kontak yang diinputkan user                 |
+| **Modern UI**        | Antarmuka intuitif dan kekinian              |
 
 </div>
 
