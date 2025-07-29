@@ -450,22 +450,29 @@ curl http://localhost:8080/api/contacts
 
 <div align="center">
 
-## 👨‍💻 Developer
+## 👨‍💻 Tim Developer
 
+<div align="center" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; margin-top: 1.5rem;">
 
-<img src="https://github.com/jefriwahyu.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
+<div style="text-align: center;">
+  <img src="https://github.com/jefriwahyu.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
+  <h3>Jefri Wahyu</h3>
+  [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/jefriwahyu)
+</div>
 
-**Jefri Wahyu**
+<div style="text-align: center;">
+  <img src="https://github.com/Jazeera99.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
+  <h3>Laura Diva</h3>
+  [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Jazeera99)
+</div>
 
-<img src="https://github.com/Jazeera99.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
+<div style="text-align: center;">
+  <img src="https://github.com/Mallwee21.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
+  <h3>Aqmal Alfareza</h3>
+  [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Mallwee21)
+</div>
 
-**Laura Diva**
-
-<img src="https://github.com/Mallwee21.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
-
-**Aqmal Alfareza**
-
-
+</div>
 
 *🚀 Flutter Developer | 💻 Full Stack Engineer | ☁️ Cloud Enthusiast*
 
