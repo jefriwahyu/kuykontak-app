@@ -148,25 +148,40 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
 
     // Handler untuk toggle favorite
     on<ToggleFavorite>((event, emit) async {
-      final currentState = state;
-      if (currentState is ContactLoaded) {
-        try {
-          final updateInfo = await ContactService.toggleFavorite(event.id);
+      try {
+        final currentState = state;
+        if (currentState is ContactLoaded) {
+          print('Toggling favorite for ID: ${event.id}');
 
-          final String updatedId = updateInfo['id'].toString();
-          final bool newFavoriteStatus = updateInfo['isFavorite'];
+          // Cari contact yang akan di-toggle
+          final contactIndex = currentState.contacts
+              .indexWhere((contact) => contact.id == event.id);
 
-          final updatedContacts = currentState.contacts.map((contact) {
-            if (contact.id == updatedId) {
-              return contact.copyWith(isFavorite: newFavoriteStatus);
+          if (contactIndex != -1) {
+            final currentContact = currentState.contacts[contactIndex];
+
+            // Update UI langsung (optimistic update)
+            final updatedContacts = List<Contact>.from(currentState.contacts);
+            updatedContacts[contactIndex] = currentContact.copyWith(
+              isFavorite: event.isFavorite,
+            );
+
+            emit(ContactLoaded(updatedContacts));
+            print('UI updated successfully');
+
+            // Panggil API di background
+            try {
+              final result = await ContactService.toggleFavorite(event.id);
+              print('API call berhasil: $result');
+            } catch (apiError) {
+              print('API call gagal tapi UI sudah diupdate: $apiError');
+              // UI tetap terupdate meski API gagal
             }
-            return contact;
-          }).toList();
-
-          emit(ContactLoaded(updatedContacts));
-        } catch (e) {
-          print("Gagal mengupdate state di BLoC: $e");
+          }
         }
+      } catch (e) {
+        print('Error in ToggleFavorite: $e');
+        // Jangan emit error, biarkan state tetap
       }
     });
   }
