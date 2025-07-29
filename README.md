@@ -412,12 +412,11 @@ curl http://localhost:8080/api/kontak
 
 <div align="center">
 
-### 🎬 **Demo Video Lengkap KuyKontak App**
+### 🎬 **Demo Video KuyKontak App**
 
 [![Demo Video KuyKontak App](https://img.shields.io/badge/▶️%20TONTON%20VIDEO%20DEMO-FF0000?style=for-the-badge&logo=youtube&logoColor=white&labelColor=black)](https://youtube.com/shorts/8uy9GU76xCs?si=51hr8j3dsfkCrNI7)
 
 **[🎬 Klik di sini untuk menonton demo video lengkap!](https://youtube.com/shorts/8uy9GU76xCs?si=51hr8j3dsfkCrNI7)**
-
 ---
 
 ### 📹 **Yang Ditampilkan di Video:**
@@ -461,14 +460,14 @@ curl http://localhost:8080/api/kontak
     </td>
     <td align="center" width="300" style="border: none; padding: 20px;">
       <img src="https://github.com/Jazeera99.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
-      <h3>🎨 Laura Diva</h3>
+      <h3>💻 Laura Diva</h3>
       <a href="https://github.com/Jazeera99" target="_blank">
         <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
       </a>
     </td>
     <td align="center" width="300" style="border: none; padding: 20px;">
       <img src="https://github.com/Mallwee21.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
-      <h3>💻 Aqmal Alfareza</h3>
+      <h3>🎨 Aqmal Alfareza</h3>
       <a href="https://github.com/Mallwee21" target="_blank">
         <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
       </a>
