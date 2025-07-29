@@ -293,9 +293,7 @@ curl http://localhost:8080/api/contacts
 
 ### 🏠 **Halaman Utama & Favorit**
 <img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="250" alt="Halaman Utama KuyKontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
-
-<img width="358" height="640" alt="image" src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" />
-
+<img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="250" alt="Halaman Utama KuyKontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 
 *✨ Tampilan halaman utama dengan daftar kontak dan fitur favorit*
 
