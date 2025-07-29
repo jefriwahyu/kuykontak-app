@@ -480,18 +480,12 @@ curl http://localhost:8080/api/contacts
 
 <br>
 
-*🚀 Flutter Developer | 💻 Full Stack Engineer | ☁️ Cloud Enthusiast*
-
----
-
-### 🌟 **Jika project ini membantu Anda, jangan lupa untuk memberikan ⭐ star!**
-
-**Made with ❤️ and ☕ by Jefri Wahyu, Laura Diva**
-
 <img src="https://img.shields.io/github/last-commit/jefriwahyu/kuykontak-app?style=flat&color=blue" alt="Last Commit">
 <img src="https://img.shields.io/badge/Status-Active-brightgreen" alt="Status">
 <img src="https://img.shields.io/badge/Maintained-Yes-blue" alt="Maintained">
 
 *📅 Last updated: July 2025*
+
+---
 
 </div>
