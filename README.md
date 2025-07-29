@@ -121,144 +121,140 @@
 ---
 
 ### 📱 A. Setup Aplikasi Flutter
-
 <div align="center">
-
 **🎯 Ikuti langkah-langkah berikut untuk menjalankan aplikasi Flutter:**
-
 </div>
 
-#### 1️⃣ Clone Repository
+#### 1️⃣ Pilih Lokasi Folder
+```bash
+# 📁 Navigasi ke folder yang diinginkan
+cd Documents/Projects
+# atau
+cd Desktop
+# atau ke lokasi folder lain sesuai keinginan
+```
+
+#### 2️⃣ Clone Repository
 ```bash
 git clone https://github.com/jefriwahyu/kuykontak-app.git
 cd kuykontak-app
 ```
 
-#### 2️⃣ Install Dependencies
+#### 3️⃣ Install Dependencies
 ```bash
 flutter pub get
 ```
 
-#### 3️⃣ Konfigurasi API Endpoint
-
+#### 4️⃣ Konfigurasi API Endpoint
 Edit file `lib/helpers/api_url.dart`:
-
 > 💡 **Info**: API CI4 sudah di hosting dan siap digunakan! Jika hosting habis masa aktifnya, dapat menggunakan localhost dengan mengkonfigurasi class ApiUrl.
-
 ```dart
 static const String _ci4Base = 'https://kontak-api.tinagers.com';
-
 // 🏠 Jika ingin menggunakan localhost, ganti dengan:
 // static const String _ci4Base = 'http://localhost:8080';
 ```
 
-#### 4️⃣ Jalankan Aplikasi
-
+#### 5️⃣ Jalankan Aplikasi
 <div align="center">
-
 **Pilih platform yang ingin Anda gunakan:**
-
 </div>
 
 ```bash
 # 📱 Cek device yang tersedia
 flutter devices
-
 # 🚀 Run di emulator/device Android/iOS
 flutter run
-
 # 🌐 Run di browser
 flutter run -d edge    # Microsoft Edge
 flutter run -d chrome  # Google Chrome
 ```
 
 <div align="center">
-
 🎉 **Selamat! Aplikasi KuyKontak sudah siap digunakan!** 🎉
-
 </div>
 
 ---
 
 ### 🚀 B. Setup Backend API (Development Lokal)
-
 <div align="center">
-
 > 💡 **Note**: Bagian ini **opsional** jika Anda menggunakan production API: 
 > 
 > **🌐 https://kontak-api.tinagers.com/**
-
 </div>
 
 <details>
 <summary>🔧 <strong>Klik untuk melihat setup backend lengkap</strong></summary>
-
 <br>
 
-#### 1️⃣ Clone Backend Repository
+#### 1️⃣ Pilih Lokasi Folder Backend
+```bash
+# 📁 Navigasi ke folder yang diinginkan untuk backend
+cd Documents/Projects/Backend
+# atau
+cd Desktop/Development
+# atau ke lokasi folder lain sesuai keinginan
+```
+
+#### 2️⃣ Clone Backend Repository
 ```bash
 git clone https://github.com/jefriwahyu/kontak-api-ci4.git
 cd kontak-api-ci4
 ```
 
-#### 2️⃣ Install Dependencies
+#### 3️⃣ Install Dependencies
 ```bash
 composer install
 ```
 
-#### 3️⃣ Konfigurasi Environment
+#### 4️⃣ Konfigurasi Environment
 ```bash
 cp env .env
 ```
 
-Edit file `.env`:
-```ini
-#--------------------------------------------------------------------
-# 🗄️ DATABASE CONFIGURATION
-#--------------------------------------------------------------------
+#### 5️⃣ Setup Database & Import File SQL
+```bash
+# 📥 Download file SQL dari repository
+# 1. Buka https://github.com/jefriwahyu/kontak-api-ci4
+# 2. Cari file database (.sql) di folder database/
+# 3. Download file tersebut ke komputer Anda
+```
+
+**🔧 Setup Database menggunakan Laragon & phpMyAdmin:**
+1. **Buka Laragon** dan klik **"Start All"**
+2. **Klik "Database"** untuk membuka phpMyAdmin
+3. **Buat database baru:**
+   - Klik **"New"** di sidebar kiri
+   - Nama database: **`kontak-api`**
+   - Klik **"Create"**
+4. **Import file SQL:**
+   - Pilih database **`kontak-api`** yang baru dibuat
+   - Klik tab **"Import"** 
+   - Klik **"Choose File"** pada bagian **"File to import"**
+   - Pilih file SQL yang sudah didownload
+   - Klik **"Go"** untuk mengimport
+
+#### 6️⃣ Konfigurasi Database di .env
+Edit file `.env` dan sesuaikan konfigurasi database:
+```env
 database.default.hostname = localhost
-database.default.database = kuykontak_db
+database.default.database = kontak-api
 database.default.username = root
 database.default.password = 
 database.default.DBDriver = MySQLi
-database.default.port = 3306
-
-#--------------------------------------------------------------------
-# 🌍 ENVIRONMENT
-#--------------------------------------------------------------------
-CI_ENVIRONMENT = development
-
-#--------------------------------------------------------------------
-# 🚀 APPLICATION
-#--------------------------------------------------------------------
-app.baseURL = 'http://localhost/kontak-api-ci4/public/'
 ```
 
-#### 4️⃣ Setup Database
-```bash
-# Buat database
-mysql -u root -p
-CREATE DATABASE kuykontak_db;
-exit
-```
-
-#### 5️⃣ Migrasi Database
-```bash
-php spark migrate
-```
-
-#### 6️⃣ Jalankan Server
+#### 7️⃣ Jalankan Server
 ```bash
 # 🚀 Built-in PHP server (Recommended)
 php spark serve
-
-# 🌐 Atau akses via Laragon
-# http://localhost/kontak-api-ci4/public/
+# 🌐 Server akan berjalan di: http://localhost:8080
 ```
 
-#### 7️⃣ Test API Connection
+#### 8️⃣ Test API Connection
 ```bash
-curl http://localhost:8080/api/contacts
+# 🧪 Test endpoint API
+curl http://localhost:8080/api/kontak
+# atau buka di browser: http://localhost:8080/api/kontak
 ```
 
 ✅ **Jika berhasil, Anda akan melihat response JSON dari API!**
