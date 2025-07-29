@@ -190,7 +190,7 @@ flutter run -d chrome  # Google Chrome
 
 ### 🚀 B. Setup Backend API (Development Lokal)
 
-<div align="center">
+<div align="left">
 
 > 💡 **Note**: Bagian ini **opsional** jika Anda menggunakan production API, karena pada projek menggunakan API yang sudah di hosting, jika ingin menggunakan lokal, anda bisa melihat cara penginstalan backend lokal di bawah: 
 
