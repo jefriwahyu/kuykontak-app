@@ -301,130 +301,140 @@ curl http://localhost:8080/api/contacts
 
 ---
 
-<table>
-<tr>
-<td align="center" width="50%">
+## 📸 Screenshot Tampilan
+<div align="center">
+
+### 🎨 **Preview Aplikasi KuyKontak** 🎨
+
+---
+
+### 🏠 **Halaman Awal**
+<p align="center">
+<img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="250" alt="Halaman Awal KuyKontak" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+</p>
+
+*✨ Tampilan halaman awal aplikasi KuyKontak*
+
+---
 
 ### 📋 **Halaman List Kontak**
-**🌞 Mode Terang** | **🌙 Mode Gelap**
 
-<img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="200" alt="List Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/> <img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="200" alt="List Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<p align="center">
+<img src="screenshots/contact-list-light.png" width="200" alt="List Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="screenshots/contact-list-dark.png" width="200" alt="List Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+</p>
+<p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
 *📱 Daftar lengkap semua kontak dalam tema terang dan gelap*
 
-</td>
-<td align="center" width="50%">
+---
 
 ### ➕ **Halaman Menambah Kontak**
-**🌞 Mode Terang** | **🌙 Mode Gelap**
 
-<img src="screenshots/add-contact-light.png" width="200" alt="Tambah Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/> <img src="screenshots/add-contact-dark.png" width="200" alt="Tambah Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<p align="center">
+<img src="screenshots/add-contact-light.png" width="200" alt="Tambah Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="screenshots/add-contact-dark.png" width="200" alt="Tambah Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+</p>
+<p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
 *🎯 Form intuitif untuk menambahkan kontak baru*
 
-</td>
-</tr>
-</table>
-
 ---
 
-<table>
-<tr>
-<td align="center" width="50%">
-
 ### 👤 **Halaman Detail Kontak**
-**🌞 Mode Terang** | **🌙 Mode Gelap**
 
-<img src="screenshots/contact-detail-light.png" width="200" alt="Detail Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/> <img src="screenshots/contact-detail-dark.png" width="200" alt="Detail Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<p align="center">
+<img src="screenshots/contact-detail-light.png" width="200" alt="Detail Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="screenshots/contact-detail-dark.png" width="200" alt="Detail Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+</p>
+<p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
 *🔍 Informasi lengkap dan detail kontak*
 
-</td>
-<td align="center" width="50%">
+---
 
 ### ✏️ **Halaman Edit Kontak**
-**🌞 Mode Terang** | **🌙 Mode Gelap**
 
-<img src="screenshots/edit-contact-light.png" width="200" alt="Edit Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/> <img src="screenshots/edit-contact-dark.png" width="200" alt="Edit Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<p align="center">
+<img src="screenshots/edit-contact-light.png" width="200" alt="Edit Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="screenshots/edit-contact-dark.png" width="200" alt="Edit Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+</p>
+<p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
 *🔧 Interface yang smooth untuk mengubah informasi kontak*
 
-</td>
-</tr>
-</table>
-
 ---
 
-<table>
-<tr>
-<td align="center" width="50%">
-
 ### ⭐ **Menambah Kontak Favorite**
-**🌞 Mode Terang** | **🌙 Mode Gelap**
 
-<img src="screenshots/add-favorite-light.png" width="200" alt="Tambah Favorite Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/> <img src="screenshots/add-favorite-dark.png" width="200" alt="Tambah Favorite Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<p align="center">
+<img src="screenshots/add-favorite-light.png" width="200" alt="Tambah Favorite Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="screenshots/add-favorite-dark.png" width="200" alt="Tambah Favorite Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+</p>
+<p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
 *💫 Fitur untuk menandai kontak sebagai favorit*
 
-</td>
-<td align="center" width="50%">
+---
 
 ### ❤️ **Halaman List Favorite**
-**🌞 Mode Terang** | **🌙 Mode Gelap**
 
-<img src="screenshots/favorite-list-light.png" width="200" alt="List Favorite Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/> <img src="screenshots/favorite-list-dark.png" width="200" alt="List Favorite Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<p align="center">
+<img src="screenshots/favorite-list-light.png" width="200" alt="List Favorite Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="screenshots/favorite-list-dark.png" width="200" alt="List Favorite Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+</p>
+<p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
 *⭐ Daftar kontak favorit untuk akses cepat*
 
-</td>
-</tr>
-</table>
-
 ---
 
-<table>
-<tr>
-<td align="center" width="50%">
-
 ### 🗑️ **Menghapus Kontak**
-**🌞 Mode Terang** | **🌙 Mode Gelap**
 
-<img src="screenshots/delete-contact-light.png" width="200" alt="Hapus Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/> <img src="screenshots/delete-contact-dark.png" width="200" alt="Hapus Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<p align="center">
+<img src="screenshots/delete-contact-light.png" width="200" alt="Hapus Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="screenshots/delete-contact-dark.png" width="200" alt="Hapus Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+</p>
+<p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
 *🚮 Konfirmasi penghapusan kontak dengan aman*
 
-</td>
-<td align="center" width="50%">
+---
 
 ### 🔄 **Sinkronisasi**
-**🌞 Mode Terang** | **🌙 Mode Gelap**
 
-<img src="screenshots/sync-light.png" width="200" alt="Sinkronisasi Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/> <img src="screenshots/sync-dark.png" width="200" alt="Sinkronisasi Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<p align="center">
+<img src="screenshots/sync-light.png" width="200" alt="Sinkronisasi Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="screenshots/sync-dark.png" width="200" alt="Sinkronisasi Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+</p>
+<p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
 *🔄 Sinkronisasi dengan kontak Android lokal secara otomatis*
 
-</td>
-</tr>
-</table>
-
 ---
 
-<table>
-<tr>
-<td align="center" width="100%">
-
 ### ⚙️ **Pengaturan**
-**🌞 Mode Terang** | **🌙 Mode Gelap**
 
-<img src="screenshots/settings-light.png" width="200" alt="Pengaturan Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/> <img src="screenshots/settings-dark.png" width="200" alt="Pengaturan Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<p align="center">
+<img src="screenshots/settings-light.png" width="200" alt="Pengaturan Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="screenshots/settings-dark.png" width="200" alt="Pengaturan Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+</p>
+<p align="center"><strong>🌞 Mode Terang</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>🌙 Mode Gelap</strong></p>
 
 *⚙️ Pengaturan aplikasi termasuk tema dan ukuran font*
 
-</td>
-</tr>
-</table>
-
 </div>
+
+---
 
 ---
 
