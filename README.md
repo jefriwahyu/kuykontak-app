@@ -308,7 +308,7 @@ curl http://localhost:8080/api/contacts
 ### 📋 **Halaman List Kontak**
 **🌞 Mode Terang** | **🌙 Mode Gelap**
 
-<img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="200" alt="List Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/> <img src="[screenshots/contact-list-dark.png](https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450)" width="200" alt="List Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+<img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="200" alt="List Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/> <img src="https://github.com/user-attachments/assets/9ac020f7-53a6-486b-ac63-58050922d450" width="200" alt="List Kontak Gelap" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
 
 *📱 Daftar lengkap semua kontak dalam tema terang dan gelap*
 
