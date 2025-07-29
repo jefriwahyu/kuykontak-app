@@ -13,7 +13,9 @@
 <img src="https://img.shields.io/github/stars/jefriwahyu/kuykontak-app?style=social" alt="GitHub stars">
 <img src="https://img.shields.io/github/forks/jefriwahyu/kuykontak-app?style=social" alt="GitHub forks">
 
-*✨ Kelola kontak Anda dengan aman, cepat, dan mudah! ✨*
+**🔗 Backend Repository**: [kontak-api-ci4](https://github.com/jefriwahyu/kontak-api-ci4)
+
+**✨ Kelola kontak Anda dengan aman, cepat, dan mudah! ✨**
 
 </div>
 
@@ -21,7 +23,11 @@
 
 ## 🎯 Deskripsi
 
-**KuyKontak** adalah aplikasi ponsel untuk mengelola kontak dengan cara yang inovatif! Dibuat menggunakan Flutter untuk tampilannya dan **CodeIgniter 4** sebagai REST API. Aplikasi ini memudahkan Anda menyimpan, mengatur, dan mengelola daftar kontak dengan tampilan yang sederhana, modern, dan mudah digunakan.
+**KuyKontak** adalah aplikasi manajemen kontak modern yang dirancang untuk memudahkan pengelolaan kontak Anda! Dibangun menggunakan **Flutter** untuk frontend yang responsif dan **CodeIgniter 4** sebagai REST API backend yang powerful. 
+
+> 📌 **Note**: Backend API berada dalam repositori terpisah di [kontak-api-ci4](https://github.com/jefriwahyu/kontak-api-ci4) untuk pemisahan yang lebih baik antara frontend dan backend.
+
+Aplikasi ini menyediakan antarmuka yang intuitif dan modern untuk menyimpan, mengorganisir, dan mengelola daftar kontak dengan berbagai fitur canggih yang memudahkan aktivitas sehari-hari Anda.
 
 ---
 
@@ -29,25 +35,25 @@
 
 <div align="center">
 
-| Fitur          | Deskripsi                                      |
-|----------------|-----------------------------------------------|
-| **Kontak Favorit**  | Tandai kontak penting sebagai favorit         |
-| **Tema Gelap & Terang** | Mode gelap/terang untuk kenyamanan mata      |
-| **Ukuran Font**     | Sesuaikan ukuran teks sesuai kebutuhan       |
-| **Pencarian Cerdas** | Temukan kontak secara instan                 |
-| **Filter Kontak**    | Urutkan kontak dengan kriteria tertentu      |
-| **Tambah Kontak**    | Buat kontak baru dengan informasi lengkap    |
-| **Edit Kontak**      | Perbarui detail kontak dengan mudah          |
-| **Hapus Kontak**     | Hapus kontak yang tidak diperlukan           |
-| **Sinkronisasi Device** | Hubungkan dengan kontak lokal di ponsel      |
-| **Validasi Input**       | Memvalidasi data kontak yang diinputkan user                 |
-| **Modern UI**        | Antarmuka yang kekinian              |
+| 🌟 Fitur | 📝 Deskripsi |
+|----------|-------------|
+| **⭐ Kontak Favorit** | Tandai kontak penting sebagai favorit untuk akses cepat |
+| **🎨 Tema Gelap & Terang** | Mode gelap/terang untuk kenyamanan mata di segala waktu |
+| **📏 Ukuran Font** | Sesuaikan ukuran teks sesuai preferensi dan kebutuhan |
+| **🔍 Pencarian Cerdas** | Temukan kontak secara instan dengan pencarian real-time |
+| **🗂️ Filter Kontak** | Urutkan dan filter kontak berdasarkan kriteria tertentu |
+| **➕ Tambah Kontak** | Buat kontak baru dengan informasi lengkap dan validasi |
+| **✏️ Edit Kontak** | Perbarui detail kontak dengan mudah dan cepat |
+| **🗑️ Hapus Kontak** | Hapus kontak yang tidak diperlukan dengan konfirmasi aman |
+| **🔄 Sinkronisasi Device** | Hubungkan dengan kontak lokal di ponsel Android |
+| **✅ Validasi Input** | Memvalidasi data kontak yang diinputkan pengguna |
+| **🎭 Modern UI** | Antarmuka yang kekinian dan user-friendly |
 
 </div>
 
 ---
 
-### 🛠️ Tech Stack
+## 🛠️ Tech Stack
 
 <div align="center">
 
@@ -57,9 +63,9 @@
 
 <table>
 <tr>
-<td align="center"><strong>Mobile Development</strong></td>
-<td align="center"><strong>Backend API</strong></td>
-<td align="center"><strong>Database & Server</strong></td>
+<td align="center"><strong>📱 Mobile Development</strong></td>
+<td align="center"><strong>🚀 Backend API</strong></td>
+<td align="center"><strong>🗄️ Database & Server</strong></td>
 </tr>
 <tr>
 <td align="center">
@@ -81,9 +87,9 @@
 
 ---
 
-## 🚀 Langkah-langkah Penginstalan
+## 🚀 Langkah-langkah Instalasi
 
-### 🔧 Prasyarat System
+### 🔧 Prasyarat Sistem
 
 <div align="center">
 
@@ -121,8 +127,11 @@
 ---
 
 ### 📱 A. Setup Aplikasi Flutter
+
 <div align="center">
+
 **🎯 Ikuti langkah-langkah berikut untuk menjalankan aplikasi Flutter:**
+
 </div>
 
 #### 1️⃣ Pilih Lokasi Folder
@@ -148,6 +157,7 @@ flutter pub get
 #### 4️⃣ Konfigurasi API Endpoint
 Edit file `lib/helpers/api_url.dart`:
 > 💡 **Info**: API CI4 sudah di hosting dan siap digunakan! Jika hosting habis masa aktifnya, dapat menggunakan localhost dengan mengkonfigurasi class ApiUrl.
+
 ```dart
 static const String _ci4Base = 'https://kontak-api.tinagers.com';
 // 🏠 Jika ingin menggunakan localhost, ganti dengan:
@@ -155,33 +165,41 @@ static const String _ci4Base = 'https://kontak-api.tinagers.com';
 ```
 
 #### 5️⃣ Jalankan Aplikasi
+
 <div align="center">
+
 **Pilih platform yang ingin Anda gunakan:**
+
 </div>
 
 ```bash
 # 📱 Cek device yang tersedia
 flutter devices
+
 # 🚀 Run di emulator/device Android/iOS
 flutter run
+
 # 🌐 Run di browser
 flutter run -d edge    # Microsoft Edge
 flutter run -d chrome  # Google Chrome
 ```
 
-<div align="center" style="text-decoration:bold'">
-🎉 Selamat! Aplikasi KuyKontak sudah siap digunakan! 🎉
+<div align="center">
+
+🎉 **Selamat! Aplikasi KuyKontak sudah siap digunakan!** 🎉
+
 </div>
 
 ---
 
-<br>
-
 ### 🚀 B. Setup Backend API (Development Lokal)
+
 <div align="center">
+
 > 💡 **Note**: Bagian ini **opsional** jika Anda menggunakan production API: 
 > 
 > **🌐 https://kontak-api.tinagers.com/**
+
 </div>
 
 <details>
@@ -266,6 +284,7 @@ curl http://localhost:8080/api/kontak
 ---
 
 ## 📸 Screenshot Tampilan
+
 <div align="center">
 
 ### 🎨 **Preview Aplikasi KuyKontak** 🎨
@@ -294,7 +313,7 @@ curl http://localhost:8080/api/kontak
 
 ---
 
-### ➕ **Halaman Menambah Kontak**
+### ➕ **Halaman Tambah Kontak**
 
 <p align="center">
 <img src="https://github.com/user-attachments/assets/100bb07b-a56e-4307-808d-db1b08d09e60" width="200" alt="Tambah Kontak Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
@@ -333,7 +352,7 @@ curl http://localhost:8080/api/kontak
 
 ---
 
-### ⭐ **Menambah Kontak Favorite**
+### ⭐ **Menambah Kontak Favorit**
 
 <p align="center">
 <img src="https://github.com/user-attachments/assets/c0d3ae18-1df2-4643-8e0f-01c5552d50f5" width="200" alt="Tambah Favorite Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
@@ -346,7 +365,7 @@ curl http://localhost:8080/api/kontak
 
 ---
 
-### ❤️ **Halaman List Favorite**
+### ❤️ **Halaman List Favorit**
 
 <p align="center">
 <img src="https://github.com/user-attachments/assets/31d5e910-f935-4671-9166-4565360f5e86" width="200" alt="List Favorite Terang" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
@@ -400,23 +419,15 @@ curl http://localhost:8080/api/kontak
 
 ---
 
----
-
 ## 🎥 Video Demo
 
 <div align="center">
 
 ### 🎬 **Demo Video Lengkap KuyKontak App**
 
-<a href="https://youtu.be/your-video-link">
-<img src="https://via.placeholder.com/600x300/FF0000/FFFFFF?text=▶️+PLAY+VIDEO+DEMO" alt="Video Demo KuyKontak" style="border-radius: 10px; cursor: pointer;"/>
-</a>
-
-<br><br>
-
 [![Demo Video KuyKontak App](https://img.shields.io/badge/▶️%20TONTON%20VIDEO%20DEMO-FF0000?style=for-the-badge&logo=youtube&logoColor=white&labelColor=black)](https://youtube.com/shorts/8uy9GU76xCs?si=51hr8j3dsfkCrNI7)
 
-**[🎬 Klik di sini untuk menonton demo video lengkap!](https://youtu.be/your-video-link)**
+**[🎬 Klik di sini untuk menonton demo video lengkap!](https://youtube.com/shorts/8uy9GU76xCs?si=51hr8j3dsfkCrNI7)**
 
 ---
 
@@ -446,29 +457,32 @@ curl http://localhost:8080/api/kontak
 
 ---
 
-<div align="center">
+## 👨‍💻 Tim Developer 
 
-# 👨‍💻 Tim Developer 
+<div align="center">
 
 <table align="center" style="border-collapse: collapse; border: none;">
   <tr style="border: none;">
     <td align="center" width="300" style="border: none; padding: 20px;">
       <img src="https://github.com/jefriwahyu.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
-      <h3>Jefri Wahyu</h3>
+      <h3>🚀 Jefri Wahyu</h3>
+      <p><em>Full Stack Developer</em></p>
       <a href="https://github.com/jefriwahyu" target="_blank">
         <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
       </a>
     </td>
     <td align="center" width="300" style="border: none; padding: 20px;">
       <img src="https://github.com/Jazeera99.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
-      <h3>Laura Diva</h3>
+      <h3>🎨 Laura Diva</h3>
+      <p><em>UI/UX Designer</em></p>
       <a href="https://github.com/Jazeera99" target="_blank">
         <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
       </a>
     </td>
     <td align="center" width="300" style="border: none; padding: 20px;">
       <img src="https://github.com/Mallwee21.png" width="100" style="border-radius: 50%; border: 3px solid #4285F4;"/>
-      <h3>Aqmal Alfareza</h3>
+      <h3>💻 Aqmal Alfareza</h3>
+      <p><em>Mobile Developer</em></p>
       <a href="https://github.com/Mallwee21" target="_blank">
         <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
       </a>
@@ -476,14 +490,27 @@ curl http://localhost:8080/api/kontak
   </tr>
 </table>
 
-<br>
+---
+
+### 📊 Repository Stats
 
 <img src="https://img.shields.io/github/last-commit/jefriwahyu/kuykontak-app?style=flat&color=blue" alt="Last Commit">
 <img src="https://img.shields.io/badge/Status-Active-brightgreen" alt="Status">
 <img src="https://img.shields.io/badge/Maintained-Yes-blue" alt="Maintained">
+<img src="https://img.shields.io/github/contributors/jefriwahyu/kuykontak-app" alt="Contributors">
 
 *📅 Last updated: July 2025*
 
+</div>
+
 ---
+
+<div align="center">
+
+## 💝 Dukungan
+
+Jika proyek ini membantu Anda, jangan lupa untuk memberikan ⭐ di repository ini!
+
+**Made with ❤️ by Tim KuyKontak**
 
 </div>
