@@ -13,7 +13,7 @@
 <img src="https://img.shields.io/github/stars/jefriwahyu/kuykontak-app?style=social" alt="GitHub stars">
 <img src="https://img.shields.io/github/forks/jefriwahyu/kuykontak-app?style=social" alt="GitHub forks">
 
-*✨ Kelola kontak Anda dengan mudah, cepat, dan efisien! ✨*
+*✨ Kelola kontak Anda dengan aman, cepat, dan mudah! ✨*
 
 </div>
 
@@ -21,17 +21,7 @@
 
 ## 🎯 Deskripsi
 
-<div align="center">
-<img src="https://via.placeholder.com/100x100/FF6B6B/FFFFFF?text=📱" alt="App Icon" style="border-radius: 20px;">
-</div>
-
-**KuyKontak** adalah aplikasi mobile manajemen kontak yang revolusioner! Dikembangkan menggunakan teknologi terdepan **Flutter** dan **CodeIgniter 4** sebagai backend API yang powerful. Aplikasi ini memberikan pengalaman yang seamless untuk menyimpan, mengelola, dan mengatur informasi kontak dengan interface mobile yang super intuitif dan modern.
-
-<div align="center">
-
-### 🌟 *"Kontak management made simple and beautiful!"* 🌟
-
-</div>
+**KuyKontak** adalah aplikasi ponsel untuk mengelola kontak dengan cara yang inovatif! Dibuat menggunakan Flutter untuk tampilannya dan **CodeIgniter 4** sebagai REST API. Aplikasi ini memudahkan Anda menyimpan, mengatur, dan mengelola daftar kontak dengan tampilan yang sederhana, modern, dan mudah digunakan.
 
 ---
 
@@ -39,24 +29,41 @@
 
 <div align="center">
 
-| ⭐ | 🎨 | 🔤 | 🔍 |
-|:---:|:---:|:---:|:---:|
-| **Kontak Favorite** | **Tema Gelap & Terang** | **Ukuran Font** | **Pencarian Cerdas** |
-| *Tandai kontak penting sebagai favorit* | *Mode gelap dan terang untuk kenyamanan* | *Sesuaikan ukuran font sesuai kebutuhan* | *Cari kontak dengan mudah dan cepat* |
-
-| 🔽 | ➕ | ✏️ | 🗑️ |
-|:---:|:---:|:---:|:---:|
-| **Filter Kontak** | **Tambah Kontak** | **Edit Kontak** | **Hapus Kontak** |
-| *Filter dan sortir kontak dengan mudah* | *Menambah kontak baru dengan info lengkap* | *Mengubah informasi yang sudah ada* | *Menghapus kontak yang tidak diperlukan* |
-
-| 📱 | 🔄 | ⚡ | 🌟 |
-|:---:|:---:|:---:|:---:|
-| **Sinkronisasi Device** | **Real-time Sync** | **Super Fast** | **Modern UI** |
-| *Sinkronisasi dengan kontak Android lokal* | *Data tersinkron real-time dengan server* | *Performa tinggi & responsive* | *Interface modern & user-friendly* |
+| Fitur          | Ikon | Deskripsi                                      |
+|----------------|:----:|-----------------------------------------------|
+| **Kontak Favorit**  | ⭐   | Tandai kontak penting sebagai favorit         |
+| **Tema Gelap & Terang** | 🎨 | Mode gelap/terang untuk kenyamanan mata      |
+| **Ukuran Font**     | 🔤   | Sesuaikan ukuran teks sesuai kebutuhan       |
+| **Pencarian Cerdas** | 🔍   | Temukan kontak secara instan                 |
+| **Filter Kontak**    | 🔽   | Urutkan kontak dengan kriteria tertentu      |
+| **Tambah Kontak**    | ➕   | Buat kontak baru dengan informasi lengkap    |
+| **Edit Kontak**      | ✏️   | Perbarui detail kontak dengan mudah          |
+| **Hapus Kontak**     | 🗑️   | Hapus kontak yang tidak diperlukan           |
+| **Sinkronisasi Device** | 📱 | Hubungkan dengan kontak lokal di ponsel      |
+| **Real-time Sync**   | 🔄   | Data selalu up-to-date di semua perangkat    |
+| **Super Fast**       | ⚡   | Performa cepat dan responsif                 |
+| **Modern UI**        | 🌟   | Antarmuka intuitif dan kekinian              |
 
 </div>
 
 ---
+
+### Alternatif versi card (jika prefer grid):
+
+<div align="center" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+
+<div>
+<h3>⭐ Kontak Favorit</h3>
+<p>Tandai kontak penting</p>
+</div>
+
+<div>
+<h3>🎨 Tema Dinamis</h3>
+<p>Gelap/terang otomatis</p>
+</div>
+
+<!-- Lanjutkan dengan div lainnya -->
+</div>
 
 ### 🛠️ Tech Stack
 
