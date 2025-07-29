@@ -414,7 +414,7 @@ curl http://localhost:8080/api/kontak
 
 ### 🎬 **Demo Video KuyKontak App**
 
-[![Demo Video KuyKontak App](https://img.shields.io/badge/▶️%20TONTON%20VIDEO%20DEMO-FF0000?style=for-the-badge&logo=youtube&logoColor=white&labelColor=black)](https://youtube.com/shorts/8uy9GU76xCs?si=51hr8j3dsfkCrNI7)
+[![Demo Video KuyKontak App](https://img.shields.io/badge/▶️%20TONTON%20VIDEO%20DEMO-FF0000?style=for-the-badge&logo=youtube&logoColor=white&labelColor=black)](https://www.youtube.com/shorts/8uy9GU76xCs)
 
 **[🎬 Klik di sini untuk menonton demo video lengkap!](https://youtube.com/shorts/8uy9GU76xCs?si=51hr8j3dsfkCrNI7)**
 ---
