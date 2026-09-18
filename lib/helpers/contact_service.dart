@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:kontak_app_m/helpers/api_url.dart';
 import 'package:kontak_app_m/model/contact.dart';
 
@@ -7,6 +8,17 @@ import 'package:kontak_app_m/model/contact.dart';
 class ContactService {
   // Instance Dio yang digunakan untuk semua permintaan jaringan.
   static final Dio _dio = Dio();
+
+  // Tentukan MIME type dari ekstensi file agar tidak ditolak server (400).
+  // MultipartFile.fromBytes tanpa contentType terkirim sebagai
+  // application/octet-stream yang tidak ada di daftar allowedTypes backend.
+  static MediaType _mimeType(String fileName) {
+    final ext = fileName.split('.').last.toLowerCase();
+    if (ext == 'png') return MediaType('image', 'png');
+    if (ext == 'gif') return MediaType('image', 'gif');
+    if (ext == 'webp') return MediaType('image', 'webp');
+    return MediaType('image', 'jpeg'); // jpg/jpeg default
+  }
 
   // Mengambil semua data kontak dari API.
   static Future<List<Contact>> getContacts() async {
@@ -36,14 +48,22 @@ class ContactService {
     try {
       // Siapkan data gambar dalam format multipart/form-data.
       FormData formData = FormData.fromMap({
-        "avatar": MultipartFile.fromBytes(imageBytes, filename: fileName),
+        "avatar": MultipartFile.fromBytes(imageBytes,
+            filename: fileName, contentType: _mimeType(fileName)),
       });
 
       final response = await _dio.post(ApiUrl.uploadUrl, data: formData);
 
       // Jika sukses, kembalikan URL gambar yang diunggah.
+      // Bentuk respons Express: {success, message, data: {url, ...}}.
+      // Bentuk respons CI4 (flat): {success, url, ...}. Dukung keduanya
+      // agar ganti currentApi tidak merusak upload.
       if (response.statusCode == 200 && response.data['success'] == true) {
-        return response.data['url'];
+        final d = response.data['data'];
+        if (d is Map && d['url'] != null) return d['url'] as String;
+        if (response.data['url'] != null) {
+          return response.data['url'] as String;
+        }
       }
       return null;
     } catch (e) {

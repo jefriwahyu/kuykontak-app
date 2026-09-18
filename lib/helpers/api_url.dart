@@ -3,16 +3,16 @@ enum ApiType { express, codeigniter }
 
 // Ganti ke ApiType.codeigniter jika ingin menguji backend CI4
 const ApiType currentApi =
-    ApiType.codeigniter; // <-- GANTI KE CODEIGNITER UNTUK MENGUJI
+    ApiType.express; // <-- EXPRESS (port 5000) yang sedang berjalan
 // -----------------------------------------
 
 class ApiUrl {
-  // Definisikan base URL murni (tanpa path)
-  static const String _expressBase = 'https://manu.my.id';
-  static const String _ci4Base = 'https://kontak-api.tinagers.com';
+  // Definisikan base URL murni (tanpa path, TANPA trailing slash agar tidak jadi //)
+  static const String _expressBase = 'http://localhost:5000';
+  // static const String _ci4Base = 'https://kontak-api.tinagers.com';
 
   // Jika ingin menggunakan localhost, ganti dengan:
-  // static const String _ci4Base = 'http://localhost:8080';
+  static const String _ci4Base = 'http://localhost:8080';
 
   // Definisikan path lengkap untuk setiap endpoint
   static const String _expressContactsPath = '/api/kontak';
